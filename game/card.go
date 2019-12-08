@@ -17,5 +17,5 @@ func NewCard(suite Suite, rank int) Card {
 }
 
 func (c Card) String() string {
-	return fmt.Sprintf("%v%d", c.Suite, c.Rank)
+	return fmt.Sprintf("%v%v", c.Rank, c.Suite)
 }

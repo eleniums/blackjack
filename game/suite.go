@@ -12,13 +12,13 @@ const (
 func (s Suite) String() string {
 	switch s {
 	case SuiteClubs:
-		return "C"
+		return "♣"
 	case SuiteSpades:
-		return "S"
+		return "♠"
 	case SuiteHearts:
-		return "H"
+		return "♥"
 	case SuiteDiamonds:
-		return "D"
+		return "♦"
 	default:
 		return "invalid suite"
 	}

@@ -6,10 +6,10 @@ import (
 
 type Card struct {
 	Suite Suite
-	Rank  int
+	Rank  Rank
 }
 
-func NewCard(suite Suite, rank int) Card {
+func NewCard(suite Suite, rank Rank) Card {
 	return Card{
 		Suite: suite,
 		Rank:  rank,

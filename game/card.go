@@ -6,16 +6,16 @@ import (
 
 type Card struct {
 	Suite Suite
-	Value int
+	Rank  int
 }
 
-func NewCard(suite Suite, value int) Card {
+func NewCard(suite Suite, rank int) Card {
 	return Card{
 		Suite: suite,
-		Value: value,
+		Rank:  rank,
 	}
 }
 
 func (c Card) String() string {
-	return fmt.Sprintf("%v%d", c.Suite, c.Value)
+	return fmt.Sprintf("%v%d", c.Suite, c.Rank)
 }

@@ -35,7 +35,7 @@ func (c Card) Symbol() string {
 }
 
 func unicodeToString(code string) string {
-	u := `"\u` + code + `"`
-	s, _ := strconv.Unquote(u)
-	return s
+	i, _ := strconv.ParseInt(code, 16, 32)
+	r := rune(i)
+	return string(r)
 }

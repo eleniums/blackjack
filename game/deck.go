@@ -46,6 +46,11 @@ func (d *Deck) Count() int {
 	return len(d.cards)
 }
 
+// Cards will return the cards in this deck.
+func (d *Deck) Cards() []Card {
+	return d.cards
+}
+
 // Add a card to the deck at the specific index.
 func (d *Deck) Add(i int, card Card) {
 	d.cards = append(d.cards, Card{})

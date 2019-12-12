@@ -6,12 +6,14 @@ import (
 
 // Shuffler will shuffle a deck of cards and deal from the top.
 type Shuffler struct {
-	deck Deck
+	deck *Deck
 }
 
 // NewShuffler will create a new shuffler.
 func NewShuffler() Shuffler {
-	return Shuffler{}
+	return Shuffler{
+		deck: &Deck{},
+	}
 }
 
 // Add will shuffle the given cards into the shuffler.

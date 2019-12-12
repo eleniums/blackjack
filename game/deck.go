@@ -46,7 +46,7 @@ func (d *Deck) Count() int {
 	return len(d.cards)
 }
 
-// Cards will return the cards in this deck.
+// Cards will return the cards in the deck.
 func (d *Deck) Cards() []Card {
 	return d.cards
 }

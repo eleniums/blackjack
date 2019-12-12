@@ -11,7 +11,7 @@ const (
 	SuiteDiamonds
 )
 
-// String returns the symbol representation of this suite.
+// String returns the symbol representation of the suite.
 func (s Suite) String() string {
 	switch s {
 	case SuiteClubs:

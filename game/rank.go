@@ -15,7 +15,7 @@ const (
 	RankKing
 )
 
-// String returns the string representation of this rank.
+// String returns the string representation of the rank.
 func (r Rank) String() string {
 	if r >= 2 && r <= 10 {
 		return strconv.Itoa(int(r))

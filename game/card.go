@@ -22,7 +22,7 @@ func NewCard(suite Suite, rank Rank) Card {
 	}
 }
 
-// String will return the string representation of this card.
+// String will return the string representation of the card.
 func (c Card) String() string {
 	if UseCardSymbol {
 		return c.Symbol()
@@ -30,12 +30,12 @@ func (c Card) String() string {
 	return c.Text()
 }
 
-// Text will return the text representation of this card.
+// Text will return the text representation of the card.
 func (c Card) Text() string {
 	return fmt.Sprintf("%v%v", c.Rank, c.Suite)
 }
 
-// Symbol will return the unicode card symbol representation of this card.
+// Symbol will return the unicode card symbol representation of the card.
 func (c Card) Symbol() string {
 	code := "1F0"
 

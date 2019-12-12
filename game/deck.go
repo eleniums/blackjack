@@ -1,5 +1,9 @@
 package game
 
+import (
+	"errors"
+)
+
 type Deck []Card
 
 func NewDeck() Deck {
@@ -30,4 +34,20 @@ func NewDeck() Deck {
 	}
 
 	return deck
+}
+
+func (d *Deck) Deal() (Card, error) {
+	if d.Empty() {
+		return Card{}, errors.New("deck is empty")
+	}
+
+	deck := *d
+	card := deck[0]
+	*d = deck[1:len(deck)]
+
+	return card, nil
+}
+
+func (d Deck) Empty() bool {
+	return len(d) == 0
 }

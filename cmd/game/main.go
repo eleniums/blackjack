@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	game.UseCardSymbol = false
 	displayAllCards()
 }
 

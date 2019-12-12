@@ -1,11 +1,17 @@
 package game
 
-type Hand []Card
+// Hand represents a hand of cards.
+type Hand struct {
+	cards []Card
+}
 
-func NewHand(cards ...Card) Hand {
+// NewHand will create a new hand with the given cards.
+func NewHand(cards ...Card) *Hand {
 	var hand Hand
+
 	for _, v := range cards {
-		hand = append(hand, v)
+		hand.cards = append(hand.cards, v)
 	}
-	return hand
+
+	return &hand
 }

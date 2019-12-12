@@ -4,8 +4,10 @@ import (
 	"strconv"
 )
 
+// Rank represents a rank (the value) on a card.
 type Rank int
 
+// Rank types.
 const (
 	RankAce  Rank = 1
 	RankJack Rank = iota + 10
@@ -13,6 +15,7 @@ const (
 	RankKing
 )
 
+// String returns the string representation of this rank.
 func (r Rank) String() string {
 	if r >= 2 && r <= 10 {
 		return strconv.Itoa(int(r))

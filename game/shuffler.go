@@ -8,7 +8,7 @@ func NewShuffler() Shuffler {
 	return Shuffler{}
 }
 
-func (s Shuffler) Add(cards ...Cards) {
+func (s Shuffler) Add(cards ...Card) {
 	// TODO: shuffle cards into the internal deck
 }
 

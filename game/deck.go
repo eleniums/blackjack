@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// ErrDeckEmpty means the deck is empty.
+var ErrDeckEmpty = errors.New("deck is empty")
+
 // Deck represents a deck of cards.
 type Deck struct {
 	cards []Card
@@ -61,7 +64,7 @@ func (d *Deck) Add(i int, card Card) {
 // Deal the top card from the deck. This removes the card from the deck.
 func (d *Deck) Deal() (Card, error) {
 	if d.Empty() {
-		return Card{}, errors.New("deck is empty")
+		return Card{}, ErrDeckEmpty
 	}
 
 	card := d.cards[0]

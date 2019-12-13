@@ -2,7 +2,7 @@ package game
 
 // Hand represents a hand of cards.
 type Hand struct {
-	cards []Card
+	Cards []Card
 }
 
 // NewHand will create a new hand with the given cards.
@@ -10,7 +10,7 @@ func NewHand(cards ...Card) *Hand {
 	var hand Hand
 
 	for _, v := range cards {
-		hand.cards = append(hand.cards, v)
+		hand.Cards = append(hand.Cards, v)
 	}
 
 	return &hand
@@ -18,17 +18,12 @@ func NewHand(cards ...Card) *Hand {
 
 // Count will return the number of cards in the hand.
 func (h *Hand) Count() int {
-	return len(h.cards)
-}
-
-// Cards will return the cards in the hand.
-func (h *Hand) Cards() []Card {
-	return h.cards
+	return len(h.Cards)
 }
 
 // Add a single card to the hand.
 func (h *Hand) Add(card Card) {
-	h.cards = append(h.cards, card)
+	h.Cards = append(h.Cards, card)
 }
 
 func (h *Hand) Total() int {

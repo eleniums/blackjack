@@ -1,9 +1,5 @@
 package game
 
-import (
-	"errors"
-)
-
 // Shuffler will shuffle a deck of cards and deal from the top.
 type Shuffler struct {
 	deck *Deck
@@ -23,6 +19,5 @@ func (s Shuffler) Add(cards ...Card) {
 
 // Deal will deal the top card from the shuffler.
 func (s Shuffler) Deal() (Card, error) {
-	// TODO: implement deal. Might want to switch to a pointer so we can return nil
-	return Card{}, errors.New("there are no cards left to deal")
+	return s.deck.Deal()
 }

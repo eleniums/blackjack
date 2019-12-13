@@ -18,3 +18,9 @@ func NewBlackjack(numDecks int) *Blackjack {
 		shuffler: shuffler,
 	}
 }
+
+// Update is the main loop for the game engine.
+func (b *Blackjack) Update() bool {
+	// TODO: this is the game engine main loop, return true to keep looping
+	return false
+}

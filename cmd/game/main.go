@@ -10,11 +10,23 @@ import (
 func main() {
 	flag.BoolVar(&game.UseCardSymbols, "use-card-symbols", false, "set to display card symbols instead of text")
 	printCardsTest := flag.Bool("print-cards-test", false, "set to display all cards (for testing purposes)")
+	numDecks := flag.Int("num-decks", 5, "number of shuffled decks to use")
 	flag.Parse()
 
 	if *printCardsTest {
 		displayAllCards()
 		return
+	}
+
+	if *numDecks < 0 {
+		fmt.Println("Number of decks has to be 1 or greater.")
+		return
+	}
+
+	blackjack := game.NewBlackjack(*numDecks)
+
+	for blackjack.Update() {
+		// do nothing
 	}
 }
 

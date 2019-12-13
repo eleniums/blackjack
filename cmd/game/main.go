@@ -1,14 +1,21 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 
 	"github.com/eleniums/blackjack/game"
 )
 
 func main() {
-	game.UseCardSymbol = false
-	displayAllCards()
+	flag.BoolVar(&game.UseCardSymbols, "use-card-symbols", false, "set to display card symbols instead of text")
+	printCardsTest := flag.Bool("print-cards-test", false, "set to display all cards (for testing purposes)")
+	flag.Parse()
+
+	if *printCardsTest {
+		displayAllCards()
+		return
+	}
 }
 
 func displayAllCards() {

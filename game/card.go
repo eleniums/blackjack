@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-// UseCardSymbol determines whether to use the unicode card symbols for the text representation or straight text.
-var UseCardSymbol = false
+// UseCardSymbols determines whether to use the unicode card symbols for the text representation or straight text.
+var UseCardSymbols = false
 
 // Card represents a single card.
 type Card struct {
@@ -41,7 +41,7 @@ func (c Card) Rank() Rank {
 
 // String will return the string representation of the card.
 func (c Card) String() string {
-	if UseCardSymbol {
+	if UseCardSymbols {
 		return c.Symbol()
 	}
 	return c.Text()

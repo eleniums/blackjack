@@ -31,6 +31,6 @@ func (r Rank) String() string {
 	case RankKing:
 		return "K"
 	default:
-		return "invalid rank"
+		return "X"
 	}
 }

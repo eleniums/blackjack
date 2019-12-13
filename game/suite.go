@@ -5,7 +5,7 @@ type Suite int
 
 // Suite types.
 const (
-	SuiteClubs Suite = iota
+	SuiteClubs Suite = iota + 1
 	SuiteSpades
 	SuiteHearts
 	SuiteDiamonds
@@ -23,6 +23,6 @@ func (s Suite) String() string {
 	case SuiteDiamonds:
 		return "♦"
 	default:
-		return "invalid suite"
+		return "X"
 	}
 }

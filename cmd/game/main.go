@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/eleniums/blackjack/engine"
 	"github.com/eleniums/blackjack/game"
 )
 
@@ -23,7 +24,7 @@ func main() {
 		return
 	}
 
-	blackjack := game.NewBlackjack(*numDecks)
+	blackjack := engine.NewBlackjack(*numDecks)
 
 	for blackjack.Update() {
 		// do nothing

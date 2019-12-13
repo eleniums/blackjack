@@ -69,6 +69,9 @@ func (c Card) Symbol() string {
 	case SuiteDiamonds:
 		code += "C"
 		break
+	default:
+		code += "A"
+		break
 	}
 
 	// skip the "knight" playing card symbol

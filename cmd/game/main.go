@@ -33,7 +33,7 @@ func main() {
 
 	fmt.Printf("Blackjack v%s\n\n", version)
 
-	blackjack := engine.NewBlackjack(*numDecks)
+	blackjack := engine.NewBlackjack(*numDecks, nil) //TODO: add player
 
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
 		fmt.Printf("Round %d\n\n", i)

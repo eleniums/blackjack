@@ -6,7 +6,7 @@ type Action int
 // Actions a player can take.
 const (
 	// Hit to draw another card.
-	Hit = iota
+	Hit = iota + 1
 
 	// Stay to stop drawing cards.
 	Stay

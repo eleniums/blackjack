@@ -41,30 +41,34 @@ func (b *Blackjack) PlayRound() {
 	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
-	b.display()
 
 	// take actions for each player
 	for i, p := range b.players {
-		if b.hands[i].Total() == 21 {
-			fmt.Printf("%s has blackjack!", p.Name())
-			continue
-		} else if b.hands[i].Total() > 21 {
-			fmt.Printf("%s busted.", p.Name())
-			continue
-		}
+		var action game.Action
+		for action != game.Stay && action != game.Double {
+			b.display()
 
-		action := p.Action(b.dealer, b.hands[i])
-		switch action {
-		case game.Hit:
-			break
-		case game.Stay:
-			break
-		case game.Split:
-			break
-		case game.Double:
-			break
-		default:
-			break
+			if b.hands[i].Total() == 21 {
+				fmt.Printf("%s has blackjack!", p.Name())
+				continue
+			} else if b.hands[i].Total() > 21 {
+				fmt.Printf("%s busted.", p.Name())
+				continue
+			}
+
+			action = p.Action(b.dealer, b.hands[i])
+			switch action {
+			case game.Hit:
+				break
+			case game.Stay:
+				break
+			case game.Split:
+				break
+			case game.Double:
+				break
+			default:
+				break
+			}
 		}
 	}
 }

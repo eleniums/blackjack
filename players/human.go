@@ -39,16 +39,16 @@ func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action 
 
 		switch input {
 		case "hit", "h":
-			action = game.Hit
+			action = game.ActionHit
 			break
 		case "stay", "s":
-			action = game.Stay
+			action = game.ActionStay
 			break
 		case "split", "p":
-			action = game.Split
+			action = game.ActionSplit
 			break
 		case "double", "d":
-			action = game.Double
+			action = game.ActionDouble
 			break
 		default:
 			action = 0

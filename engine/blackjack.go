@@ -45,7 +45,7 @@ func (b *Blackjack) PlayRound() {
 	// take actions for each player
 	for i, p := range b.players {
 		var action game.Action
-		for action != game.Stay && action != game.Double {
+		for action != game.ActionStay && action != game.ActionDouble {
 			b.display()
 
 			if b.hands[i].Total() == 21 {
@@ -58,13 +58,13 @@ func (b *Blackjack) PlayRound() {
 
 			action = p.Action(b.dealer, b.hands[i])
 			switch action {
-			case game.Hit:
+			case game.ActionHit:
 				break
-			case game.Stay:
+			case game.ActionStay:
 				break
-			case game.Split:
+			case game.ActionSplit:
 				break
-			case game.Double:
+			case game.ActionDouble:
 				break
 			default:
 				break

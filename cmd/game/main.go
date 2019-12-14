@@ -8,10 +8,13 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
+var version = "0.1"
+
 func main() {
 	flag.BoolVar(&game.UseCardSymbols, "use-card-symbols", false, "set to display card symbols instead of text")
 	printCardsTest := flag.Bool("print-cards-test", false, "set to display all cards (for testing purposes)")
 	numDecks := flag.Int("num-decks", 6, "number of shuffled decks to use")
+	numRounds := flag.Int("num-rounds", 3, "number of rounds to play (0 is infinite)")
 	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	// startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	// minBet := flag.Int("min-bet", 15, "minimum bet allowed")
@@ -28,10 +31,13 @@ func main() {
 		return
 	}
 
+	fmt.Printf("Blackjack v%s\n\n", version)
+
 	blackjack := engine.NewBlackjack(*numDecks)
 
-	for blackjack.Update() {
-		// do nothing
+	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
+		fmt.Printf("Round %d\n\n", i)
+		blackjack.PlayRound()
 	}
 }
 

@@ -23,8 +23,7 @@ func NewBlackjack(numDecks int) *Blackjack {
 	}
 }
 
-// Update is the main loop for the game engine.
-func (b *Blackjack) Update() bool {
+// PlayRound will run a single round of blackjack.
+func (b *Blackjack) PlayRound() {
 	// TODO: this is the game engine main loop, return true to keep looping
-	return false
 }

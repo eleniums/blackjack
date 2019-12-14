@@ -19,7 +19,7 @@ func (ai *StandardAI) Name() string {
 }
 
 // Action returns the action the player wants to make with his hand.
-func (ai *StandardAI) Action(dealer game.Hand, player game.Hand) game.Action {
+func (ai *StandardAI) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	// TODO: implement player Action
 	return 0
 }

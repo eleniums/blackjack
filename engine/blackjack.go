@@ -38,10 +38,35 @@ func NewBlackjack(numDecks int, players ...Player) *Blackjack {
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
-	// TODO: finish PlayRound
+	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
 	b.display()
+
+	// take actions for each player
+	for i, p := range b.players {
+		if b.hands[i].Total() == 21 {
+			fmt.Printf("%s has blackjack!", p.Name())
+			continue
+		} else if b.hands[i].Total() > 21 {
+			fmt.Printf("%s busted.", p.Name())
+			continue
+		}
+
+		action := p.Action(b.dealer, b.hands[i])
+		switch action {
+		case game.Hit:
+			break
+		case game.Stay:
+			break
+		case game.Split:
+			break
+		case game.Double:
+			break
+		default:
+			break
+		}
+	}
 }
 
 // display all cards on the table.

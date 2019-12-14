@@ -22,7 +22,7 @@ func (hp *HumanPlayer) Name() string {
 }
 
 // Action returns the action the player wants to make with his hand.
-func (hp *HumanPlayer) Action(dealer game.Hand, player game.Hand) game.Action {
+func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	// TODO: implement player Action
 	return 0
 }

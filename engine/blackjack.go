@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"fmt"
+
 	"github.com/eleniums/blackjack/game"
 )
 
@@ -36,5 +38,14 @@ func NewBlackjack(numDecks int, players ...Player) *Blackjack {
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
-	// TODO: this is the game engine main loop, return true to keep looping
+	// TODO: finish PlayRound
+	b.display()
+}
+
+// display all cards on the table.
+func (b *Blackjack) display() {
+	fmt.Printf("Dealer: %v\n\n", b.dealer)
+	for i, v := range b.hands {
+		fmt.Printf("%s: %v\n\n", b.players[i].Name(), v)
+	}
 }

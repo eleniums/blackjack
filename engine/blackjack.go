@@ -49,16 +49,17 @@ func (b *Blackjack) PlayRound() {
 			b.display()
 
 			if b.hands[i].Total() == 21 {
-				fmt.Printf("%s has blackjack!", p.Name())
-				continue
+				fmt.Printf("%s has blackjack!\n", p.Name())
+				break
 			} else if b.hands[i].Total() > 21 {
-				fmt.Printf("%s busted.", p.Name())
-				continue
+				fmt.Printf("%s busted.\n", p.Name())
+				break
 			}
 
 			action = p.Action(b.dealer, b.hands[i])
 			switch action {
 			case game.ActionHit:
+				b.dealCard(b.hands[i], false)
 				break
 			case game.ActionStay:
 				break

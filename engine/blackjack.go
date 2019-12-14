@@ -88,40 +88,29 @@ func (b *Blackjack) emptyHands() {
 	}
 }
 
-func (b *Blackjack) dealInitialCards() {
-	var card game.Card
-	var err error
+func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) {
+	card, err := b.shuffler.Deal()
+	if err != nil {
+		panic(err)
+	}
+	card.Hidden = faceDown
+	hand.Add(card)
+}
 
+func (b *Blackjack) dealInitialCards() {
 	// deal first card to each player face up
 	for _, v := range b.hands {
-		card, err = b.shuffler.Deal()
-		if err != nil {
-			panic(err)
-		}
-		v.Add(card)
+		b.dealCard(v, false)
 	}
 
 	// deal first card to dealer face down
-	card, err = b.shuffler.Deal()
-	if err != nil {
-		panic(err)
-	}
-	card.Hidden = true
-	b.dealer.Add(card)
+	b.dealCard(b.dealer, true)
 
 	// deal second card to each player face up
 	for _, v := range b.hands {
-		card, err = b.shuffler.Deal()
-		if err != nil {
-			panic(err)
-		}
-		v.Add(card)
+		b.dealCard(v, false)
 	}
 
 	// deal second card to dealer face up
-	card, err = b.shuffler.Deal()
-	if err != nil {
-		panic(err)
-	}
-	b.dealer.Add(card)
+	b.dealCard(b.dealer, false)
 }

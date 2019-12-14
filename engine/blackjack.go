@@ -39,6 +39,8 @@ func NewBlackjack(numDecks int, players ...Player) *Blackjack {
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
 	// TODO: finish PlayRound
+	b.emptyHands()
+	b.dealInitialCards()
 	b.display()
 }
 
@@ -48,4 +50,49 @@ func (b *Blackjack) display() {
 	for i, v := range b.hands {
 		fmt.Printf("%s: %v\n\n", b.players[i].Name(), v)
 	}
+}
+
+func (b *Blackjack) emptyHands() {
+	b.dealer.Cards = b.dealer.Cards[:0]
+	for _, v := range b.hands {
+		v.Cards = v.Cards[:0]
+	}
+}
+
+func (b *Blackjack) dealInitialCards() {
+	var card game.Card
+	var err error
+
+	// deal first card to each player face up
+	for _, v := range b.hands {
+		card, err = b.shuffler.Deal()
+		if err != nil {
+			panic(err)
+		}
+		v.Add(card)
+	}
+
+	// deal first card to dealer face down
+	card, err = b.shuffler.Deal()
+	if err != nil {
+		panic(err)
+	}
+	card.Hidden = true
+	b.dealer.Add(card)
+
+	// deal second card to each player face up
+	for _, v := range b.hands {
+		card, err = b.shuffler.Deal()
+		if err != nil {
+			panic(err)
+		}
+		v.Add(card)
+	}
+
+	// deal second card to dealer face up
+	card, err = b.shuffler.Deal()
+	if err != nil {
+		panic(err)
+	}
+	b.dealer.Add(card)
 }

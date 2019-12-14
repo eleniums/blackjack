@@ -6,6 +6,19 @@ import (
 
 // HumanPlayer represents a single human player.
 type HumanPlayer struct {
+	name string
+}
+
+// NewHumanPlayer will create a new human player.
+func NewHumanPlayer(name string) *HumanPlayer {
+	return &HumanPlayer{
+		name: name,
+	}
+}
+
+// Name of player.
+func (hp *HumanPlayer) Name() string {
+	return hp.name
 }
 
 // Action returns the action the player wants to make with his hand.

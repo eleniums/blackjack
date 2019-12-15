@@ -29,7 +29,7 @@ func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action 
 	var action game.Action
 	for action == 0 {
 		fmt.Printf("Hit, Stay, Split, or Double: ")
-		input := readInput()
+		input := game.ReadInput()
 		input = strings.ToLower(input)
 
 		switch input {

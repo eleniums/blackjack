@@ -77,9 +77,9 @@ func (b *Blackjack) PlayRound() {
 
 // display all cards on the table.
 func (b *Blackjack) display() {
-	fmt.Printf("Dealer: %v\n", b.dealer)
+	fmt.Printf("Dealer: %v= %d\n", b.dealer, b.dealer.Total())
 	for i, v := range b.hands {
-		fmt.Printf("%s: %v\n", b.players[i].Name(), v)
+		fmt.Printf("%s: %v= %d\n", b.players[i].Name(), v, v.Total())
 	}
 }
 

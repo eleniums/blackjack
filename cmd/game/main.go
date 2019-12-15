@@ -37,9 +37,9 @@ func main() {
 
 	blackjack := engine.NewBlackjack(*numDecks, human)
 
-	fmt.Printf("Blackjack v%s\n", version)
+	fmt.Printf("Blackjack v%s\n\n", version)
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
-		fmt.Printf("\n--- Round %d ---\n", i)
+		fmt.Printf("--- Round %d ---\n", i)
 		blackjack.PlayRound()
 	}
 }

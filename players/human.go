@@ -1,9 +1,7 @@
 package players
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/eleniums/blackjack/game"
@@ -11,16 +9,13 @@ import (
 
 // HumanPlayer represents a single human player.
 type HumanPlayer struct {
-	name   string
-	reader *bufio.Reader
+	name string
 }
 
 // NewHumanPlayer will create a new human player.
 func NewHumanPlayer(name string) *HumanPlayer {
-	reader := bufio.NewReader(os.Stdin)
 	return &HumanPlayer{
-		name:   name,
-		reader: reader,
+		name: name,
 	}
 }
 
@@ -34,7 +29,7 @@ func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action 
 	var action game.Action
 	for action == 0 {
 		fmt.Printf("Hit, Stay, Split, or Double: ")
-		input := hp.readInput()
+		input := readInput()
 		input = strings.ToLower(input)
 
 		switch input {
@@ -63,13 +58,4 @@ func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action 
 func (hp *HumanPlayer) PlaceBet(minBet, maxBet, totalMoney int) int {
 	// TODO: implement player PlaceBet
 	return 15
-}
-
-func (hp *HumanPlayer) readInput() string {
-	input, err := hp.reader.ReadString('\n')
-	if err != nil {
-		fmt.Printf("\nerror reading input: %v\n", err)
-	}
-	input = strings.TrimSpace(input)
-	return input
 }

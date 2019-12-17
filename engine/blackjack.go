@@ -59,9 +59,11 @@ func (b *Blackjack) PlayRound() {
 			action = p.Action(b.dealer, b.hands[i])
 			switch action {
 			case game.ActionHit:
-				b.dealCard(b.hands[i], false)
+				card := b.dealCard(b.hands[i], false)
+				fmt.Printf("%s hit and was dealt: %v\n", p.Name(), card)
 				break
 			case game.ActionStay:
+				fmt.Printf("%s chose to stay.\n", p.Name())
 				break
 			case game.ActionSplit:
 				break
@@ -90,13 +92,14 @@ func (b *Blackjack) emptyHands() {
 	}
 }
 
-func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) {
+func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) game.Card {
 	card, err := b.shuffler.Deal()
 	if err != nil {
 		panic(err)
 	}
 	card.Hidden = faceDown
 	hand.Add(card)
+	return card
 }
 
 func (b *Blackjack) dealInitialCards() {

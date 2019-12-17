@@ -41,13 +41,12 @@ func (b *Blackjack) PlayRound() {
 	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
+	b.display()
 
 	// take actions for each player
 	for i, p := range b.players {
 		var action game.Action
 		for action != game.ActionStay && action != game.ActionDouble {
-			b.display()
-
 			if b.hands[i].Total() == 21 {
 				fmt.Printf("%s has blackjack!\n", p.Name())
 				break
@@ -66,6 +65,7 @@ func (b *Blackjack) PlayRound() {
 				fmt.Printf("%s chose to stay.\n", p.Name())
 				break
 			case game.ActionSplit:
+				// TODO: implement split
 				break
 			case game.ActionDouble:
 				card := b.dealCard(b.hands[i], false)
@@ -75,6 +75,8 @@ func (b *Blackjack) PlayRound() {
 			default:
 				break
 			}
+
+			b.display()
 		}
 		fmt.Println()
 	}

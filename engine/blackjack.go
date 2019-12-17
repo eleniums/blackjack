@@ -68,6 +68,9 @@ func (b *Blackjack) PlayRound() {
 			case game.ActionSplit:
 				break
 			case game.ActionDouble:
+				card := b.dealCard(b.hands[i], false)
+				// TODO: double bet
+				fmt.Printf("%s doubled down and was dealt: %v\n", p.Name(), card)
 				break
 			default:
 				break

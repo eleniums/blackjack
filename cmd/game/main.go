@@ -16,6 +16,7 @@ func main() {
 	printCardsTest := flag.Bool("print-cards-test", false, "set to display all cards (for testing purposes)")
 	numDecks := flag.Int("num-decks", 6, "number of shuffled decks to use")
 	numRounds := flag.Int("num-rounds", 3, "number of rounds to play (0 is infinite)")
+	numPlayers := flag.Int("num-players", 1, "number of human players in game")
 	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	// startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	// minBet := flag.Int("min-bet", 15, "minimum bet allowed")
@@ -34,12 +35,18 @@ func main() {
 
 	fmt.Printf("--- Blackjack v%s ---\n\n", version)
 
-	fmt.Printf("Enter player name: ")
-	name := game.ReadInput()
-	human := players.NewHumanPlayer(name)
+	var competitors []engine.Player
+
+	// add human players
+	for i := 0; i < *numPlayers; i++ {
+		fmt.Printf("Enter player name: ")
+		name := game.ReadInput()
+		human := players.NewHumanPlayer(name)
+		competitors = append(competitors, human)
+	}
 	fmt.Println()
 
-	blackjack := engine.NewBlackjack(*numDecks, human)
+	blackjack := engine.NewBlackjack(*numDecks, competitors...)
 
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
 		fmt.Printf("--- Round %d ---\n", i)

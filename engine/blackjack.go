@@ -42,9 +42,11 @@ func (b *Blackjack) PlayRound() {
 	b.emptyHands()
 	b.dealInitialCards()
 	b.display()
+	fmt.Println()
 
 	// take actions for each player
 	for i, p := range b.players {
+		fmt.Printf("** %s's turn. **\n", p.Name())
 		var action game.Action
 		for action != game.ActionStay && action != game.ActionDouble {
 			if b.hands[i].Total() == 21 {
@@ -78,6 +80,10 @@ func (b *Blackjack) PlayRound() {
 
 			b.display()
 		}
+
+		// take actions for dealer
+		// TODO: implement dealer
+
 		fmt.Println()
 	}
 }

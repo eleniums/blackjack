@@ -50,7 +50,8 @@ func (b *Blackjack) PlayRound() {
 
 		var action game.Action
 		for action != game.ActionStay && action != game.ActionDouble {
-			b.displayPlayerHand(p.Name(), b.hands[i])
+			b.displayHand("Dealer", b.dealer)
+			b.displayHand(p.Name(), b.hands[i])
 
 			if b.hands[i].Total() == 21 {
 				fmt.Printf("%s has blackjack!\n", p.Name())
@@ -85,13 +86,18 @@ func (b *Blackjack) PlayRound() {
 		fmt.Println()
 	}
 
-	// take actions for dealer
-	// TODO: first reveal facedown dealer card
 	// TODO: figure out rules for when dealer should hit or stay (soft 17?)
+
+	// take actions for dealer
 	fmt.Println("** Dealer's turn. **")
+	b.dealer.Cards[0].Hidden = false
+	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
+	b.displayHand("Dealer", b.dealer)
+
 	for b.dealer.Total() <= 17 {
 		card := b.dealCard(b.dealer, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
+		b.displayHand("Dealer", b.dealer)
 	}
 
 	fmt.Println()
@@ -108,9 +114,8 @@ func (b *Blackjack) displayAll() {
 	}
 }
 
-// displayPlayerHand will display the dealer hand and the player's given hand.
-func (b *Blackjack) displayPlayerHand(name string, hand *game.Hand) {
-	fmt.Printf("Dealer: %v= %d\n", b.dealer, b.dealer.Total())
+// displayHand will display the given hand.
+func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 	fmt.Printf("%s: %v= %d\n", name, hand, hand.Total())
 }
 

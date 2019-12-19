@@ -41,14 +41,17 @@ func (b *Blackjack) PlayRound() {
 	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
-	b.display()
+	b.displayAll()
 	fmt.Println()
 
 	// take actions for each player
 	for i, p := range b.players {
 		fmt.Printf("** %s's turn. **\n", p.Name())
+
 		var action game.Action
 		for action != game.ActionStay && action != game.ActionDouble {
+			b.displayPlayerHand(p.Name(), b.hands[i])
+
 			if b.hands[i].Total() == 21 {
 				fmt.Printf("%s has blackjack!\n", p.Name())
 				break
@@ -77,23 +80,38 @@ func (b *Blackjack) PlayRound() {
 			default:
 				break
 			}
-
-			b.display()
 		}
-
-		// take actions for dealer
-		// TODO: implement dealer
 
 		fmt.Println()
 	}
+
+	// take actions for dealer
+	// TODO: first reveal facedown dealer card
+	// TODO: figure out rules for when dealer should hit or stay (soft 17?)
+	fmt.Println("** Dealer's turn. **")
+	for b.dealer.Total() <= 17 {
+		card := b.dealCard(b.dealer, false)
+		fmt.Printf("Dealer hit and was dealt: %v\n", card)
+	}
+
+	fmt.Println()
+
+	// determine winners
+	// TODO: determine who won and lost and collect bets
 }
 
-// display all cards on the table.
-func (b *Blackjack) display() {
+// displayAll will display all cards on the table.
+func (b *Blackjack) displayAll() {
 	fmt.Printf("Dealer: %v= %d\n", b.dealer, b.dealer.Total())
 	for i, v := range b.hands {
 		fmt.Printf("%s: %v= %d\n", b.players[i].Name(), v, v.Total())
 	}
+}
+
+// displayPlayerHand will display the dealer hand and the player's given hand.
+func (b *Blackjack) displayPlayerHand(name string, hand *game.Hand) {
+	fmt.Printf("Dealer: %v= %d\n", b.dealer, b.dealer.Total())
+	fmt.Printf("%s: %v= %d\n", name, hand, hand.Total())
 }
 
 func (b *Blackjack) emptyHands() {

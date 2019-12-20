@@ -38,8 +38,6 @@ func NewBlackjack(numDecks int, players ...Player) *Blackjack {
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
-	busted := true
-
 	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
@@ -47,64 +45,67 @@ func (b *Blackjack) PlayRound() {
 	fmt.Println()
 
 	// take actions for each player
+	busted := true
 	for i, p := range b.players {
-		fmt.Printf("** %s's turn. **\n", p.Name())
-
-		var action game.Action
-		for action != game.ActionStay && action != game.ActionDouble {
-			b.displayHand("Dealer", b.dealer)
-			b.displayHand(p.Name(), b.hands[i])
-
-			if b.hands[i].Total() == 21 {
-				fmt.Printf("%s has blackjack!\n", p.Name())
-				busted = false
-				break
-			} else if b.hands[i].Total() > 21 {
-				fmt.Printf("%s busted.\n", p.Name())
-				break
-			}
-
-			action = p.Action(b.dealer, b.hands[i])
-			switch action {
-			case game.ActionHit:
-				card := b.dealCard(b.hands[i], false)
-				fmt.Printf("%s hit and was dealt: %v\n", p.Name(), card)
-				break
-			case game.ActionStay:
-				fmt.Printf("%s chose to stay.\n", p.Name())
-				busted = false
-				break
-			case game.ActionSplit:
-				// TODO: implement split
-				break
-			case game.ActionDouble:
-				card := b.dealCard(b.hands[i], false)
-				// TODO: double bet
-				fmt.Printf("%s doubled down and was dealt: %v\n", p.Name(), card)
-				busted = false
-				break
-			default:
-				break
-			}
-		}
-
+		busted = b.playerTurn(p, b.hands[i])
 		fmt.Println()
 	}
 
-	// TODO: figure out rules for when dealer should hit or stay (soft 17?)
-
+	// take actions for dealer
 	if busted {
 		fmt.Println("All players busted.")
 	} else {
 		b.dealerTurn()
 	}
-
 	fmt.Println()
 
 	// determine winners
 	// TODO: determine who won and lost and collect bets
 }
 
+// playerTurn will take actions for a single player and return true if player busted.
+func (b *Blackjack) playerTurn(player Player, hand *game.Hand) bool {
+	fmt.Printf("** %s's turn. **\n", player.Name())
+
+	var action game.Action
+	for action != game.ActionStay && action != game.ActionDouble {
+		b.displayHand("Dealer", b.dealer)
+		b.displayHand(player.Name(), hand)
+
+		if hand.Total() == 21 {
+			fmt.Printf("%s has blackjack!\n", player.Name())
+			break
+		} else if hand.Total() > 21 {
+			fmt.Printf("%s busted.\n", player.Name())
+			return true
+		}
+
+		action = player.Action(b.dealer, hand)
+		switch action {
+		case game.ActionHit:
+			card := b.dealCard(hand, false)
+			fmt.Printf("%s hit and was dealt: %v\n", player.Name(), card)
+			break
+		case game.ActionStay:
+			fmt.Printf("%s chose to stay.\n", player.Name())
+			break
+		case game.ActionSplit:
+			// TODO: implement split
+			break
+		case game.ActionDouble:
+			card := b.dealCard(hand, false)
+			// TODO: double bet
+			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name(), card)
+			break
+		default:
+			break
+		}
+	}
+
+	return false
+}
+
+// dealerTurn will take actions for the dealer.
 func (b *Blackjack) dealerTurn() {
 	fmt.Println("** Dealer's turn. **")
 	b.dealer.Cards[0].Hidden = false

@@ -38,6 +38,8 @@ func NewBlackjack(numDecks int, players ...Player) *Blackjack {
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
+	busted := true
+
 	// deal initial hands
 	b.emptyHands()
 	b.dealInitialCards()
@@ -55,6 +57,7 @@ func (b *Blackjack) PlayRound() {
 
 			if b.hands[i].Total() == 21 {
 				fmt.Printf("%s has blackjack!\n", p.Name())
+				busted = false
 				break
 			} else if b.hands[i].Total() > 21 {
 				fmt.Printf("%s busted.\n", p.Name())
@@ -69,6 +72,7 @@ func (b *Blackjack) PlayRound() {
 				break
 			case game.ActionStay:
 				fmt.Printf("%s chose to stay.\n", p.Name())
+				busted = false
 				break
 			case game.ActionSplit:
 				// TODO: implement split
@@ -77,6 +81,7 @@ func (b *Blackjack) PlayRound() {
 				card := b.dealCard(b.hands[i], false)
 				// TODO: double bet
 				fmt.Printf("%s doubled down and was dealt: %v\n", p.Name(), card)
+				busted = false
 				break
 			default:
 				break
@@ -88,16 +93,20 @@ func (b *Blackjack) PlayRound() {
 
 	// TODO: figure out rules for when dealer should hit or stay (soft 17?)
 
-	// take actions for dealer
-	fmt.Println("** Dealer's turn. **")
-	b.dealer.Cards[0].Hidden = false
-	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
-	b.displayHand("Dealer", b.dealer)
-
-	for b.dealer.Total() <= 17 {
-		card := b.dealCard(b.dealer, false)
-		fmt.Printf("Dealer hit and was dealt: %v\n", card)
+	if busted {
+		fmt.Println("All players busted.")
+	} else {
+		// take actions for dealer
+		fmt.Println("** Dealer's turn. **")
+		b.dealer.Cards[0].Hidden = false
+		fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
 		b.displayHand("Dealer", b.dealer)
+
+		for b.dealer.Total() <= 17 {
+			card := b.dealCard(b.dealer, false)
+			fmt.Printf("Dealer hit and was dealt: %v\n", card)
+			b.displayHand("Dealer", b.dealer)
+		}
 	}
 
 	fmt.Println()

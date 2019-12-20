@@ -59,6 +59,35 @@ func (h *Hand) Total() int {
 	return total
 }
 
+// Soft returns true if the hand is a soft hand, meaning it includes an ace that is counted as 11.
+func (h *Hand) Soft() bool {
+	total := 0
+	numAces := 0
+	for _, v := range h.Cards {
+		if v.Rank() > RankAce && v.Rank() < RankJack {
+			total += int(v.Rank())
+		} else if v.Rank() >= RankJack && v.Rank() <= RankKing {
+			total += 10
+		} else if v.Rank() == RankAce {
+			numAces++
+		}
+	}
+
+	foundAces := 0
+	for _, v := range h.Cards {
+		if v.Rank() == RankAce {
+			foundAces++
+			if foundAces == numAces && total+11 <= 21 {
+				return true
+			} else {
+				total++
+			}
+		}
+	}
+
+	return false
+}
+
 // String will return a string representation of the hand.
 func (h *Hand) String() string {
 	var s string

@@ -113,7 +113,8 @@ func (b *Blackjack) dealerTurn() {
 	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
 	b.displayHand("Dealer", b.dealer)
 
-	for b.dealer.Total() <= 17 {
+	// dealer hits on soft 17
+	for b.dealer.Total() < 17 || (b.dealer.Total() == 17 && b.dealer.Soft()) {
 		card := b.dealCard(b.dealer, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
 		b.displayHand("Dealer", b.dealer)

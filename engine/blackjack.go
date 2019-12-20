@@ -74,7 +74,7 @@ func (b *Blackjack) playerTurn(player Player, hand *game.Hand) bool {
 
 		if hand.Total() == 21 {
 			fmt.Printf("%s has blackjack!\n", player.Name())
-			break
+			return false
 		} else if hand.Total() > 21 {
 			fmt.Printf("%s busted.\n", player.Name())
 			return true
@@ -96,6 +96,7 @@ func (b *Blackjack) playerTurn(player Player, hand *game.Hand) bool {
 			card := b.dealCard(hand, false)
 			// TODO: double bet
 			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name(), card)
+			b.displayHand(player.Name(), hand)
 			break
 		default:
 			break

@@ -96,23 +96,26 @@ func (b *Blackjack) PlayRound() {
 	if busted {
 		fmt.Println("All players busted.")
 	} else {
-		// take actions for dealer
-		fmt.Println("** Dealer's turn. **")
-		b.dealer.Cards[0].Hidden = false
-		fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
-		b.displayHand("Dealer", b.dealer)
-
-		for b.dealer.Total() <= 17 {
-			card := b.dealCard(b.dealer, false)
-			fmt.Printf("Dealer hit and was dealt: %v\n", card)
-			b.displayHand("Dealer", b.dealer)
-		}
+		b.dealerTurn()
 	}
 
 	fmt.Println()
 
 	// determine winners
 	// TODO: determine who won and lost and collect bets
+}
+
+func (b *Blackjack) dealerTurn() {
+	fmt.Println("** Dealer's turn. **")
+	b.dealer.Cards[0].Hidden = false
+	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
+	b.displayHand("Dealer", b.dealer)
+
+	for b.dealer.Total() <= 17 {
+		card := b.dealCard(b.dealer, false)
+		fmt.Printf("Dealer hit and was dealt: %v\n", card)
+		b.displayHand("Dealer", b.dealer)
+	}
 }
 
 // displayAll will display all cards on the table.

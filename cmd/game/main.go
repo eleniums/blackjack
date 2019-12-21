@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/engine"
 	"github.com/eleniums/blackjack/game"
-	"github.com/eleniums/blackjack/players"
 )
 
 var version = "0.1"
@@ -41,7 +41,7 @@ func main() {
 	for i := 0; i < *numPlayers; i++ {
 		fmt.Printf("Enter player name: ")
 		name := game.ReadInput()
-		human := players.NewHumanPlayer(name)
+		human := ai.NewHuman(name)
 		competitors = append(competitors, human)
 	}
 	fmt.Println()

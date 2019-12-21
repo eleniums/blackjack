@@ -1,4 +1,4 @@
-package players
+package ai
 
 import (
 	"fmt"
@@ -7,25 +7,25 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
-// HumanPlayer represents a single human player.
-type HumanPlayer struct {
+// Human represents a single human player.
+type Human struct {
 	name string
 }
 
-// NewHumanPlayer will create a new human player.
-func NewHumanPlayer(name string) *HumanPlayer {
-	return &HumanPlayer{
+// NewHuman will create a new human player.
+func NewHuman(name string) *Human {
+	return &Human{
 		name: name,
 	}
 }
 
 // Name of player.
-func (hp *HumanPlayer) Name() string {
-	return hp.name
+func (h *Human) Name() string {
+	return h.name
 }
 
 // Action returns the action the player wants to make with his hand.
-func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action {
+func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	var action game.Action
 	for action == 0 {
 		fmt.Printf("Hit, Stay, Split, or Double: ")
@@ -55,7 +55,7 @@ func (hp *HumanPlayer) Action(dealer *game.Hand, player *game.Hand) game.Action 
 }
 
 // PlaceBet returns the player's bet.
-func (hp *HumanPlayer) PlaceBet(minBet, maxBet, totalMoney int) int {
+func (h *Human) PlaceBet(minBet, maxBet, totalMoney int) int {
 	// TODO: implement player PlaceBet
 	return 15
 }

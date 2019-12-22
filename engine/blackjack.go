@@ -11,11 +11,11 @@ type Blackjack struct {
 	shuffler game.Shuffler
 	dealer   *game.Hand
 	hands    []*game.Hand
-	players  []Player
+	players  []AI
 }
 
 // NewBlackjack will create a new game engine.
-func NewBlackjack(numDecks int, players ...Player) *Blackjack {
+func NewBlackjack(numDecks int, players ...AI) *Blackjack {
 	shuffler := game.NewShuffler()
 
 	deck := game.NewDeck()
@@ -64,7 +64,7 @@ func (b *Blackjack) PlayRound() {
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
-func (b *Blackjack) playerTurn(player Player, hand *game.Hand) bool {
+func (b *Blackjack) playerTurn(player AI, hand *game.Hand) bool {
 	fmt.Printf("** %s's turn. **\n", player.Name())
 
 	var action game.Action

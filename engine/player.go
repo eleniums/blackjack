@@ -4,8 +4,8 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
-// Player interface.
-type Player interface {
+// AI interface.
+type AI interface {
 	// Name of player.
 	Name() string
 

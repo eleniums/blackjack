@@ -10,12 +10,11 @@ import (
 type Blackjack struct {
 	shuffler game.Shuffler
 	dealer   *game.Hand
-	hands    []*game.Hand
-	players  []AI
+	players  []*Player
 }
 
 // NewBlackjack will create a new game engine.
-func NewBlackjack(numDecks int, players ...AI) *Blackjack {
+func NewBlackjack(numDecks int, players ...*Player) *Blackjack {
 	shuffler := game.NewShuffler()
 
 	deck := game.NewDeck()
@@ -23,15 +22,9 @@ func NewBlackjack(numDecks int, players ...AI) *Blackjack {
 		shuffler.Add(deck.Cards...)
 	}
 
-	hands := []*game.Hand{}
-	for range players {
-		hands = append(hands, game.NewHand())
-	}
-
 	return &Blackjack{
 		shuffler: shuffler,
 		dealer:   game.NewHand(),
-		hands:    hands,
 		players:  players,
 	}
 }

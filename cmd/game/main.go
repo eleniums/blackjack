@@ -18,7 +18,7 @@ func main() {
 	numRounds := flag.Int("num-rounds", 3, "number of rounds to play (0 is infinite)")
 	numPlayers := flag.Int("num-players", 1, "number of human players in game")
 	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
-	// startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
+	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	// minBet := flag.Int("min-bet", 15, "minimum bet allowed")
 	// maxBet := flag.Int("max-bet", 15, "maximum bet allowed")
 	flag.Parse()
@@ -35,18 +35,18 @@ func main() {
 
 	fmt.Printf("--- Blackjack v%s ---\n\n", version)
 
-	var competitors []engine.AI
+	var players []*Players
 
 	// add human players
 	for i := 0; i < *numPlayers; i++ {
 		fmt.Printf("Enter player name: ")
 		name := game.ReadInput()
-		human := ai.NewHuman(name)
-		competitors = append(competitors, human)
+		player := engine.NewPlayer(name, *startingMoney, ai.NewHuman())
+		players = append(players, player)
 	}
 	fmt.Println()
 
-	blackjack := engine.NewBlackjack(*numDecks, competitors...)
+	blackjack := engine.NewBlackjack(*numDecks, players...)
 
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
 		fmt.Printf("--- Round %d ---\n", i)

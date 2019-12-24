@@ -39,8 +39,8 @@ func (b *Blackjack) PlayRound() {
 
 	// take actions for each player
 	busted := true
-	for i, p := range b.players {
-		busted = b.playerTurn(p, b.hands[i])
+	for _, p := range b.players {
+		busted = b.playerTurn(p)
 		fmt.Println()
 	}
 
@@ -57,39 +57,39 @@ func (b *Blackjack) PlayRound() {
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
-func (b *Blackjack) playerTurn(player AI, hand *game.Hand) bool {
-	fmt.Printf("** %s's turn. **\n", player.Name())
+func (b *Blackjack) playerTurn(player *Player) bool {
+	fmt.Printf("** %s's turn. **\n", player.Name)
 
 	var action game.Action
 	for action != game.ActionStay && action != game.ActionDouble {
 		b.displayHand("Dealer", b.dealer)
-		b.displayHand(player.Name(), hand)
+		b.displayHand(player.Name, player.Hand)
 
-		if hand.Total() == 21 {
-			fmt.Printf("%s has blackjack!\n", player.Name())
+		if player.Hand.Total() == 21 {
+			fmt.Printf("%s has blackjack!\n", player.Name)
 			return false
-		} else if hand.Total() > 21 {
-			fmt.Printf("%s busted.\n", player.Name())
+		} else if player.Hand.Total() > 21 {
+			fmt.Printf("%s busted.\n", player.Name)
 			return true
 		}
 
-		action = player.Action(b.dealer, hand)
+		action = player.AI.Action(b.dealer, player.Hand)
 		switch action {
 		case game.ActionHit:
-			card := b.dealCard(hand, false)
-			fmt.Printf("%s hit and was dealt: %v\n", player.Name(), card)
+			card := b.dealCard(player.Hand, false)
+			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
 			break
 		case game.ActionStay:
-			fmt.Printf("%s chose to stay.\n", player.Name())
+			fmt.Printf("%s chose to stay.\n", player.Name)
 			break
 		case game.ActionSplit:
 			// TODO: implement split
 			break
 		case game.ActionDouble:
-			card := b.dealCard(hand, false)
+			card := b.dealCard(player.Hand, false)
 			// TODO: double bet
-			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name(), card)
-			b.displayHand(player.Name(), hand)
+			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name, card)
+			b.displayHand(player.Name, player.Hand)
 			break
 		default:
 			break
@@ -117,8 +117,8 @@ func (b *Blackjack) dealerTurn() {
 // displayAll will display all cards on the table.
 func (b *Blackjack) displayAll() {
 	b.displayHand("Dealer", b.dealer)
-	for i, v := range b.hands {
-		b.displayHand(b.players[i].Name(), v)
+	for _, v := range b.players {
+		b.displayHand(v.Name, v.Hand)
 	}
 }
 
@@ -129,8 +129,8 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 
 func (b *Blackjack) emptyHands() {
 	b.dealer.Cards = b.dealer.Cards[:0]
-	for _, v := range b.hands {
-		v.Cards = v.Cards[:0]
+	for _, v := range b.players {
+		v.Hand.Cards = v.Hand.Cards[:0]
 	}
 }
 
@@ -146,16 +146,16 @@ func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) game.Card {
 
 func (b *Blackjack) dealInitialCards() {
 	// deal first card to each player face up
-	for _, v := range b.hands {
-		b.dealCard(v, false)
+	for _, v := range b.players {
+		b.dealCard(v.Hand, false)
 	}
 
 	// deal first card to dealer face down
 	b.dealCard(b.dealer, true)
 
 	// deal second card to each player face up
-	for _, v := range b.hands {
-		b.dealCard(v, false)
+	for _, v := range b.players {
+		b.dealCard(v.Hand, false)
 	}
 
 	// deal second card to dealer face up

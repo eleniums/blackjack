@@ -8,20 +8,11 @@ import (
 )
 
 // Human represents a single human player.
-type Human struct {
-	name string
-}
+type Human struct{}
 
 // NewHuman will create a new human player.
-func NewHuman(name string) *Human {
-	return &Human{
-		name: name,
-	}
-}
-
-// Name of player.
-func (h *Human) Name() string {
-	return h.name
+func NewHuman() *Human {
+	return &Human{}
 }
 
 // Action returns the action the player wants to make with his hand.

@@ -6,9 +6,6 @@ import (
 
 // AI interface.
 type AI interface {
-	// Name of player.
-	Name() string
-
 	// Action returns the action the player wants to make with his hand.
 	Action(dealer *game.Hand, player *game.Hand) game.Action
 

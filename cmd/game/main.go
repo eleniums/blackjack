@@ -35,7 +35,7 @@ func main() {
 
 	fmt.Printf("--- Blackjack v%s ---\n\n", version)
 
-	var players []*Players
+	var players []*engine.Player
 
 	// add human players
 	for i := 0; i < *numPlayers; i++ {

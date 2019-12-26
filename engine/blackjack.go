@@ -69,7 +69,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			fmt.Printf("%s has blackjack!\n", player.Name)
 			return false
 		} else if player.Hand.Total() > 21 {
-			fmt.Printf("%s busted.\n", player.Name)
+			fmt.Printf("%s busted with a total of %d.\n", player.Name, player.Hand.Total())
 			return true
 		}
 
@@ -80,7 +80,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
 			break
 		case game.ActionStay:
-			fmt.Printf("%s chose to stay.\n", player.Name)
+			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, player.Hand.Total())
 			break
 		case game.ActionSplit:
 			// TODO: implement split
@@ -107,11 +107,13 @@ func (b *Blackjack) dealerTurn() {
 	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
-	for b.dealer.Hand.Total() < 17 || (b.dealer.Hand.Total() == 17 && b.dealer.Hand.Soft()) {
+	for b.dealer.AI.Action(b.dealer.Hand, nil) == game.ActionHit {
 		card := b.dealCard(b.dealer.Hand, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
 		b.displayHand("Dealer", b.dealer.Hand)
 	}
+
+	fmt.Printf("Dealer finished with a total of %d.\n", b.dealer.Hand.Total())
 }
 
 // displayAll will display all cards on the table.

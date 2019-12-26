@@ -46,7 +46,10 @@ func main() {
 	}
 	fmt.Println()
 
-	blackjack := engine.NewBlackjack(*numDecks, players...)
+	// create dealer
+	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
+
+	blackjack := engine.NewBlackjack(*numDecks, dealer, players...)
 
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
 		fmt.Printf("--- Round %d ---\n", i)

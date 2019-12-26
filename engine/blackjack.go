@@ -9,12 +9,12 @@ import (
 // Blackjack is the engine for a game of Blackjack.
 type Blackjack struct {
 	shuffler game.Shuffler
-	dealer   *game.Hand
+	dealer   *Player
 	players  []*Player
 }
 
 // NewBlackjack will create a new game engine.
-func NewBlackjack(numDecks int, players ...*Player) *Blackjack {
+func NewBlackjack(numDecks int, dealer *Player, players ...*Player) *Blackjack {
 	shuffler := game.NewShuffler()
 
 	deck := game.NewDeck()
@@ -24,7 +24,7 @@ func NewBlackjack(numDecks int, players ...*Player) *Blackjack {
 
 	return &Blackjack{
 		shuffler: shuffler,
-		dealer:   game.NewHand(),
+		dealer:   dealer,
 		players:  players,
 	}
 }
@@ -62,7 +62,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 
 	var action game.Action
 	for action != game.ActionStay && action != game.ActionDouble {
-		b.displayHand("Dealer", b.dealer)
+		b.displayHand("Dealer", b.dealer.Hand)
 		b.displayHand(player.Name, player.Hand)
 
 		if player.Hand.Total() == 21 {
@@ -73,7 +73,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			return true
 		}
 
-		action = player.AI.Action(b.dealer, player.Hand)
+		action = player.AI.Action(b.dealer.Hand, player.Hand)
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(player.Hand, false)
@@ -102,21 +102,21 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 // dealerTurn will take actions for the dealer.
 func (b *Blackjack) dealerTurn() {
 	fmt.Println("** Dealer's turn. **")
-	b.dealer.Cards[0].Hidden = false
-	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Cards[0])
-	b.displayHand("Dealer", b.dealer)
+	b.dealer.Hand.Cards[0].Hidden = false
+	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Hand.Cards[0])
+	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
-	for b.dealer.Total() < 17 || (b.dealer.Total() == 17 && b.dealer.Soft()) {
-		card := b.dealCard(b.dealer, false)
+	for b.dealer.Hand.Total() < 17 || (b.dealer.Hand.Total() == 17 && b.dealer.Hand.Soft()) {
+		card := b.dealCard(b.dealer.Hand, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
-		b.displayHand("Dealer", b.dealer)
+		b.displayHand("Dealer", b.dealer.Hand)
 	}
 }
 
 // displayAll will display all cards on the table.
 func (b *Blackjack) displayAll() {
-	b.displayHand("Dealer", b.dealer)
+	b.displayHand("Dealer", b.dealer.Hand)
 	for _, v := range b.players {
 		b.displayHand(v.Name, v.Hand)
 	}
@@ -128,7 +128,7 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 }
 
 func (b *Blackjack) emptyHands() {
-	b.dealer.Cards = b.dealer.Cards[:0]
+	b.dealer.Hand.Cards = b.dealer.Hand.Cards[:0]
 	for _, v := range b.players {
 		v.Hand.Cards = v.Hand.Cards[:0]
 	}
@@ -151,7 +151,7 @@ func (b *Blackjack) dealInitialCards() {
 	}
 
 	// deal first card to dealer face down
-	b.dealCard(b.dealer, true)
+	b.dealCard(b.dealer.Hand, true)
 
 	// deal second card to each player face up
 	for _, v := range b.players {
@@ -159,5 +159,5 @@ func (b *Blackjack) dealInitialCards() {
 	}
 
 	// deal second card to dealer face up
-	b.dealCard(b.dealer, false)
+	b.dealCard(b.dealer.Hand, false)
 }

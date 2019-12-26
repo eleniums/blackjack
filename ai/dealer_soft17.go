@@ -14,8 +14,11 @@ func NewSoft17Dealer() *Soft17Dealer {
 
 // Action returns the action the player wants to make with his hand.
 func (ai *Soft17Dealer) Action(dealer *game.Hand, player *game.Hand) game.Action {
-	// TODO: implement soft 17 dealer Action
-	return 0
+	// dealer hits on soft 17
+	for dealer.Total() < 17 || (dealer.Total() == 17 && dealer.Soft()) {
+		return game.ActionHit
+	}
+	return game.ActionStay
 }
 
 // PlaceBet returns the player's bet.

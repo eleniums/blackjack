@@ -53,6 +53,17 @@ func (b *Blackjack) PlayRound() {
 	fmt.Println()
 
 	// determine winners
+	dealerTotal := b.dealer.Hand.Total()
+	for _, p := range b.players {
+		playerTotal := p.Hand.Total()
+		if playerTotal < dealerTotal {
+			// TODO: player loses
+		} else if playerTotal == dealerTotal {
+			// TODO: push, it's a tie
+		} else {
+			// TODO: player wins!
+		}
+	}
 	// TODO: determine who won and lost and collect bets
 }
 

@@ -120,8 +120,8 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			// TODO: implement split
 		case game.ActionDouble:
 			card := b.dealCard(player.Hand, false)
-			// TODO: double bet
-			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name, card)
+			player.Bet *= 2
+			fmt.Printf("%s doubled their bet to $%d and was dealt: %v\n", player.Name, player.Bet, card)
 			b.displayHand(player.Name, player.Hand)
 		case game.ActionStats:
 			b.displayPlayerStats(player)

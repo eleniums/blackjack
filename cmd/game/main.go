@@ -52,7 +52,11 @@ func main() {
 	blackjack := engine.NewBlackjack(*numDecks, dealer, players...)
 
 	// show starting stats
-	fmt.Println("Ready to begin game.")
+	if *numRounds == 0 {
+		fmt.Println("Ready to begin game with infinite rounds.")
+	} else {
+		fmt.Printf("Ready to begin game with %d rounds.\n", *numRounds)
+	}
 	fmt.Printf("All players start with $%d.\n", *startingMoney)
 	fmt.Printf("Min bet is $%d. Max bet is $%d.\n", *minBet, *maxBet)
 	fmt.Println()

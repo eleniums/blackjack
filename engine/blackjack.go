@@ -53,33 +53,15 @@ func (b *Blackjack) PlayRound() {
 	fmt.Println()
 
 	// determine winners
-	dealerTotal := b.dealer.Hand.Total()
-	for _, p := range b.players {
-		playerTotal := p.Hand.Total()
-		if playerTotal > 21 {
-			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
-			// TODO: remove player's bet
-		} else if dealerTotal > 21 {
-			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
-			// TODO: player wins! Double player's bet
-		} else if playerTotal < dealerTotal {
-			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
-			// TODO: remove player's bet
-		} else if playerTotal == dealerTotal {
-			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
-			// TODO: push, player gets bet back
-		} else if playerTotal > dealerTotal {
-			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
-			// TODO: player wins! Double player's bet
-		}
-	}
+	b.determineWinners()
 	fmt.Println()
+}
 
-	// list all player stats
+// DisplayStats will show all player stats.
+func (b *Blackjack) DisplayStats() {
 	for _, p := range b.players {
 		b.displayPlayerStats(p)
 	}
-	fmt.Println()
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
@@ -146,6 +128,30 @@ func (b *Blackjack) dealerTurn() {
 		fmt.Printf("Dealer finished with a total of %d.\n", dealerTotal)
 	} else {
 		fmt.Printf("Dealer busted with a total of %d.\n", dealerTotal)
+	}
+}
+
+// determineWinners will determine which players won or lost.
+func (b *Blackjack) determineWinners() {
+	dealerTotal := b.dealer.Hand.Total()
+	for _, p := range b.players {
+		playerTotal := p.Hand.Total()
+		if playerTotal > 21 {
+			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
+			// TODO: remove player's bet
+		} else if dealerTotal > 21 {
+			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
+			// TODO: player wins! Double player's bet
+		} else if playerTotal < dealerTotal {
+			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
+			// TODO: remove player's bet
+		} else if playerTotal == dealerTotal {
+			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
+			// TODO: push, player gets bet back
+		} else if playerTotal > dealerTotal {
+			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
+			// TODO: player wins! Double player's bet
+		}
 	}
 }
 

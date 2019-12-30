@@ -46,7 +46,7 @@ func (b *Blackjack) PlayRound() {
 
 	// take actions for dealer
 	if busted {
-		fmt.Println("All players busted.")
+		fmt.Println("All players busted.") // TODO: make sure this scenario works correctly
 	} else {
 		b.dealerTurn()
 	}
@@ -56,15 +56,18 @@ func (b *Blackjack) PlayRound() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
 		playerTotal := p.Hand.Total()
-		if playerTotal < dealerTotal {
-			// TODO: player loses
-		} else if playerTotal == dealerTotal {
-			// TODO: push, it's a tie
-		} else {
-			// TODO: player wins!
+		if playerTotal < dealerTotal && dealerTotal <= 21 {
+			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
+			// TODO: remove player's bet
+		} else if playerTotal == dealerTotal && dealerTotal <= 21 {
+			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
+			// TODO: push, player gets bet back
+		} else if playerTotal > dealerTotal && playerTotal <= 21 {
+			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
+			// TODO: player wins! Double player's bet
 		}
 	}
-	// TODO: determine who won and lost and collect bets
+	fmt.Println()
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
@@ -118,13 +121,18 @@ func (b *Blackjack) dealerTurn() {
 	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
-	for b.dealer.AI.Action(b.dealer.Hand, nil) == game.ActionHit {
+	for b.dealer.Hand.Total() < 21 && b.dealer.AI.Action(b.dealer.Hand, nil) == game.ActionHit {
 		card := b.dealCard(b.dealer.Hand, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
 		b.displayHand("Dealer", b.dealer.Hand)
 	}
 
-	fmt.Printf("Dealer finished with a total of %d.\n", b.dealer.Hand.Total())
+	dealerTotal := b.dealer.Hand.Total()
+	if dealerTotal <= 21 {
+		fmt.Printf("Dealer finished with a total of %d.\n", dealerTotal)
+	} else {
+		fmt.Printf("Dealer busted with a total of %d.\n", dealerTotal)
+	}
 }
 
 // displayAll will display all cards on the table.

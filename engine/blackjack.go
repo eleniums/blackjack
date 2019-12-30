@@ -158,23 +158,22 @@ func (b *Blackjack) determineWinners() {
 		if playerTotal > 21 {
 			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
 			p.Loss++
-			// TODO: remove player's bet
+			p.Money -= p.Bet
 		} else if dealerTotal > 21 {
 			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
 			p.Win++
-			// TODO: player wins! Double player's bet
+			p.Money += p.Bet
 		} else if playerTotal < dealerTotal {
 			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
 			p.Loss++
-			// TODO: remove player's bet
+			p.Money -= p.Bet
 		} else if playerTotal == dealerTotal {
 			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
 			p.Tie++
-			// TODO: push, player gets bet back
 		} else if playerTotal > dealerTotal {
 			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
 			p.Win++
-			// TODO: player wins! Double player's bet
+			p.Money += p.Bet
 		}
 	}
 }

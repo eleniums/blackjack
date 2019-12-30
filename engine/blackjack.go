@@ -78,7 +78,12 @@ func (b *Blackjack) DisplayStats() {
 func (b *Blackjack) placeBet(player *Player) {
 	fmt.Printf("%s has $%d. Min bet is $%d and max bet is $%d.\n", player.Name, player.Money, b.MinBet, b.MaxBet)
 	player.Bet = player.AI.PlaceBet(b.MinBet, b.MaxBet, player.Money)
-	fmt.Printf("%s placed a bet of $%d.\n", player.Name, player.Bet)
+	if player.Bet >= b.MinBet && player.Bet <= b.MaxBet {
+		fmt.Printf("%s placed a bet of $%d.\n", player.Name, player.Bet)
+	} else {
+		fmt.Printf("%s tried to place an invalid bet of $%d. Will use minimum bet of $%d.\n", player.Name, player.Bet, b.MinBet)
+		player.Bet = b.MinBet
+	}
 }
 
 // playerTurn will take actions for a single player and return true if player busted.

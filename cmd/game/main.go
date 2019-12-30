@@ -21,6 +21,7 @@ func main() {
 	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	minBet := flag.Int("min-bet", 15, "minimum bet allowed")
 	maxBet := flag.Int("max-bet", 100, "maximum bet allowed")
+	addRandomAI := flag.Bool("random-ai", false, "add an AI that randomly chooses actions")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -28,7 +29,7 @@ func main() {
 		return
 	}
 
-	if *numDecks < 0 {
+	if *numDecks <= 0 {
 		fmt.Println("Number of decks has to be 1 or greater.")
 		return
 	}
@@ -47,8 +48,15 @@ func main() {
 	fmt.Println()
 
 	// add computer players
-	randomAI := engine.NewPlayer("Larry", *startingMoney, ai.NewRandom())
-	players = append(players, randomAI)
+	if *addRandomAI {
+		randomAI := engine.NewPlayer("Larry", *startingMoney, ai.NewRandom())
+		players = append(players, randomAI)
+	}
+
+	if len(players) <= 0 {
+		fmt.Println("Number of players has to be 1 or greater.")
+		return
+	}
 
 	// create dealer
 	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())

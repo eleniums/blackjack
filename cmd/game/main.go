@@ -19,8 +19,8 @@ func main() {
 	numPlayers := flag.Int("num-players", 1, "number of human players in game")
 	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
-	// minBet := flag.Int("min-bet", 15, "minimum bet allowed")
-	// maxBet := flag.Int("max-bet", 15, "maximum bet allowed")
+	minBet := flag.Int("min-bet", 15, "minimum bet allowed")
+	maxBet := flag.Int("max-bet", 500, "maximum bet allowed")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -51,9 +51,19 @@ func main() {
 
 	blackjack := engine.NewBlackjack(*numDecks, dealer, players...)
 
+	// show starting stats
+	fmt.Println("Ready to begin game.")
+	fmt.Printf("All players start with $%d.\n", *startingMoney)
+	fmt.Printf("Min bet is $%d. Max bet is $%d.\n", *minBet, *maxBet)
+	fmt.Println()
+	blackjack.DisplayStats()
+	fmt.Println()
+
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
 		fmt.Printf("--- Round %d ---\n", i)
 		blackjack.PlayRound()
+		blackjack.DisplayStats()
+		fmt.Println()
 	}
 }
 

@@ -47,10 +47,13 @@ func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 
 // PlaceBet returns the player's bet.
 func (h *Human) PlaceBet(minBet, maxBet, totalMoney int) int {
-	fmt.Printf("Place bet: ")
-	input := game.ReadInput()
-	input = strings.ToLower(input)
-	bet, _ := strconv.Atoi(input)
-	// TODO: handle error and loop until valid input
+	var err error
+	bet := -1
+	for err != nil || bet < minBet || bet > maxBet {
+		fmt.Printf("Place bet: ")
+		input := game.ReadInput()
+		input = strings.ToLower(input)
+		bet, err = strconv.Atoi(input)
+	}
 	return bet
 }

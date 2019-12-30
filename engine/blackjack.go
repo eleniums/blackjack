@@ -136,18 +136,23 @@ func (b *Blackjack) determineWinners() {
 		playerTotal := p.Hand.Total()
 		if playerTotal > 21 {
 			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
+			p.Loss++
 			// TODO: remove player's bet
 		} else if dealerTotal > 21 {
 			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
+			p.Win++
 			// TODO: player wins! Double player's bet
 		} else if playerTotal < dealerTotal {
 			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
+			p.Loss++
 			// TODO: remove player's bet
 		} else if playerTotal == dealerTotal {
 			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
+			p.Tie++
 			// TODO: push, player gets bet back
 		} else if playerTotal > dealerTotal {
 			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
+			p.Win++
 			// TODO: player wins! Double player's bet
 		}
 	}
@@ -169,6 +174,7 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 // displayPlayerStats will display the stats for a single player.
 func (b *Blackjack) displayPlayerStats(player *Player) {
 	fmt.Printf("%s (%T)\n", player.Name, player.AI)
+	fmt.Printf("  Win: %d | Loss: %d | Tie: %d | $%d\n", player.Win, player.Loss, player.Tie, player.Money)
 }
 
 func (b *Blackjack) emptyHands() {

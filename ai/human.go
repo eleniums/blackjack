@@ -53,6 +53,9 @@ func (h *Human) PlaceBet(minBet, maxBet, totalMoney int) int {
 		fmt.Printf("Place bet: ")
 		input := game.ReadInput()
 		input = strings.ToLower(input)
+		if input == "" {
+			return minBet
+		}
 		bet, err = strconv.Atoi(input)
 	}
 	return bet

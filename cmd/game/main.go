@@ -20,7 +20,7 @@ func main() {
 	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	minBet := flag.Int("min-bet", 15, "minimum bet allowed")
-	maxBet := flag.Int("max-bet", 500, "maximum bet allowed")
+	maxBet := flag.Int("max-bet", 100, "maximum bet allowed")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -50,6 +50,8 @@ func main() {
 	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
 
 	blackjack := engine.NewBlackjack(*numDecks, dealer, players...)
+	blackjack.MinBet = *minBet
+	blackjack.MaxBet = *maxBet
 
 	// show starting stats
 	if *numRounds == 0 {

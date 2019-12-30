@@ -12,6 +12,8 @@ type Blackjack struct {
 	shuffler game.Shuffler
 	dealer   *Player
 	players  []*Player
+	MinBet   int
+	MaxBet   int
 }
 
 // NewBlackjack will create a new game engine.
@@ -27,6 +29,8 @@ func NewBlackjack(numDecks int, dealer *Player, players ...*Player) *Blackjack {
 		shuffler: shuffler,
 		dealer:   dealer,
 		players:  players,
+		MinBet:   15,
+		MaxBet:   100,
 	}
 }
 
@@ -37,6 +41,12 @@ func (b *Blackjack) PlayRound() {
 	b.dealInitialCards()
 	b.displayAll()
 	fmt.Println()
+
+	// place bets for each player
+	for _, p := range b.players {
+		b.placeBet(p)
+		fmt.Println()
+	}
 
 	// take actions for each player
 	busted := true
@@ -63,6 +73,12 @@ func (b *Blackjack) DisplayStats() {
 	for _, p := range b.players {
 		b.displayPlayerStats(p)
 	}
+}
+
+func (b *Blackjack) placeBet(player *Player) {
+	fmt.Printf("%s has $%d. Min bet is $%d and max bet is $%d.\n", player.Name, player.Money, b.MinBet, b.MaxBet)
+	player.Bet = player.AI.PlaceBet(b.MinBet, b.MaxBet, player.Money)
+	fmt.Printf("%s placed a bet of $%d.\n", player.Name, player.Bet)
 }
 
 // playerTurn will take actions for a single player and return true if player busted.

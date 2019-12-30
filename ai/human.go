@@ -2,6 +2,7 @@ package ai
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/eleniums/blackjack/game"
@@ -46,6 +47,10 @@ func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 
 // PlaceBet returns the player's bet.
 func (h *Human) PlaceBet(minBet, maxBet, totalMoney int) int {
-	// TODO: implement player PlaceBet
-	return 15
+	fmt.Printf("Place bet: ")
+	input := game.ReadInput()
+	input = strings.ToLower(input)
+	bet, _ := strconv.Atoi(input)
+	// TODO: handle error and loop until valid input
+	return bet
 }

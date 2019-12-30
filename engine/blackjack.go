@@ -204,9 +204,22 @@ func (b *Blackjack) displayPlayerStats(player *Player) {
 }
 
 func (b *Blackjack) emptyHands() {
+	for _, c := range b.dealer.Hand.Cards {
+		b.discard.Add(0, c)
+	}
 	b.dealer.Hand.Cards = b.dealer.Hand.Cards[:0]
+
 	for _, v := range b.players {
+		for _, c := range v.Hand.Cards {
+			b.discard.Add(0, c)
+		}
 		v.Hand.Cards = v.Hand.Cards[:0]
+	}
+
+	// check if discard pile is too full
+	if b.discard.Count() > b.maxDiscard {
+		b.shuffler.Add(b.discard.Cards...)
+		b.discard.Cards = b.discard.Cards[:0]
 	}
 }
 

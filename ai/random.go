@@ -1,7 +1,6 @@
 package ai
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -26,7 +25,6 @@ func NewRandom() *Random {
 // Action returns the action the player wants to make with his hand.
 func (ai *Random) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	i := ai.rand.Intn(2)
-	fmt.Println(i)
 	if i == 0 {
 		return game.ActionHit
 	}

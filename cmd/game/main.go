@@ -17,7 +17,7 @@ func main() {
 	numDecks := flag.Int("num-decks", 6, "number of shuffled decks to use")
 	numRounds := flag.Int("num-rounds", 3, "number of rounds to play (0 is infinite)")
 	numPlayers := flag.Int("num-players", 1, "number of human players in game")
-	// maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
+	maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	minBet := flag.Int("min-bet", 15, "minimum bet allowed")
 	maxBet := flag.Int("max-bet", 100, "maximum bet allowed")
@@ -49,9 +49,7 @@ func main() {
 	// create dealer
 	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
 
-	blackjack := engine.NewBlackjack(*numDecks, dealer, players...)
-	blackjack.MinBet = *minBet
-	blackjack.MaxBet = *maxBet
+	blackjack := engine.NewBlackjack(*numDecks, *maxDiscard, *minBet, *maxBet, dealer, players...)
 
 	// show starting stats
 	if *numRounds == 0 {

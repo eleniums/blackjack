@@ -9,15 +9,17 @@ import (
 
 // Blackjack is the engine for a game of Blackjack.
 type Blackjack struct {
-	shuffler game.Shuffler
-	dealer   *Player
-	players  []*Player
-	MinBet   int
-	MaxBet   int
+	shuffler   game.Shuffler
+	dealer     *Player
+	players    []*Player
+	discard    *game.Deck
+	maxDiscard int
+	minBet     int
+	maxBet     int
 }
 
 // NewBlackjack will create a new game engine.
-func NewBlackjack(numDecks int, dealer *Player, players ...*Player) *Blackjack {
+func NewBlackjack(numDecks int, maxDiscard int, minBet int, maxBet int, dealer *Player, players ...*Player) *Blackjack {
 	shuffler := game.NewShuffler()
 
 	deck := game.NewDeck()
@@ -25,12 +27,16 @@ func NewBlackjack(numDecks int, dealer *Player, players ...*Player) *Blackjack {
 		shuffler.Add(deck.Cards...)
 	}
 
+	discard := game.NewEmptyDeck()
+
 	return &Blackjack{
-		shuffler: shuffler,
-		dealer:   dealer,
-		players:  players,
-		MinBet:   15,
-		MaxBet:   100,
+		shuffler:   shuffler,
+		dealer:     dealer,
+		players:    players,
+		discard:    discard,
+		maxDiscard: maxDiscard,
+		minBet:     minBet,
+		maxBet:     maxBet,
 	}
 }
 
@@ -76,13 +82,13 @@ func (b *Blackjack) DisplayStats() {
 }
 
 func (b *Blackjack) placeBet(player *Player) {
-	fmt.Printf("%s has $%d. Min bet is $%d and max bet is $%d.\n", player.Name, player.Money, b.MinBet, b.MaxBet)
-	player.Bet = player.AI.PlaceBet(b.MinBet, b.MaxBet, player.Money)
-	if player.Bet >= b.MinBet && player.Bet <= b.MaxBet {
+	fmt.Printf("%s has $%d. Min bet is $%d and max bet is $%d.\n", player.Name, player.Money, b.minBet, b.maxBet)
+	player.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
+	if player.Bet >= b.minBet && player.Bet <= b.maxBet {
 		fmt.Printf("%s placed a bet of $%d.\n", player.Name, player.Bet)
 	} else {
-		fmt.Printf("%s tried to place an invalid bet of $%d. Will use minimum bet of $%d.\n", player.Name, player.Bet, b.MinBet)
-		player.Bet = b.MinBet
+		fmt.Printf("%s tried to place an invalid bet of $%d. Will use minimum bet of $%d.\n", player.Name, player.Bet, b.minBet)
+		player.Bet = b.minBet
 	}
 }
 

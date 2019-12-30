@@ -44,6 +44,11 @@ func NewDeck() *Deck {
 	return &deck
 }
 
+// NewEmptyDeck will create an empty deck.
+func NewEmptyDeck() *Deck {
+	return &Deck{}
+}
+
 // Count returns the number of cards in the deck.
 func (d *Deck) Count() int {
 	return len(d.Cards)

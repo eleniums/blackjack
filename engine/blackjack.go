@@ -46,7 +46,7 @@ func (b *Blackjack) PlayRound() {
 
 	// take actions for dealer
 	if busted {
-		fmt.Println("All players busted.") // TODO: make sure this scenario works correctly
+		fmt.Println("Skipping dealer since all players busted.")
 	} else {
 		b.dealerTurn()
 	}
@@ -56,13 +56,19 @@ func (b *Blackjack) PlayRound() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
 		playerTotal := p.Hand.Total()
-		if playerTotal < dealerTotal && dealerTotal <= 21 {
+		if playerTotal > 21 {
+			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
+			// TODO: remove player's bet
+		} else if dealerTotal > 21 {
+			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
+			// TODO: player wins! Double player's bet
+		} else if playerTotal < dealerTotal {
 			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
 			// TODO: remove player's bet
-		} else if playerTotal == dealerTotal && dealerTotal <= 21 {
+		} else if playerTotal == dealerTotal {
 			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
 			// TODO: push, player gets bet back
-		} else if playerTotal > dealerTotal && playerTotal <= 21 {
+		} else if playerTotal > dealerTotal {
 			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
 			// TODO: player wins! Double player's bet
 		}

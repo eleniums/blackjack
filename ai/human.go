@@ -36,6 +36,8 @@ func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 		case "double", "d":
 			action = game.ActionDouble
 			break
+		case "stats":
+			action = game.ActionStats
 		default:
 			action = 0
 			break

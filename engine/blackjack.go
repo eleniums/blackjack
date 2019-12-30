@@ -74,6 +74,12 @@ func (b *Blackjack) PlayRound() {
 		}
 	}
 	fmt.Println()
+
+	// list all player stats
+	for _, p := range b.players {
+		b.displayPlayerStats(p)
+	}
+	fmt.Println()
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
@@ -111,6 +117,8 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name, card)
 			b.displayHand(player.Name, player.Hand)
 			break
+		case game.ActionStats:
+			b.displayPlayerStats(player)
 		default:
 			break
 		}
@@ -154,6 +162,11 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 	fmt.Printf("%s: %v= %d\n", name, hand, hand.Total())
 }
 
+// displayPlayerStats will display the stats for a single player.
+func (b *Blackjack) displayPlayerStats(player *Player) {
+	fmt.Printf("%s (%T)\n", player.Name, player.AI)
+}
+
 func (b *Blackjack) emptyHands() {
 	b.dealer.Hand.Cards = b.dealer.Hand.Cards[:0]
 	for _, v := range b.players {
@@ -161,6 +174,7 @@ func (b *Blackjack) emptyHands() {
 	}
 }
 
+// dealCard will deal a single card to the given hand.
 func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) game.Card {
 	card, err := b.shuffler.Deal()
 	if err != nil {
@@ -171,6 +185,7 @@ func (b *Blackjack) dealCard(hand *game.Hand, faceDown bool) game.Card {
 	return card
 }
 
+// dealInitialCards will deal cards for a new round.
 func (b *Blackjack) dealInitialCards() {
 	// deal first card to each player face up
 	for _, v := range b.players {

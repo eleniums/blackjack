@@ -9,4 +9,5 @@ const (
 	ActionStay
 	ActionSplit
 	ActionDouble
+	ActionStats
 )

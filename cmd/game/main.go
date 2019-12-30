@@ -21,7 +21,8 @@ func main() {
 	startingMoney := flag.Int("starting-money", 100, "amount of money players start with")
 	minBet := flag.Int("min-bet", 15, "minimum bet allowed")
 	maxBet := flag.Int("max-bet", 100, "maximum bet allowed")
-	addRandomAI := flag.Bool("random-ai", false, "add an AI that randomly chooses actions")
+	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
+	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -51,6 +52,11 @@ func main() {
 	if *addRandomAI {
 		randomAI := engine.NewPlayer("Larry", *startingMoney, ai.NewRandom())
 		players = append(players, randomAI)
+	}
+
+	if *addStandardAI {
+		standardAI := engine.NewPlayer("Joe", *startingMoney, ai.NewStandard())
+		players = append(players, standardAI)
 	}
 
 	if len(players) <= 0 {

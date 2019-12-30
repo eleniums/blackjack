@@ -10,4 +10,5 @@ const (
 	ActionSplit
 	ActionDouble
 	ActionStats
+	ActionExit
 )

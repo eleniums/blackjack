@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/eleniums/blackjack/game"
 )
@@ -86,23 +87,20 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 		case game.ActionHit:
 			card := b.dealCard(player.Hand, false)
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
-			break
 		case game.ActionStay:
 			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, player.Hand.Total())
-			break
 		case game.ActionSplit:
 			// TODO: implement split
-			break
 		case game.ActionDouble:
 			card := b.dealCard(player.Hand, false)
 			// TODO: double bet
 			fmt.Printf("%s doubled down and was dealt: %v\n", player.Name, card)
 			b.displayHand(player.Name, player.Hand)
-			break
 		case game.ActionStats:
 			b.displayPlayerStats(player)
-		default:
-			break
+		case game.ActionExit:
+			fmt.Println("Goodbye!")
+			os.Exit(0)
 		}
 	}
 

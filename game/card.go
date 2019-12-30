@@ -59,19 +59,14 @@ func (c Card) Symbol() string {
 	switch c.Suite() {
 	case SuiteClubs:
 		code += "D"
-		break
 	case SuiteSpades:
 		code += "A"
-		break
 	case SuiteHearts:
 		code += "B"
-		break
 	case SuiteDiamonds:
 		code += "C"
-		break
 	default:
 		code += "A"
-		break
 	}
 
 	// skip the "knight" playing card symbol

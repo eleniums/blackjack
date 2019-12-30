@@ -46,6 +46,10 @@ func main() {
 	}
 	fmt.Println()
 
+	// add computer players
+	randomAI := engine.NewPlayer("Larry", *startingMoney, ai.NewRandom())
+	players = append(players, randomAI)
+
 	// create dealer
 	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
 

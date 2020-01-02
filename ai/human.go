@@ -20,7 +20,7 @@ func NewHuman() *Human {
 func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	var action game.Action
 	for action == 0 {
-		fmt.Printf("Hit, Stay, Split, or Double: ")
+		h.displayPossibleActions(player)
 		input := game.ReadInput()
 		input = strings.ToLower(input)
 
@@ -59,4 +59,37 @@ func (h *Human) PlaceBet(minBet, maxBet, totalMoney int) int {
 		bet, err = strconv.Atoi(input)
 	}
 	return bet
+}
+
+func (h *Human) displayPossibleActions(hand *game.Hand) {
+	actions := []string{
+		"Hit",
+		"Stay",
+	}
+
+	if hand.Count() == 2 {
+		actions = append(actions, "Double")
+	}
+
+	if hand.Count() == 2 && hand.Cards[0].Rank() == hand.Cards[1].Rank() {
+		actions = append(actions, "Split")
+	}
+
+	var prompt strings.Builder
+	for i, v := range actions {
+		if i == len(actions)-1 {
+			prompt.WriteString("or ")
+			prompt.WriteString(v)
+			prompt.WriteString(": ")
+		} else {
+			prompt.WriteString(v)
+			if len(actions) == 2 {
+				prompt.WriteString(" ")
+			} else {
+				prompt.WriteString(", ")
+			}
+		}
+	}
+
+	fmt.Printf(prompt.String())
 }

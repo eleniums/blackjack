@@ -210,10 +210,20 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 
 // displayPlayerStats will display the stats for a single player.
 func (b *Blackjack) displayPlayerStats(player *Player) {
+	total := player.Win + player.Loss + player.Tie
 	fmt.Printf("%s (%T)\n", player.Name, player.AI)
-	fmt.Printf("  Win: %d | Loss: %d | Tie: %d | $%d\n", player.Win, player.Loss, player.Tie, player.Money)
+	fmt.Printf("  Win: %d (%%%.1f) | Loss: %d (%%%.1f) | Tie: %d (%%%.1f) | $%d\n", player.Win, percent(player.Win, total), player.Loss, percent(player.Loss, total), player.Tie, percent(player.Tie, total), player.Money)
 }
 
+// percent will calculate a percentage from the given values.
+func percent(numerator, denominator int) float32 {
+	if denominator == 0 {
+		return 0
+	}
+	return float32(numerator) / float32(denominator) * 100.0
+}
+
+// emptyHands will empty all hands in the game and add cards to discard pile.
 func (b *Blackjack) emptyHands() {
 	for _, c := range b.dealer.Hand.Cards {
 		b.discard.Add(0, c)

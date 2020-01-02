@@ -1,0 +1,26 @@
+package ai
+
+import (
+	"github.com/eleniums/blackjack/game"
+)
+
+// Standard is an opponent that uses a standard strategy.
+type Standard struct{}
+
+// NewStandard will create a new standard AI.
+func NewStandard() *Standard {
+	return &Standard{}
+}
+
+// Action returns the action the player wants to make with his hand.
+func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
+	if player.Total() < 16 {
+		return game.ActionHit
+	}
+	return game.ActionStay
+}
+
+// PlaceBet returns the player's bet.
+func (ai *Standard) PlaceBet(minBet, maxBet, totalMoney int) int {
+	return minBet
+}

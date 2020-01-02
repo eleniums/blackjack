@@ -119,6 +119,11 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 		case game.ActionSplit:
 			// TODO: implement split
 		case game.ActionDouble:
+			if player.Hand.Count() != 2 {
+				fmt.Println("Doubling down is only allowed on the original two cards.")
+				action = game.ActionInvalid
+				continue
+			}
 			card := b.dealCard(player.Hand, false)
 			player.Bet *= 2
 			fmt.Printf("%s doubled their bet to $%d and was dealt: %v\n", player.Name, player.Bet, card)

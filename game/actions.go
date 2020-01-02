@@ -11,4 +11,5 @@ const (
 	ActionDouble
 	ActionStats
 	ActionExit
+	ActionInvalid
 )

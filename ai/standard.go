@@ -22,8 +22,36 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 		if playerTotal >= 20 {
 			return game.ActionStay
 		}
-
-		// TODO: finish soft
+		if playerTotal == 19 {
+			if dealerTotal == 6 && ai.canDouble(player) {
+				return game.ActionDouble
+			}
+			return game.ActionStay
+		}
+		if playerTotal == 18 {
+			if ai.within(dealerTotal, 2, 6) && ai.canDouble(player) {
+				return game.ActionDouble
+			}
+			if ai.within(dealerTotal, 9, 11) {
+				return game.ActionHit
+			}
+			return game.ActionStay
+		}
+		if playerTotal == 17 {
+			if ai.within(dealerTotal, 3, 6) && ai.canDouble(player) {
+				return game.ActionDouble
+			}
+		}
+		if ai.within(playerTotal, 15, 16) {
+			if ai.within(dealerTotal, 4, 6) && ai.canDouble(player) {
+				return game.ActionDouble
+			}
+		}
+		if ai.within(playerTotal, 13, 14) {
+			if ai.within(dealerTotal, 5, 6) && ai.canDouble(player) {
+				return game.ActionDouble
+			}
+		}
 
 		return game.ActionHit
 	}

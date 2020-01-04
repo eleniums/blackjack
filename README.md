@@ -7,12 +7,22 @@ To play the game:
 go run ./cmd/game/main.go
 ```
 
+## Rules
+Rules used for this version of blackjack:
+- Dealer hits soft 17
+- Natural blackjacks pay 3:2
+- Late surrender is allowed
+- Double down is allowed
+- Multiple splits are allowed
+- Insurance is not available
+
 ## TODO
 - [x] Implement double down
 - [x] Make sure double down can only be done with original two cards
 - [x] Only show available actions if they are possible, like double or split
+- [ ] Check for natural blackjacks and pay 3:2 (1.5x)
 - [ ] Implement split
-- [ ] Implement surrender
+- [ ] Implement late surrender
 - [ ] Implement standard AI
 - [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)
 - [ ] Create machine learning AI

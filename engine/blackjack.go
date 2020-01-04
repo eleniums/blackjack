@@ -148,8 +148,8 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 // dealerTurn will take actions for the dealer.
 func (b *Blackjack) dealerTurn() {
 	fmt.Println("** Dealer's turn. **")
-	b.dealer.Hand.Cards[0].Hidden = false
-	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Hand.Cards[0])
+	b.dealer.Hand.Cards[1].Hidden = false
+	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Hand.Cards[1])
 	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
@@ -262,14 +262,14 @@ func (b *Blackjack) dealInitialCards() {
 		b.dealCard(v.Hand, false)
 	}
 
-	// deal first card to dealer face down
-	b.dealCard(b.dealer.Hand, true)
+	// deal first card to dealer face up
+	b.dealCard(b.dealer.Hand, false)
 
 	// deal second card to each player face up
 	for _, v := range b.players {
 		b.dealCard(v.Hand, false)
 	}
 
-	// deal second card to dealer face up
-	b.dealCard(b.dealer.Hand, false)
+	// deal second card to dealer face down
+	b.dealCard(b.dealer.Hand, true)
 }

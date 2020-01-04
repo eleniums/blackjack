@@ -67,11 +67,11 @@ func (h *Human) displayPossibleActions(hand *game.Hand) {
 		"Stay",
 	}
 
-	if hand.Count() == 2 {
+	if hand.CanDouble() {
 		actions = append(actions, "Double")
 	}
 
-	if hand.Count() == 2 && hand.Cards[0].Rank() == hand.Cards[1].Rank() {
+	if hand.CanSplit() {
 		actions = append(actions, "Split")
 	}
 

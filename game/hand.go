@@ -88,6 +88,16 @@ func (h *Hand) Soft() bool {
 	return false
 }
 
+// CanDouble will return true if doubling down is allowed.
+func (h *Hand) CanDouble() bool {
+	return h.Count() == 2
+}
+
+// CanSplit will return true if splitting is allowed.
+func (h *Hand) CanSplit() bool {
+	return h.Count() == 2 && h.Cards[0].Rank() == h.Cards[1].Rank()
+}
+
 // String will return a string representation of the hand.
 func (h *Hand) String() string {
 	var s string

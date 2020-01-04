@@ -23,13 +23,13 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 			return game.ActionStay
 		}
 		if playerTotal == 19 {
-			if dealerTotal == 6 && ai.canDouble(player) {
+			if dealerTotal == 6 && player.CanDouble() {
 				return game.ActionDouble
 			}
 			return game.ActionStay
 		}
 		if playerTotal == 18 {
-			if ai.within(dealerTotal, 2, 6) && ai.canDouble(player) {
+			if ai.within(dealerTotal, 2, 6) && player.CanDouble() {
 				return game.ActionDouble
 			}
 			if ai.within(dealerTotal, 9, 11) {
@@ -38,17 +38,17 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 			return game.ActionStay
 		}
 		if playerTotal == 17 {
-			if ai.within(dealerTotal, 3, 6) && ai.canDouble(player) {
+			if ai.within(dealerTotal, 3, 6) && player.CanDouble() {
 				return game.ActionDouble
 			}
 		}
 		if ai.within(playerTotal, 15, 16) {
-			if ai.within(dealerTotal, 4, 6) && ai.canDouble(player) {
+			if ai.within(dealerTotal, 4, 6) && player.CanDouble() {
 				return game.ActionDouble
 			}
 		}
 		if ai.within(playerTotal, 13, 14) {
-			if ai.within(dealerTotal, 5, 6) && ai.canDouble(player) {
+			if ai.within(dealerTotal, 5, 6) && player.CanDouble() {
 				return game.ActionDouble
 			}
 		}
@@ -66,13 +66,13 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	if playerTotal == 12 && ai.within(dealerTotal, 4, 6) {
 		return game.ActionStay
 	}
-	if playerTotal == 11 && ai.canDouble(player) {
+	if playerTotal == 11 && player.CanDouble() {
 		return game.ActionDouble
 	}
-	if playerTotal == 10 && ai.within(dealerTotal, 2, 9) && ai.canDouble(player) {
+	if playerTotal == 10 && ai.within(dealerTotal, 2, 9) && player.CanDouble() {
 		return game.ActionDouble
 	}
-	if playerTotal == 9 && ai.within(dealerTotal, 3, 6) && ai.canDouble(player) {
+	if playerTotal == 9 && ai.within(dealerTotal, 3, 6) && player.CanDouble() {
 		return game.ActionDouble
 	}
 
@@ -87,9 +87,4 @@ func (ai *Standard) PlaceBet(minBet, maxBet, totalMoney int) int {
 // within will return true if the value is within the inclusive range [low, high].
 func (ai *Standard) within(value, low, high int) bool {
 	return value >= low && value <= high
-}
-
-// canDouble will return true if the player is allowed to double down.
-func (ai *Standard) canDouble(hand *game.Hand) bool {
-	return hand.Count() == 2
 }

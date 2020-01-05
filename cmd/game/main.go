@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strings"
 
 	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/engine"
@@ -43,6 +44,9 @@ func main() {
 	for i := 0; i < *numPlayers; i++ {
 		fmt.Printf("Enter player name: ")
 		name := game.ReadInput()
+		if strings.TrimSpace(name) == "" {
+			name = fmt.Sprintf("Player %d", i+1)
+		}
 		player := engine.NewPlayer(name, *startingMoney, ai.NewHuman())
 		players = append(players, player)
 	}

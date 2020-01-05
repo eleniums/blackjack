@@ -98,6 +98,22 @@ func (h *Hand) CanSplit() bool {
 	return h.Count() == 2 && h.Cards[0].Rank() == h.Cards[1].Rank()
 }
 
+// IsNatural will return true if this hand is a natural blackjack (21 from two cards).
+func (h *Hand) IsNatural() bool {
+	if h.Count() == 2 {
+		// a copy is used so the cards will not stay revealed
+		local := NewHand(h.Cards...)
+
+		// we need to reveal all the cards so this works for the dealer
+		local.Cards[0].Hidden = false
+		local.Cards[1].Hidden = false
+
+		return local.Total() == 21
+	}
+
+	return false
+}
+
 // String will return a string representation of the hand.
 func (h *Hand) String() string {
 	var s string

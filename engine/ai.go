@@ -10,5 +10,5 @@ type AI interface {
 	Action(dealer *game.Hand, player *game.Hand) game.Action
 
 	// PlaceBet returns the player's bet.
-	PlaceBet(minBet, maxBet, totalMoney int) int
+	PlaceBet(minBet, maxBet, totalMoney float64) float64
 }

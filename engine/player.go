@@ -9,15 +9,15 @@ type Player struct {
 	Name  string
 	AI    AI
 	Hand  *game.Hand
-	Money int
-	Bet   int
+	Money float64
+	Bet   float64
 	Win   int
 	Loss  int
 	Tie   int
 }
 
 // NewPlayer will create a new player instance.
-func NewPlayer(name string, money int, ai AI) *Player {
+func NewPlayer(name string, money float64, ai AI) *Player {
 	return &Player{
 		Name:  name,
 		AI:    ai,

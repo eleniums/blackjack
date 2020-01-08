@@ -22,7 +22,7 @@ func (ai *Soft17Dealer) Action(dealer *game.Hand, player *game.Hand) game.Action
 }
 
 // PlaceBet returns the player's bet.
-func (ai *Soft17Dealer) PlaceBet(minBet, maxBet, totalMoney int) int {
+func (ai *Soft17Dealer) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 	// dealer does not place any bets
 	return 0
 }

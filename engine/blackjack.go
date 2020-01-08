@@ -54,6 +54,13 @@ func (b *Blackjack) PlayRound() {
 	b.displayAll()
 	fmt.Println()
 
+	if b.dealer.Hand.IsNatural() {
+		// dealer has blackjack, so skip to winners/losers
+		b.handleDealerNatural()
+		fmt.Println()
+		return
+	}
+
 	// take actions for each player
 	busted := true
 	for _, p := range b.players {
@@ -172,7 +179,11 @@ func (b *Blackjack) determineWinners() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
 		playerTotal := p.Hand.Total()
-		if playerTotal > 21 {
+		if p.Hand.IsNatural() {
+			fmt.Printf("%s has a natural blackjack!\n", p.Name)
+			p.Win++
+			p.Money += int(float32(p.Bet) * 1.5) // TODO: figure out what to do about truncation? Make it a float?
+		} else if playerTotal > 21 {
 			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
 			p.Loss++
 			p.Money -= p.Bet
@@ -191,6 +202,21 @@ func (b *Blackjack) determineWinners() {
 			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
 			p.Win++
 			p.Money += p.Bet
+		}
+	}
+}
+
+// handleDealerNatural will determine which players won or lost after dealer got a natural blackjack.
+func (b *Blackjack) handleDealerNatural() {
+	fmt.Println("Dealer has a natural blackjack.")
+	for _, p := range b.players {
+		if p.Hand.IsNatural() {
+			fmt.Printf("Push, %s also has a natural blackjack.\n", p.Name)
+			p.Tie++
+		} else {
+			fmt.Printf("%s loses to dealer's natural blackjack.\n", p.Name)
+			p.Loss++
+			p.Money -= p.Bet
 		}
 	}
 }

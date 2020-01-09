@@ -141,6 +141,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			player.Bet *= 2
 			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Bet, card)
 			b.displayHand(player.Name, player.Hand)
+			return player.Hand.Total() > 21
 		case game.ActionStats:
 			b.displayPlayerStats(player)
 		case game.ActionExit:

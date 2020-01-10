@@ -21,7 +21,7 @@ func main() {
 	maxDiscard := flag.Int("max-discard", 20, "number of cards allowed in discard pile before shuffling them back in")
 	startingMoney := flag.Float64("starting-money", 100, "amount of money players start with")
 	minBet := flag.Float64("min-bet", 15, "minimum bet allowed")
-	maxBet := flag.Float64("max-bet", 100, "maximum bet allowed")
+	maxBet := flag.Float64("max-bet", 500, "maximum bet allowed")
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	flag.Parse()

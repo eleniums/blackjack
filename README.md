@@ -20,7 +20,8 @@ Rules used for this version of blackjack:
 - [x] Implement double down
 - [x] Make sure double down can only be done with original two cards
 - [x] Only show available actions if they are possible, like double or split
-- [ ] Check for natural blackjacks and pay 3:2 (1.5x)
+- [x] Check for natural blackjacks and pay 3:2 (1.5x)
+- [x] Change money to float
 - [ ] Implement split
 - [ ] Implement late surrender
 - [ ] Implement standard AI

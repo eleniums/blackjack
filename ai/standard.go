@@ -80,6 +80,6 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 }
 
 // PlaceBet returns the player's bet.
-func (ai *Standard) PlaceBet(minBet, maxBet, totalMoney int) int {
+func (ai *Standard) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 	return minBet
 }

@@ -32,6 +32,6 @@ func (ai *Random) Action(dealer *game.Hand, player *game.Hand) game.Action {
 }
 
 // PlaceBet returns the player's bet.
-func (ai *Random) PlaceBet(minBet, maxBet, totalMoney int) int {
+func (ai *Random) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 	return minBet
 }

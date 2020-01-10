@@ -14,12 +14,12 @@ type Blackjack struct {
 	players    []*Player
 	discard    *game.Deck
 	maxDiscard int
-	minBet     int
-	maxBet     int
+	minBet     float64
+	maxBet     float64
 }
 
 // NewBlackjack will create a new game engine.
-func NewBlackjack(numDecks int, maxDiscard int, minBet int, maxBet int, dealer *Player, players ...*Player) *Blackjack {
+func NewBlackjack(numDecks int, maxDiscard int, minBet float64, maxBet float64, dealer *Player, players ...*Player) *Blackjack {
 	shuffler := game.NewShuffler()
 
 	deck := game.NewDeck()
@@ -54,6 +54,13 @@ func (b *Blackjack) PlayRound() {
 	b.displayAll()
 	fmt.Println()
 
+	if b.dealer.Hand.IsNatural() {
+		// dealer has blackjack, so skip to winners/losers
+		b.handleDealerNatural()
+		fmt.Println()
+		return
+	}
+
 	// take actions for each player
 	busted := true
 	for _, p := range b.players {
@@ -82,12 +89,12 @@ func (b *Blackjack) DisplayStats() {
 }
 
 func (b *Blackjack) placeBet(player *Player) {
-	fmt.Printf("%s has $%d. Min bet is $%d and max bet is $%d.\n", player.Name, player.Money, b.minBet, b.maxBet)
+	fmt.Printf("%s has $%.2f. Min bet is $%.2f and max bet is $%.2f.\n", player.Name, player.Money, b.minBet, b.maxBet)
 	player.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
 	if player.Bet >= b.minBet && player.Bet <= b.maxBet {
-		fmt.Printf("%s placed a bet of $%d.\n", player.Name, player.Bet)
+		fmt.Printf("%s placed a bet of $%.2f.\n", player.Name, player.Bet)
 	} else {
-		fmt.Printf("%s tried to place an invalid bet of $%d. Will use minimum bet of $%d.\n", player.Name, player.Bet, b.minBet)
+		fmt.Printf("%s tried to place an invalid bet of $%.2f. Will use minimum bet of $%.2f.\n", player.Name, player.Bet, b.minBet)
 		player.Bet = b.minBet
 	}
 }
@@ -132,8 +139,9 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			}
 			card := b.dealCard(player.Hand, false)
 			player.Bet *= 2
-			fmt.Printf("%s doubled their bet to $%d and was dealt: %v\n", player.Name, player.Bet, card)
+			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Bet, card)
 			b.displayHand(player.Name, player.Hand)
+			return player.Hand.Total() > 21
 		case game.ActionStats:
 			b.displayPlayerStats(player)
 		case game.ActionExit:
@@ -172,7 +180,11 @@ func (b *Blackjack) determineWinners() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
 		playerTotal := p.Hand.Total()
-		if playerTotal > 21 {
+		if p.Hand.IsNatural() {
+			fmt.Printf("%s has a natural blackjack!\n", p.Name)
+			p.Win++
+			p.Money += p.Bet * 1.5
+		} else if playerTotal > 21 {
 			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
 			p.Loss++
 			p.Money -= p.Bet
@@ -195,6 +207,21 @@ func (b *Blackjack) determineWinners() {
 	}
 }
 
+// handleDealerNatural will determine which players won or lost after dealer got a natural blackjack.
+func (b *Blackjack) handleDealerNatural() {
+	fmt.Println("Dealer has a natural blackjack.")
+	for _, p := range b.players {
+		if p.Hand.IsNatural() {
+			fmt.Printf("Push, %s also has a natural blackjack.\n", p.Name)
+			p.Tie++
+		} else {
+			fmt.Printf("%s loses to dealer's natural blackjack.\n", p.Name)
+			p.Loss++
+			p.Money -= p.Bet
+		}
+	}
+}
+
 // displayAll will display all cards on the table.
 func (b *Blackjack) displayAll() {
 	b.displayHand("Dealer", b.dealer.Hand)
@@ -212,7 +239,7 @@ func (b *Blackjack) displayHand(name string, hand *game.Hand) {
 func (b *Blackjack) displayPlayerStats(player *Player) {
 	total := player.Win + player.Loss + player.Tie
 	fmt.Printf("%s (%T)\n", player.Name, player.AI)
-	fmt.Printf("  Win: %d (%%%.1f) | Loss: %d (%%%.1f) | Tie: %d (%%%.1f) | $%d\n", player.Win, percent(player.Win, total), player.Loss, percent(player.Loss, total), player.Tie, percent(player.Tie, total), player.Money)
+	fmt.Printf("  Win: %d (%%%.1f) | Loss: %d (%%%.1f) | Tie: %d (%%%.1f) | $%.2f\n", player.Win, percent(player.Win, total), player.Loss, percent(player.Loss, total), player.Tie, percent(player.Tie, total), player.Money)
 }
 
 // percent will calculate a percentage from the given values.

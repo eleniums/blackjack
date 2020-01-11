@@ -124,7 +124,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 		case game.ActionStay:
 			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, player.Hand.Total())
 		case game.ActionSplit:
-			if player.Hand.Count() > 2 || player.Hand.Cards[0].Rank() != player.Hand.Cards[1].Rank() {
+			if !player.Hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
 				continue
@@ -132,7 +132,7 @@ func (b *Blackjack) playerTurn(player *Player) bool {
 			// TODO: implement split
 			fmt.Println("Splitting is not currently implemented.")
 		case game.ActionDouble:
-			if player.Hand.Count() != 2 {
+			if !player.Hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
 				continue

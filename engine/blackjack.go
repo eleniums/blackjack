@@ -102,48 +102,63 @@ func (b *Blackjack) placeBet(player *Player) {
 // playerTurn will take actions for a single player and return true if player busted.
 func (b *Blackjack) playerTurn(player *Player) bool {
 	fmt.Printf("** %s's turn. **\n", player.Name)
+	return b.playHand(player, player.Hand)
+}
 
+// playHand will play out a single hand from a player.
+func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 	var action game.Action
 	for action != game.ActionStay && action != game.ActionDouble {
 		b.displayHand("Dealer", b.dealer.Hand)
-		b.displayHand(player.Name, player.Hand)
+		b.displayHand(player.Name, hand)
 
-		if player.Hand.Total() == 21 {
+		if hand.Total() == 21 {
 			fmt.Printf("%s has blackjack!\n", player.Name)
 			return false
-		} else if player.Hand.Total() > 21 {
-			fmt.Printf("%s busted with a total of %d.\n", player.Name, player.Hand.Total())
+		} else if hand.Total() > 21 {
+			fmt.Printf("%s busted with a total of %d.\n", player.Name, hand.Total())
 			return true
 		}
 
-		action = player.AI.Action(b.dealer.Hand, player.Hand)
+		action = player.AI.Action(b.dealer.Hand, hand)
 		switch action {
 		case game.ActionHit:
-			card := b.dealCard(player.Hand, false)
+			card := b.dealCard(hand, false)
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
+
 		case game.ActionStay:
-			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, player.Hand.Total())
+			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, hand.Total())
+
 		case game.ActionSplit:
-			if !player.Hand.CanSplit() {
+			if !hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
 				continue
 			}
-			// TODO: implement split
-			fmt.Println("Splitting is not currently implemented.")
+
+			// TODO: split hands
+			// // split hand
+			// splitHand := game.NewHand(hand.Cards[1])
+			// hand.Cards = hand.Cards[:1]
+
+			// // play split hand first
+			// player.
+
 		case game.ActionDouble:
-			if !player.Hand.CanDouble() {
+			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
 				continue
 			}
-			card := b.dealCard(player.Hand, false)
+			card := b.dealCard(hand, false)
 			player.Bet *= 2
 			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Bet, card)
-			b.displayHand(player.Name, player.Hand)
-			return player.Hand.Total() > 21
+			b.displayHand(player.Name, hand)
+			return hand.Total() > 21
+
 		case game.ActionStats:
 			b.displayPlayerStats(player)
+
 		case game.ActionExit:
 			fmt.Println("Goodbye!")
 			os.Exit(0)

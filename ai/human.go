@@ -57,6 +57,13 @@ func (h *Human) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 			return minBet
 		}
 		bet, err = strconv.ParseFloat(input, 64)
+		if err != nil {
+			fmt.Println("Invalid value for bet.")
+		} else if bet < minBet {
+			fmt.Printf("Bet cannot be less than minimum of $%.2f.\n", minBet)
+		} else if bet > maxBet {
+			fmt.Printf("Bet cannot be greater than maximum of $%.2f.\n", maxBet)
+		}
 	}
 	return bet
 }

@@ -136,13 +136,14 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 				continue
 			}
 
-			// TODO: split hands
-			// // split hand
-			// splitHand := game.NewHand(hand.Cards[1])
-			// hand.Cards = hand.Cards[:1]
+			// split hand
+			splitHand := game.NewHand(hand.Cards[1])
+			splitHand.Bet = hand.Bet
+			hand.Cards = hand.Cards[:1]
 
-			// // play split hand first
-			// player.
+			// play split hand first
+			// TODO: how to handle return value for busted?
+			b.playHand(player, splitHand)
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {

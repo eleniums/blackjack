@@ -90,12 +90,12 @@ func (b *Blackjack) DisplayStats() {
 
 func (b *Blackjack) placeBet(player *Player) {
 	fmt.Printf("%s has $%.2f. Min bet is $%.2f and max bet is $%.2f.\n", player.Name, player.Money, b.minBet, b.maxBet)
-	player.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
-	if player.Bet >= b.minBet && player.Bet <= b.maxBet {
-		fmt.Printf("%s placed a bet of $%.2f.\n", player.Name, player.Bet)
+	player.Hand.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
+	if player.Hand.Bet >= b.minBet && player.Hand.Bet <= b.maxBet {
+		fmt.Printf("%s placed a bet of $%.2f.\n", player.Name, player.Hand.Bet)
 	} else {
-		fmt.Printf("%s tried to place an invalid bet of $%.2f. Will use minimum bet of $%.2f.\n", player.Name, player.Bet, b.minBet)
-		player.Bet = b.minBet
+		fmt.Printf("%s tried to place an invalid bet of $%.2f. Will use minimum bet of $%.2f.\n", player.Name, player.Hand.Bet, b.minBet)
+		player.Hand.Bet = b.minBet
 	}
 }
 
@@ -151,8 +151,8 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 				continue
 			}
 			card := b.dealCard(hand, false)
-			player.Bet *= 2
-			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Bet, card)
+			player.Hand.Bet *= 2
+			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Hand.Bet, card)
 			b.displayHand(player.Name, hand)
 			return hand.Total() > 21
 
@@ -198,26 +198,26 @@ func (b *Blackjack) determineWinners() {
 		if p.Hand.IsNatural() {
 			fmt.Printf("%s has a natural blackjack!\n", p.Name)
 			p.Win++
-			p.Money += p.Bet * 1.5
+			p.Money += p.Hand.Bet * 1.5
 		} else if playerTotal > 21 {
 			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
 			p.Loss++
-			p.Money -= p.Bet
+			p.Money -= p.Hand.Bet
 		} else if dealerTotal > 21 {
 			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
 			p.Win++
-			p.Money += p.Bet
+			p.Money += p.Hand.Bet
 		} else if playerTotal < dealerTotal {
 			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
 			p.Loss++
-			p.Money -= p.Bet
+			p.Money -= p.Hand.Bet
 		} else if playerTotal == dealerTotal {
 			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
 			p.Tie++
 		} else if playerTotal > dealerTotal {
 			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
 			p.Win++
-			p.Money += p.Bet
+			p.Money += p.Hand.Bet
 		}
 	}
 }
@@ -232,7 +232,7 @@ func (b *Blackjack) handleDealerNatural() {
 		} else {
 			fmt.Printf("%s loses to dealer's natural blackjack.\n", p.Name)
 			p.Loss++
-			p.Money -= p.Bet
+			p.Money -= p.Hand.Bet
 		}
 	}
 }

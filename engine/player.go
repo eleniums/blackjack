@@ -10,7 +10,6 @@ type Player struct {
 	AI    AI
 	Hand  *game.Hand
 	Money float64
-	Bet   float64
 	Win   int
 	Loss  int
 	Tie   int
@@ -23,7 +22,6 @@ func NewPlayer(name string, money float64, ai AI) *Player {
 		AI:    ai,
 		Hand:  game.NewHand(),
 		Money: money,
-		Bet:   0,
 		Win:   0,
 		Loss:  0,
 		Tie:   0,

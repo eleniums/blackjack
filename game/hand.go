@@ -7,6 +7,7 @@ import (
 // Hand represents a hand of cards.
 type Hand struct {
 	Cards []Card
+	Bet   float64
 }
 
 // NewHand will create a new hand with the given cards.

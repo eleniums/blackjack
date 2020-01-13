@@ -79,9 +79,8 @@ func (h *Hand) Soft() bool {
 			foundAces++
 			if foundAces == numAces && total+11 <= 21 {
 				return true
-			} else {
-				total++
 			}
+			total++
 		}
 	}
 

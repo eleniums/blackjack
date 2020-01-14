@@ -102,7 +102,17 @@ func (b *Blackjack) placeBet(player *Player) {
 // playerTurn will take actions for a single player and return true if player busted.
 func (b *Blackjack) playerTurn(player *Player) bool {
 	fmt.Printf("** %s's turn. **\n", player.Name)
-	return b.playHand(player, player.Hand)
+	busted := b.playHand(player, player.Hand)
+
+	for i := 0; i < len(player.SplitHands); i++ {
+		fmt.Printf("\n** Split hand for %s. **\n", player.Name)
+		splitBusted := b.playHand(player, player.SplitHands[i])
+		if !splitBusted {
+			busted = false
+		}
+	}
+
+	return busted
 }
 
 // playHand will play out a single hand from a player.
@@ -140,10 +150,10 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			splitHand := game.NewHand(hand.Cards[1])
 			splitHand.Bet = hand.Bet
 			hand.Cards = hand.Cards[:1]
+			player.SplitHands = append(player.SplitHands, splitHand)
 
-			// play split hand first
-			// TODO: how to handle return value for busted?
-			b.playHand(player, splitHand)
+			// TODO: need to make sure to check additional hands for winners and losers
+			// TODO: need to find way to test this easier
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {

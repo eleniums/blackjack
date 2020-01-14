@@ -6,13 +6,14 @@ import (
 
 // Player is someone playing against the dealer.
 type Player struct {
-	Name  string
-	AI    AI
-	Hand  *game.Hand
-	Money float64
-	Win   int
-	Loss  int
-	Tie   int
+	Name       string
+	AI         AI
+	Hand       *game.Hand
+	SplitHands []*game.Hand
+	Money      float64
+	Win        int
+	Loss       int
+	Tie        int
 }
 
 // NewPlayer will create a new player instance.

@@ -22,7 +22,7 @@ Rules used for this version of blackjack:
 - [x] Only show available actions if they are possible, like double or split
 - [x] Check for natural blackjacks and pay 3:2 (1.5x)
 - [x] Change money to float
-- [ ] Implement split
+- [x] Implement split
 - [ ] Implement late surrender
 - [ ] Implement standard AI
 - [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)

@@ -152,9 +152,6 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			hand.Cards = hand.Cards[:1]
 			player.SplitHands = append(player.SplitHands, splitHand)
 
-			// TODO: need to make sure to check additional hands for winners and losers
-			// TODO: need to find way to test this easier
-
 		case game.ActionDouble:
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")

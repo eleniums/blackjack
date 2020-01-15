@@ -19,25 +19,25 @@ func NewDeck() *Deck {
 
 	// add clubs
 	for i := 1; i <= 13; i++ {
-		card := NewCard(SuiteClubs, Rank(i))
+		card := NewCard(SuitClubs, Rank(i))
 		deck.Cards = append(deck.Cards, card)
 	}
 
 	// add spades
 	for i := 1; i <= 13; i++ {
-		card := NewCard(SuiteSpades, Rank(i))
+		card := NewCard(SuitSpades, Rank(i))
 		deck.Cards = append(deck.Cards, card)
 	}
 
 	// add hearts
 	for i := 1; i <= 13; i++ {
-		card := NewCard(SuiteHearts, Rank(i))
+		card := NewCard(SuitHearts, Rank(i))
 		deck.Cards = append(deck.Cards, card)
 	}
 
 	// add diamonds
 	for i := 1; i <= 13; i++ {
-		card := NewCard(SuiteDiamonds, Rank(i))
+		card := NewCard(SuitDiamonds, Rank(i))
 		deck.Cards = append(deck.Cards, card)
 	}
 

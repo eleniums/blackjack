@@ -6,14 +6,14 @@ import (
 
 // Player is someone playing against the dealer.
 type Player struct {
-	Name  string
-	AI    AI
-	Hand  *game.Hand
-	Money float64
-	Bet   float64
-	Win   int
-	Loss  int
-	Tie   int
+	Name       string
+	AI         AI
+	Hand       *game.Hand
+	SplitHands []*game.Hand
+	Money      float64
+	Win        int
+	Loss       int
+	Tie        int
 }
 
 // NewPlayer will create a new player instance.
@@ -23,7 +23,6 @@ func NewPlayer(name string, money float64, ai AI) *Player {
 		AI:    ai,
 		Hand:  game.NewHand(),
 		Money: money,
-		Bet:   0,
 		Win:   0,
 		Loss:  0,
 		Tie:   0,

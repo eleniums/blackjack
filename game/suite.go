@@ -1,26 +1,26 @@
 package game
 
-// Suite represents a suite on a card.
-type Suite int
+// Suit represents a suit on a card.
+type Suit int
 
-// Suite types.
+// Suit types.
 const (
-	SuiteClubs Suite = iota + 1
-	SuiteSpades
-	SuiteHearts
-	SuiteDiamonds
+	SuitClubs Suit = iota + 1
+	SuitSpades
+	SuitHearts
+	SuitDiamonds
 )
 
-// String returns the symbol representation of the suite.
-func (s Suite) String() string {
+// String returns the symbol representation of the suit.
+func (s Suit) String() string {
 	switch s {
-	case SuiteClubs:
+	case SuitClubs:
 		return "♣"
-	case SuiteSpades:
+	case SuitSpades:
 		return "♠"
-	case SuiteHearts:
+	case SuitHearts:
 		return "♥"
-	case SuiteDiamonds:
+	case SuitDiamonds:
 		return "♦"
 	default:
 		return "X"

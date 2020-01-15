@@ -10,25 +10,25 @@ var UseCardSymbols = false
 
 // Card represents a single card.
 type Card struct {
-	suite  Suite
+	suit  Suit
 	rank   Rank
 	Hidden bool
 }
 
-// NewCard will return a new card with the given suite and rank.
-func NewCard(suite Suite, rank Rank) Card {
+// NewCard will return a new card with the given suit and rank.
+func NewCard(suit Suit, rank Rank) Card {
 	return Card{
-		suite: suite,
+		suit: suit,
 		rank:  rank,
 	}
 }
 
-// Suite will return the card's suite or a default value if the card is hidden.
-func (c Card) Suite() Suite {
+// Suit will return the card's suit or a default value if the card is hidden.
+func (c Card) Suit() Suit {
 	if c.Hidden {
 		return 0
 	}
-	return c.suite
+	return c.suit
 }
 
 // Rank will return the card's rank or a default value if the card is hidden.
@@ -49,21 +49,21 @@ func (c Card) String() string {
 
 // Text will return the text representation of the card.
 func (c Card) Text() string {
-	return fmt.Sprintf("%v%v", c.Rank(), c.Suite())
+	return fmt.Sprintf("%v%v", c.Rank(), c.Suit())
 }
 
 // Symbol will return the unicode card symbol representation of the card.
 func (c Card) Symbol() string {
 	code := "1F0"
 
-	switch c.Suite() {
-	case SuiteClubs:
+	switch c.Suit() {
+	case SuitClubs:
 		code += "D"
-	case SuiteSpades:
+	case SuitSpades:
 		code += "A"
-	case SuiteHearts:
+	case SuitHearts:
 		code += "B"
-	case SuiteDiamonds:
+	case SuitDiamonds:
 		code += "C"
 	default:
 		code += "A"

@@ -90,60 +90,83 @@ func (b *Blackjack) DisplayStats() {
 
 func (b *Blackjack) placeBet(player *Player) {
 	fmt.Printf("%s has $%.2f. Min bet is $%.2f and max bet is $%.2f.\n", player.Name, player.Money, b.minBet, b.maxBet)
-	player.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
-	if player.Bet >= b.minBet && player.Bet <= b.maxBet {
-		fmt.Printf("%s placed a bet of $%.2f.\n", player.Name, player.Bet)
+	player.Hand.Bet = player.AI.PlaceBet(b.minBet, b.maxBet, player.Money)
+	if player.Hand.Bet >= b.minBet && player.Hand.Bet <= b.maxBet {
+		fmt.Printf("%s placed a bet of $%.2f.\n", player.Name, player.Hand.Bet)
 	} else {
-		fmt.Printf("%s tried to place an invalid bet of $%.2f. Will use minimum bet of $%.2f.\n", player.Name, player.Bet, b.minBet)
-		player.Bet = b.minBet
+		fmt.Printf("%s tried to place an invalid bet of $%.2f. Will use minimum bet of $%.2f.\n", player.Name, player.Hand.Bet, b.minBet)
+		player.Hand.Bet = b.minBet
 	}
 }
 
 // playerTurn will take actions for a single player and return true if player busted.
 func (b *Blackjack) playerTurn(player *Player) bool {
 	fmt.Printf("** %s's turn. **\n", player.Name)
+	busted := b.playHand(player, player.Hand)
 
+	for i := 0; i < len(player.SplitHands); i++ {
+		fmt.Printf("\n** Split hand for %s. **\n", player.Name)
+		splitBusted := b.playHand(player, player.SplitHands[i])
+		if !splitBusted {
+			busted = false
+		}
+	}
+
+	return busted
+}
+
+// playHand will play out a single hand from a player.
+func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 	var action game.Action
 	for action != game.ActionStay && action != game.ActionDouble {
 		b.displayHand("Dealer", b.dealer.Hand)
-		b.displayHand(player.Name, player.Hand)
+		b.displayHand(player.Name, hand)
 
-		if player.Hand.Total() == 21 {
+		if hand.Total() == 21 {
 			fmt.Printf("%s has blackjack!\n", player.Name)
 			return false
-		} else if player.Hand.Total() > 21 {
-			fmt.Printf("%s busted with a total of %d.\n", player.Name, player.Hand.Total())
+		} else if hand.Total() > 21 {
+			fmt.Printf("%s busted with a total of %d.\n", player.Name, hand.Total())
 			return true
 		}
 
-		action = player.AI.Action(b.dealer.Hand, player.Hand)
+		action = player.AI.Action(b.dealer.Hand, hand)
 		switch action {
 		case game.ActionHit:
-			card := b.dealCard(player.Hand, false)
+			card := b.dealCard(hand, false)
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
+
 		case game.ActionStay:
-			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, player.Hand.Total())
+			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, hand.Total())
+
 		case game.ActionSplit:
-			if player.Hand.Count() > 2 || player.Hand.Cards[0].Rank() != player.Hand.Cards[1].Rank() {
+			if !hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
 				continue
 			}
-			// TODO: implement split
-			fmt.Println("Splitting is not currently implemented.")
+
+			// split hand
+			splitHand := game.NewHand(hand.Cards[1])
+			splitHand.Bet = hand.Bet
+			hand.Cards = hand.Cards[:1]
+			player.SplitHands = append(player.SplitHands, splitHand)
+
 		case game.ActionDouble:
-			if player.Hand.Count() != 2 {
+			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
 				continue
 			}
-			card := b.dealCard(player.Hand, false)
-			player.Bet *= 2
-			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Bet, card)
-			b.displayHand(player.Name, player.Hand)
-			return player.Hand.Total() > 21
+			card := b.dealCard(hand, false)
+			player.Hand.Bet *= 2
+			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Hand.Bet, card)
+			b.displayHand(player.Name, hand)
+			return hand.Total() > 21
+
 		case game.ActionStats:
 			b.displayPlayerStats(player)
+
 		case game.ActionExit:
 			fmt.Println("Goodbye!")
 			os.Exit(0)
@@ -179,31 +202,39 @@ func (b *Blackjack) dealerTurn() {
 func (b *Blackjack) determineWinners() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
-		playerTotal := p.Hand.Total()
-		if p.Hand.IsNatural() {
-			fmt.Printf("%s has a natural blackjack!\n", p.Name)
-			p.Win++
-			p.Money += p.Bet * 1.5
-		} else if playerTotal > 21 {
-			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
-			p.Loss++
-			p.Money -= p.Bet
-		} else if dealerTotal > 21 {
-			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
-			p.Win++
-			p.Money += p.Bet
-		} else if playerTotal < dealerTotal {
-			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
-			p.Loss++
-			p.Money -= p.Bet
-		} else if playerTotal == dealerTotal {
-			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
-			p.Tie++
-		} else if playerTotal > dealerTotal {
-			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
-			p.Win++
-			p.Money += p.Bet
+		b.determineWinner(p, p.Hand, dealerTotal)
+		for _, h := range p.SplitHands {
+			b.determineWinner(p, h, dealerTotal)
 		}
+	}
+}
+
+// determineWinner will determine whether a player beat the dealer.
+func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal int) {
+	playerTotal := hand.Total()
+	if hand.IsNatural() {
+		fmt.Printf("%s has a natural blackjack!\n", player.Name)
+		player.Win++
+		player.Money += hand.Bet * 1.5
+	} else if playerTotal > 21 {
+		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if dealerTotal > 21 {
+		fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", player.Name, playerTotal, dealerTotal)
+		player.Win++
+		player.Money += hand.Bet
+	} else if playerTotal < dealerTotal {
+		fmt.Printf("%s has %d, which loses to dealer's %d.\n", player.Name, playerTotal, dealerTotal)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if playerTotal == dealerTotal {
+		fmt.Printf("Push, %s and dealer both have %d.\n", player.Name, playerTotal)
+		player.Tie++
+	} else if playerTotal > dealerTotal {
+		fmt.Printf("%s has %d, which beats dealer's %d!\n", player.Name, playerTotal, dealerTotal)
+		player.Win++
+		player.Money += hand.Bet
 	}
 }
 
@@ -217,7 +248,7 @@ func (b *Blackjack) handleDealerNatural() {
 		} else {
 			fmt.Printf("%s loses to dealer's natural blackjack.\n", p.Name)
 			p.Loss++
-			p.Money -= p.Bet
+			p.Money -= p.Hand.Bet
 		}
 	}
 }

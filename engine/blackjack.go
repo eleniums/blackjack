@@ -101,11 +101,11 @@ func (b *Blackjack) placeBet(player *Player) {
 
 // playerTurn will take actions for a single player and return true if player busted.
 func (b *Blackjack) playerTurn(player *Player) bool {
-	fmt.Printf("** %s's turn. **\n", player.Name)
+	fmt.Printf("** %s's turn **\n", player.Name)
 	busted := b.playHand(player, player.Hand)
 
 	for i := 0; i < len(player.SplitHands); i++ {
-		fmt.Printf("\n** Split hand for %s. **\n", player.Name)
+		fmt.Printf("\n** Split hand for %s **\n", player.Name)
 		splitBusted := b.playHand(player, player.SplitHands[i])
 		if !splitBusted {
 			busted = false
@@ -178,7 +178,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 
 // dealerTurn will take actions for the dealer.
 func (b *Blackjack) dealerTurn() {
-	fmt.Println("** Dealer's turn. **")
+	fmt.Println("** Dealer's turn **")
 	b.dealer.Hand.Cards[1].Hidden = false
 	fmt.Printf("Dealer revealed their facedown card: %v\n", b.dealer.Hand.Cards[1])
 	b.displayHand("Dealer", b.dealer.Hand)

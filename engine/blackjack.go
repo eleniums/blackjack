@@ -205,31 +205,39 @@ func (b *Blackjack) dealerTurn() {
 func (b *Blackjack) determineWinners() {
 	dealerTotal := b.dealer.Hand.Total()
 	for _, p := range b.players {
-		playerTotal := p.Hand.Total()
-		if p.Hand.IsNatural() {
-			fmt.Printf("%s has a natural blackjack!\n", p.Name)
-			p.Win++
-			p.Money += p.Hand.Bet * 1.5
-		} else if playerTotal > 21 {
-			fmt.Printf("%s busted with a total of %d.\n", p.Name, playerTotal)
-			p.Loss++
-			p.Money -= p.Hand.Bet
-		} else if dealerTotal > 21 {
-			fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", p.Name, playerTotal, dealerTotal)
-			p.Win++
-			p.Money += p.Hand.Bet
-		} else if playerTotal < dealerTotal {
-			fmt.Printf("%s has %d, which loses to dealer's %d.\n", p.Name, playerTotal, dealerTotal)
-			p.Loss++
-			p.Money -= p.Hand.Bet
-		} else if playerTotal == dealerTotal {
-			fmt.Printf("Push, %s and dealer both have %d.\n", p.Name, playerTotal)
-			p.Tie++
-		} else if playerTotal > dealerTotal {
-			fmt.Printf("%s has %d, which beats dealer's %d!\n", p.Name, playerTotal, dealerTotal)
-			p.Win++
-			p.Money += p.Hand.Bet
+		b.determineWinner(p, p.Hand, dealerTotal)
+		for _, h := range p.SplitHands {
+			b.determineWinner(p, h, dealerTotal)
 		}
+	}
+}
+
+// determineWinner will determine whether a player beat the dealer.
+func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal int) {
+	playerTotal := hand.Total()
+	if hand.IsNatural() {
+		fmt.Printf("%s has a natural blackjack!\n", player.Name)
+		player.Win++
+		player.Money += hand.Bet * 1.5
+	} else if playerTotal > 21 {
+		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if dealerTotal > 21 {
+		fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", player.Name, playerTotal, dealerTotal)
+		player.Win++
+		player.Money += hand.Bet
+	} else if playerTotal < dealerTotal {
+		fmt.Printf("%s has %d, which loses to dealer's %d.\n", player.Name, playerTotal, dealerTotal)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if playerTotal == dealerTotal {
+		fmt.Printf("Push, %s and dealer both have %d.\n", player.Name, playerTotal)
+		player.Tie++
+	} else if playerTotal > dealerTotal {
+		fmt.Printf("%s has %d, which beats dealer's %d!\n", player.Name, playerTotal, dealerTotal)
+		player.Win++
+		player.Money += hand.Bet
 	}
 }
 

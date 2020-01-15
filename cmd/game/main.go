@@ -96,28 +96,28 @@ func main() {
 func displayAllCards() {
 	fmt.Println("Clubs:")
 	for i := 1; i <= 13; i++ {
-		card := game.NewCard(game.SuiteClubs, game.Rank(i))
+		card := game.NewCard(game.SuitClubs, game.Rank(i))
 		fmt.Printf("%v  ", card)
 	}
 	fmt.Printf("\n\n")
 
 	fmt.Println("Spades:")
 	for i := 1; i <= 13; i++ {
-		card := game.NewCard(game.SuiteSpades, game.Rank(i))
+		card := game.NewCard(game.SuitSpades, game.Rank(i))
 		fmt.Printf("%v  ", card)
 	}
 	fmt.Printf("\n\n")
 
 	fmt.Println("Hearts:")
 	for i := 1; i <= 13; i++ {
-		card := game.NewCard(game.SuiteHearts, game.Rank(i))
+		card := game.NewCard(game.SuitHearts, game.Rank(i))
 		fmt.Printf("%v  ", card)
 	}
 	fmt.Printf("\n\n")
 
 	fmt.Println("Diamonds:")
 	for i := 1; i <= 13; i++ {
-		card := game.NewCard(game.SuiteDiamonds, game.Rank(i))
+		card := game.NewCard(game.SuitDiamonds, game.Rank(i))
 		fmt.Printf("%v  ", card)
 	}
 	fmt.Printf("\n")

@@ -9,6 +9,7 @@ const (
 	ActionStay
 	ActionSplit
 	ActionDouble
+	ActionSurrender
 	ActionStats
 	ActionExit
 	ActionInvalid

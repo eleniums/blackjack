@@ -293,6 +293,14 @@ func (b *Blackjack) emptyHands() {
 			b.discard.Add(0, c)
 		}
 		v.Hand.Cards = v.Hand.Cards[:0]
+
+		for _, s := range v.SplitHands {
+			for _, c := range s.Cards {
+				b.discard.Add(0, c)
+			}
+			s.Cards = s.Cards[:0]
+		}
+		v.SplitHands = v.SplitHands[:0]
 	}
 
 	// check if discard pile is too full

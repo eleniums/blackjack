@@ -70,7 +70,7 @@ func (b *Blackjack) PlayRound() {
 
 	// take actions for dealer
 	if busted {
-		fmt.Println("Skipping dealer since all players busted.")
+		fmt.Println("Skipping dealer since all players busted or surrendered.")
 	} else {
 		b.dealerTurn()
 	}
@@ -172,8 +172,9 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 				action = game.ActionInvalid
 				continue
 			}
-
-			// TODO: finish surrender
+			player.Hand.Bet /= 2
+			fmt.Printf("%s surrendered their hand and reduced their bet to $%.2f.\n", player.Name, player.Hand.Bet)
+			return true
 
 		case game.ActionStats:
 			b.displayPlayerStats(player)

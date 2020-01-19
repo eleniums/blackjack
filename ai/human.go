@@ -84,7 +84,9 @@ func (h *Human) displayPossibleActions(hand *game.Hand) {
 		actions = append(actions, "Split")
 	}
 
-	actions = append(actions, "Surrender")
+	if hand.CanDouble() {
+		actions = append(actions, "Surrender")
+	}
 
 	var prompt strings.Builder
 	for i, v := range actions {

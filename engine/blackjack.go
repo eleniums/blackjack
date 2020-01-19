@@ -152,6 +152,8 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			hand.Cards = hand.Cards[:1]
 			player.SplitHands = append(player.SplitHands, splitHand)
 
+			// TODO: deal second card to each split hand
+
 		case game.ActionDouble:
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
@@ -163,6 +165,15 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Hand.Bet, card)
 			b.displayHand(player.Name, hand)
 			return hand.Total() > 21
+
+		case game.ActionSurrender:
+			if !hand.CanDouble() || len(player.SplitHands) > 0 {
+				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
+				action = game.ActionInvalid
+				continue
+			}
+
+			// TODO: finish surrender
 
 		case game.ActionStats:
 			b.displayPlayerStats(player)

@@ -23,7 +23,7 @@ Rules used for this version of blackjack:
 - [x] Check for natural blackjacks and pay 3:2 (1.5x)
 - [x] Change money to float
 - [x] Implement split
-- [ ] Implement late surrender
+- [x] Implement late surrender
 - [ ] Implement standard AI
 - [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)
 - [ ] Create machine learning AI

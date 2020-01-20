@@ -42,6 +42,9 @@ func NewBlackjack(numDecks int, maxDiscard int, minBet float64, maxBet float64, 
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
+	// start clean
+	b.emptyHands()
+
 	// place bets for each player
 	for _, p := range b.players {
 		b.placeBet(p)
@@ -49,7 +52,6 @@ func (b *Blackjack) PlayRound() {
 	}
 
 	// deal initial hands
-	b.emptyHands()
 	b.dealInitialCards()
 	b.displayAll()
 	fmt.Println()
@@ -298,19 +300,19 @@ func (b *Blackjack) emptyHands() {
 	for _, c := range b.dealer.Hand.Cards {
 		b.discard.Add(0, c)
 	}
-	b.dealer.Hand.Cards = b.dealer.Hand.Cards[:0]
+	b.dealer.Hand.Clear()
 
 	for _, v := range b.players {
 		for _, c := range v.Hand.Cards {
 			b.discard.Add(0, c)
 		}
-		v.Hand.Cards = v.Hand.Cards[:0]
+		v.Hand.Clear()
 
 		for _, s := range v.SplitHands {
 			for _, c := range s.Cards {
 				b.discard.Add(0, c)
 			}
-			s.Cards = s.Cards[:0]
+			s.Clear()
 		}
 		v.SplitHands = v.SplitHands[:0]
 	}

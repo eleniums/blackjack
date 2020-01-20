@@ -6,8 +6,9 @@ import (
 
 // Hand represents a hand of cards.
 type Hand struct {
-	Cards []Card
-	Bet   float64
+	Cards       []Card
+	Bet         float64
+	Surrendered bool
 }
 
 // NewHand will create a new hand with the given cards.
@@ -24,6 +25,13 @@ func NewHand(cards ...Card) *Hand {
 // Count will return the number of cards in the hand.
 func (h *Hand) Count() int {
 	return len(h.Cards)
+}
+
+// Clear will reset a hand to empty.
+func (h *Hand) Clear() {
+	h.Cards = h.Cards[:0]
+	h.Bet = 0
+	h.Surrendered = false
 }
 
 // Add a single card to the hand.

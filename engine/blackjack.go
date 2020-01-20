@@ -175,6 +175,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 				continue
 			}
 			player.Hand.Bet /= 2
+			player.Hand.Surrendered = true
 			fmt.Printf("%s surrendered their hand and reduced their bet to $%.2f.\n", player.Name, player.Hand.Bet)
 			return true
 
@@ -226,7 +227,11 @@ func (b *Blackjack) determineWinners() {
 // determineWinner will determine whether a player beat the dealer.
 func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal int) {
 	playerTotal := hand.Total()
-	if hand.IsNatural() {
+	if hand.Surrendered {
+		fmt.Printf("%s surrendered.\n", player.Name)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if hand.IsNatural() {
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5

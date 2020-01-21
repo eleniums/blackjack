@@ -79,8 +79,8 @@ func main() {
 	} else {
 		fmt.Printf("Ready to begin game with %d rounds.\n", *numRounds)
 	}
-	fmt.Printf("All players start with $%d.\n", *startingMoney)
-	fmt.Printf("Min bet is $%d. Max bet is $%d.\n", *minBet, *maxBet)
+	fmt.Printf("All players start with $%.2f.\n", *startingMoney)
+	fmt.Printf("Min bet is $%.2f. Max bet is $%.2f.\n", *minBet, *maxBet)
 	fmt.Println()
 	blackjack.DisplayStats()
 	fmt.Println()

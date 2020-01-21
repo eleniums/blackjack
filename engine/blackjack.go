@@ -154,7 +154,10 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			hand.Cards = hand.Cards[:1]
 			player.SplitHands = append(player.SplitHands, splitHand)
 
-			// TODO: deal second card to each split hand
+			// deal second card to each new hand
+			newCard1 := b.dealCard(hand, false)
+			newCard2 := b.dealCard(splitHand, false)
+			fmt.Printf("%s split their hand.\nOne hand was dealt: %v\nThe other hand was dealt: %v\n", player.Name, newCard1, newCard2)
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {

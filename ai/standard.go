@@ -17,6 +17,14 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	dealerTotal := dealer.Total()
 	playerTotal := player.Total()
 
+	// check for surrender
+	if playerTotal == 16 && within(dealerTotal, 9, 11) && player.CanDouble() {
+		return game.ActionSurrender
+	}
+	if playerTotal == 15 && dealerTotal == 10 && player.CanDouble() {
+		return game.ActionSurrender
+	}
+
 	// at least one ace that is counted as 11
 	if player.Soft() {
 		if playerTotal >= 20 {

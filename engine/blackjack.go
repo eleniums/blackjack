@@ -42,6 +42,9 @@ func NewBlackjack(numDecks int, maxDiscard int, minBet float64, maxBet float64, 
 
 // PlayRound will run a single round of blackjack.
 func (b *Blackjack) PlayRound() {
+	// start clean
+	b.emptyHands()
+
 	// place bets for each player
 	for _, p := range b.players {
 		b.placeBet(p)
@@ -49,7 +52,6 @@ func (b *Blackjack) PlayRound() {
 	}
 
 	// deal initial hands
-	b.emptyHands()
 	b.dealInitialCards()
 	b.displayAll()
 	fmt.Println()
@@ -70,7 +72,7 @@ func (b *Blackjack) PlayRound() {
 
 	// take actions for dealer
 	if busted {
-		fmt.Println("Skipping dealer since all players busted.")
+		fmt.Println("Skipping dealer since all players busted or surrendered.")
 	} else {
 		b.dealerTurn()
 	}
@@ -152,6 +154,11 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			hand.Cards = hand.Cards[:1]
 			player.SplitHands = append(player.SplitHands, splitHand)
 
+			// deal second card to each new hand
+			newCard1 := b.dealCard(hand, false)
+			newCard2 := b.dealCard(splitHand, false)
+			fmt.Printf("%s split their hand.\nOne hand was dealt: %v\nThe other hand was dealt: %v\n", player.Name, newCard1, newCard2)
+
 		case game.ActionDouble:
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
@@ -163,6 +170,17 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			fmt.Printf("%s doubled their bet to $%.2f and was dealt: %v\n", player.Name, player.Hand.Bet, card)
 			b.displayHand(player.Name, hand)
 			return hand.Total() > 21
+
+		case game.ActionSurrender:
+			if !hand.CanDouble() || len(player.SplitHands) > 0 {
+				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
+				action = game.ActionInvalid
+				continue
+			}
+			player.Hand.Bet /= 2
+			player.Hand.Surrendered = true
+			fmt.Printf("%s surrendered their hand and reduced their bet to $%.2f.\n", player.Name, player.Hand.Bet)
+			return true
 
 		case game.ActionStats:
 			b.displayPlayerStats(player)
@@ -212,7 +230,11 @@ func (b *Blackjack) determineWinners() {
 // determineWinner will determine whether a player beat the dealer.
 func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal int) {
 	playerTotal := hand.Total()
-	if hand.IsNatural() {
+	if hand.Surrendered {
+		fmt.Printf("%s surrendered.\n", player.Name)
+		player.Loss++
+		player.Money -= hand.Bet
+	} else if hand.IsNatural() {
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5
@@ -286,13 +308,21 @@ func (b *Blackjack) emptyHands() {
 	for _, c := range b.dealer.Hand.Cards {
 		b.discard.Add(0, c)
 	}
-	b.dealer.Hand.Cards = b.dealer.Hand.Cards[:0]
+	b.dealer.Hand.Clear()
 
 	for _, v := range b.players {
 		for _, c := range v.Hand.Cards {
 			b.discard.Add(0, c)
 		}
-		v.Hand.Cards = v.Hand.Cards[:0]
+		v.Hand.Clear()
+
+		for _, s := range v.SplitHands {
+			for _, c := range s.Cards {
+				b.discard.Add(0, c)
+			}
+			s.Clear()
+		}
+		v.SplitHands = v.SplitHands[:0]
 	}
 
 	// check if discard pile is too full

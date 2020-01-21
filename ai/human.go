@@ -33,6 +33,8 @@ func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
 			action = game.ActionSplit
 		case "double", "d":
 			action = game.ActionDouble
+		case "surrender":
+			action = game.ActionSurrender
 		case "stats":
 			action = game.ActionStats
 		case "exit", "quit":
@@ -80,6 +82,10 @@ func (h *Human) displayPossibleActions(hand *game.Hand) {
 
 	if hand.CanSplit() {
 		actions = append(actions, "Split")
+	}
+
+	if hand.CanDouble() {
+		actions = append(actions, "Surrender")
 	}
 
 	var prompt strings.Builder

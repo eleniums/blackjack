@@ -66,7 +66,9 @@ func (b *Blackjack) PlayRound() {
 	// take actions for each player
 	busted := true
 	for _, p := range b.players {
-		busted = b.playerTurn(p)
+		if !b.playerTurn(p) {
+			busted = false
+		}
 		fmt.Println()
 	}
 

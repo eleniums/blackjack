@@ -17,6 +17,31 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand) game.Action {
 	dealerTotal := dealer.Total()
 	playerTotal := player.Total()
 
+	// check for split
+	if player.CanSplit() {
+		if player.Cards[0].Rank() == game.RankAce {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 9 && within(dealerTotal, 2, 9) && dealerTotal != 7 {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 7 && within(dealerTotal, 2, 7) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 6 && within(dealerTotal, 2, 6) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 4 && within(dealerTotal, 5, 6) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 3 && within(dealerTotal, 2, 7) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 2 && within(dealerTotal, 2, 7) {
+			return game.ActionSplit
+		}
+	}
+
 	// check for surrender
 	if playerTotal == 16 && within(dealerTotal, 9, 11) && player.CanDouble() {
 		return game.ActionSurrender

@@ -16,8 +16,8 @@ func NewHuman() *Human {
 	return &Human{}
 }
 
-// Action returns the action the player wants to make with his hand.
-func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
+// Action returns the action the player wants to make with his hand from the given array of possible actions.
+func (h *Human) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
 	var action game.Action
 	for action == 0 {
 		h.displayPossibleActions(player)

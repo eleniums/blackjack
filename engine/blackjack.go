@@ -134,7 +134,8 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return true
 		}
 
-		action = player.AI.Action(b.dealer.Hand, hand)
+		actions := b.possibleActions(player, hand)
+		action = player.AI.Action(b.dealer.Hand, hand, actions)
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(hand, false)

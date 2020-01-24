@@ -204,7 +204,7 @@ func (b *Blackjack) dealerTurn() {
 	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
-	for b.dealer.Hand.Total() < 21 && b.dealer.AI.Action(b.dealer.Hand, nil) == game.ActionHit {
+	for b.dealer.Hand.Total() < 21 && b.dealer.AI.Action(b.dealer.Hand, nil, nil) == game.ActionHit {
 		card := b.dealCard(b.dealer.Hand, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
 		b.displayHand("Dealer", b.dealer.Hand)
@@ -362,4 +362,26 @@ func (b *Blackjack) dealInitialCards() {
 
 	// deal second card to dealer face down
 	b.dealCard(b.dealer.Hand, true)
+}
+
+// possibleActions will determine the actions a player has available to them.
+func (b *Blackjack) possibleActions(player *Player, hand *game.Hand) []game.Action {
+	actions := []game.Action{
+		game.ActionHit,
+		game.ActionStay,
+	}
+
+	if hand.CanDouble() {
+		actions = append(actions, game.ActionDouble)
+	}
+
+	if hand.CanSplit() {
+		actions = append(actions, game.ActionSplit)
+	}
+
+	if len(hand.Cards) == 2 && len(player.SplitHands) == 0 {
+		actions = append(actions, game.ActionSurrender)
+	}
+
+	return actions
 }

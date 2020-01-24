@@ -96,19 +96,24 @@ func (h *Hand) Soft() bool {
 	return false
 }
 
+// IsInitialHand will return true if hand only has two cards.
+func (h *Hand) IsInitialHand() bool {
+	return h.Count() == 2
+}
+
 // CanDouble will return true if doubling down is allowed.
 func (h *Hand) CanDouble() bool {
-	return h.Count() == 2
+	return h.IsInitialHand()
 }
 
 // CanSplit will return true if splitting is allowed.
 func (h *Hand) CanSplit() bool {
-	return h.Count() == 2 && h.Cards[0].Rank() == h.Cards[1].Rank()
+	return h.IsInitialHand() && h.Cards[0].Rank() == h.Cards[1].Rank()
 }
 
 // IsNatural will return true if this hand is a natural blackjack (21 from two cards).
 func (h *Hand) IsNatural() bool {
-	if h.Count() == 2 {
+	if h.IsInitialHand() {
 		// a copy is used so the cards will not stay revealed
 		local := NewHand(h.Cards...)
 

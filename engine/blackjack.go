@@ -175,7 +175,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return hand.Total() > 21
 
 		case game.ActionSurrender:
-			if !hand.CanDouble() || len(player.SplitHands) > 0 {
+			if !hand.IsInitialHand() || len(player.SplitHands) > 0 {
 				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
 				action = game.ActionInvalid
 				continue
@@ -380,7 +380,7 @@ func (b *Blackjack) possibleActions(player *Player, hand *game.Hand) []game.Acti
 		actions = append(actions, game.ActionSplit)
 	}
 
-	if len(hand.Cards) == 2 && len(player.SplitHands) == 0 {
+	if hand.IsInitialHand() && len(player.SplitHands) == 0 {
 		actions = append(actions, game.ActionSurrender)
 	}
 

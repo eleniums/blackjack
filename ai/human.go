@@ -84,7 +84,7 @@ func (h *Human) displayPossibleActions(hand *game.Hand) {
 		actions = append(actions, "Split")
 	}
 
-	if hand.CanDouble() {
+	if hand.IsInitialHand() {
 		actions = append(actions, "Surrender")
 	}
 

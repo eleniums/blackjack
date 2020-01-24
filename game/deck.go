@@ -63,7 +63,7 @@ func (d *Deck) Add(i int, card Card) {
 
 // Deal the top card from the deck. This removes the card from the deck.
 func (d *Deck) Deal() (Card, error) {
-	if len(d.Cards) == 0 {
+	if d.Count() == 0 {
 		return Card{}, ErrDeckEmpty
 	}
 

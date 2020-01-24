@@ -22,8 +22,8 @@ func NewRandom() *Random {
 	}
 }
 
-// Action returns the action the player wants to make with his hand.
-func (ai *Random) Action(dealer *game.Hand, player *game.Hand) game.Action {
+// Action returns the action the player wants to make with his hand from the given array of possible actions.
+func (ai *Random) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
 	i := ai.rand.Intn(2)
 	if i == 0 {
 		return game.ActionHit

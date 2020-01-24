@@ -66,7 +66,9 @@ func (b *Blackjack) PlayRound() {
 	// take actions for each player
 	busted := true
 	for _, p := range b.players {
-		busted = b.playerTurn(p)
+		if !b.playerTurn(p) {
+			busted = false
+		}
 		fmt.Println()
 	}
 
@@ -132,7 +134,8 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return true
 		}
 
-		action = player.AI.Action(b.dealer.Hand, hand)
+		actions := b.possibleActions(player, hand)
+		action = player.AI.Action(b.dealer.Hand, hand, actions)
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(hand, false)
@@ -172,7 +175,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return hand.Total() > 21
 
 		case game.ActionSurrender:
-			if !hand.CanDouble() || len(player.SplitHands) > 0 {
+			if !hand.IsInitialHand() || len(player.SplitHands) > 0 {
 				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
 				action = game.ActionInvalid
 				continue
@@ -202,7 +205,7 @@ func (b *Blackjack) dealerTurn() {
 	b.displayHand("Dealer", b.dealer.Hand)
 
 	// dealer hits on soft 17
-	for b.dealer.Hand.Total() < 21 && b.dealer.AI.Action(b.dealer.Hand, nil) == game.ActionHit {
+	for b.dealer.Hand.Total() < 21 && b.dealer.AI.Action(b.dealer.Hand, nil, nil) == game.ActionHit {
 		card := b.dealCard(b.dealer.Hand, false)
 		fmt.Printf("Dealer hit and was dealt: %v\n", card)
 		b.displayHand("Dealer", b.dealer.Hand)
@@ -360,4 +363,26 @@ func (b *Blackjack) dealInitialCards() {
 
 	// deal second card to dealer face down
 	b.dealCard(b.dealer.Hand, true)
+}
+
+// possibleActions will determine the actions a player has available to them.
+func (b *Blackjack) possibleActions(player *Player, hand *game.Hand) []game.Action {
+	actions := []game.Action{
+		game.ActionHit,
+		game.ActionStay,
+	}
+
+	if hand.CanDouble() {
+		actions = append(actions, game.ActionDouble)
+	}
+
+	if hand.CanSplit() {
+		actions = append(actions, game.ActionSplit)
+	}
+
+	if hand.IsInitialHand() && len(player.SplitHands) == 0 {
+		actions = append(actions, game.ActionSurrender)
+	}
+
+	return actions
 }

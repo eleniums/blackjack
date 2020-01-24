@@ -12,8 +12,8 @@ func NewSoft17Dealer() *Soft17Dealer {
 	return &Soft17Dealer{}
 }
 
-// Action returns the action the player wants to make with his hand.
-func (ai *Soft17Dealer) Action(dealer *game.Hand, player *game.Hand) game.Action {
+// Action returns the action the player wants to make with his hand from the given array of possible actions.
+func (ai *Soft17Dealer) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
 	// dealer hits on soft 17
 	for dealer.Total() < 17 || (dealer.Total() == 17 && dealer.Soft()) {
 		return game.ActionHit

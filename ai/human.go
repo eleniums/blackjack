@@ -16,11 +16,11 @@ func NewHuman() *Human {
 	return &Human{}
 }
 
-// Action returns the action the player wants to make with his hand.
-func (h *Human) Action(dealer *game.Hand, player *game.Hand) game.Action {
+// Action returns the action the player wants to make with his hand from the given array of possible actions.
+func (h *Human) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
 	var action game.Action
 	for action == 0 {
-		h.displayPossibleActions(player)
+		h.displayPossibleActions(actions)
 		input := game.ReadInput()
 		input = strings.ToLower(input)
 
@@ -70,33 +70,34 @@ func (h *Human) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 	return bet
 }
 
-func (h *Human) displayPossibleActions(hand *game.Hand) {
-	actions := []string{
-		"Hit",
-		"Stay",
-	}
+// displayPossibleActions will print the available player actions.
+func (h *Human) displayPossibleActions(actions []game.Action) {
+	display := []string{}
 
-	if hand.CanDouble() {
-		actions = append(actions, "Double")
-	}
-
-	if hand.CanSplit() {
-		actions = append(actions, "Split")
-	}
-
-	if hand.CanDouble() {
-		actions = append(actions, "Surrender")
+	for _, v := range actions {
+		switch v {
+		case game.ActionHit:
+			display = append(display, "Hit")
+		case game.ActionStay:
+			display = append(display, "Stay")
+		case game.ActionDouble:
+			display = append(display, "Double")
+		case game.ActionSplit:
+			display = append(display, "Split")
+		case game.ActionSurrender:
+			display = append(display, "Surrender")
+		}
 	}
 
 	var prompt strings.Builder
-	for i, v := range actions {
-		if i == len(actions)-1 {
+	for i, v := range display {
+		if i == len(display)-1 {
 			prompt.WriteString("or ")
 			prompt.WriteString(v)
 			prompt.WriteString(": ")
 		} else {
 			prompt.WriteString(v)
-			if len(actions) == 2 {
+			if len(display) == 2 {
 				prompt.WriteString(" ")
 			} else {
 				prompt.WriteString(", ")

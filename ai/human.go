@@ -70,6 +70,7 @@ func (h *Human) PlaceBet(minBet, maxBet, totalMoney float64) float64 {
 	return bet
 }
 
+// displayPossibleActions will print the available player actions.
 func (h *Human) displayPossibleActions(actions []game.Action) {
 	display := []string{}
 

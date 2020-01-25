@@ -12,7 +12,9 @@ Rules used for this version of blackjack:
 - Dealer hits soft 17
 - Natural blackjacks pay 3:2
 - Late surrender is allowed
+- Cannot surrender after split
 - Double down is allowed
+- Double after split is allowed
 - Multiple splits are allowed
 - Insurance is not available
 

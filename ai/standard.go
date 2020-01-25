@@ -17,38 +17,63 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand, actions []game.
 	dealerTotal := dealer.Total()
 	playerTotal := player.Total()
 
+	// check for surrender
+	if allowed(actions, game.ActionSurrender) {
+		if player.Hard() && playerTotal == 16 && within(dealerTotal, 9, 11) && player.Cards[0].Rank() != 8 {
+			return game.ActionSurrender
+		}
+		if player.Hard() && playerTotal == 15 && dealerTotal == 10 {
+			return game.ActionSurrender
+		}
+	}
+
 	// check for split
-	if player.CanSplit() {
+	if allowed(actions, game.ActionSplit) {
 		if player.Cards[0].Rank() == game.RankAce {
 			return game.ActionSplit
 		}
-		if player.Cards[0].Rank() == 9 && within(dealerTotal, 2, 9) && dealerTotal != 7 {
-			return game.ActionSplit
-		}
-		if player.Cards[0].Rank() == 7 && within(dealerTotal, 2, 7) {
-			return game.ActionSplit
-		}
-		if player.Cards[0].Rank() == 6 && within(dealerTotal, 2, 6) {
-			return game.ActionSplit
-		}
-		if player.Cards[0].Rank() == 4 && within(dealerTotal, 5, 6) {
-			return game.ActionSplit
-		}
-		if player.Cards[0].Rank() == 3 && within(dealerTotal, 2, 7) {
+		if player.Cards[0].Rank() == 8 {
 			return game.ActionSplit
 		}
 		if player.Cards[0].Rank() == 2 && within(dealerTotal, 2, 7) {
 			return game.ActionSplit
 		}
+		if player.Cards[0].Rank() == 3 && within(dealerTotal, 2, 7) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 4 && within(dealerTotal, 5, 6) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 6 && within(dealerTotal, 2, 6) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 7 && within(dealerTotal, 2, 7) {
+			return game.ActionSplit
+		}
+		if player.Cards[0].Rank() == 9 && within(dealerTotal, 2, 9) && dealerTotal != 7 {
+			return game.ActionSplit
+		}
 	}
 
-	// check for surrender
-	if allowed(actions, game.ActionSurrender) {
-		if playerTotal == 16 && within(dealerTotal, 9, 11) {
-			return game.ActionSurrender
+	// check for double
+	if allowed(actions, game.ActionDouble) {
+		if player.Hard() && playerTotal == 9 && within(dealerTotal, 3, 6) {
+			return game.ActionDouble
 		}
-		if playerTotal == 15 && dealerTotal == 10 {
-			return game.ActionSurrender
+		if player.Hard() && playerTotal == 10 && !within(dealerTotal, 10, 11) {
+			return game.ActionDouble
+		}
+		if player.Hard() && playerTotal == 11 && dealerTotal != 11 {
+			return game.ActionDouble
+		}
+		if player.Soft() && within(playerTotal, 13, 14) && within(dealerTotal, 5, 6) {
+			return game.ActionDouble
+		}
+		if player.Soft() && within(playerTotal, 15, 16) && within(dealerTotal, 4, 6) {
+			return game.ActionDouble
+		}
+		if player.Soft() && within(playerTotal, 17, 18) && within(dealerTotal, 3, 6) {
+			return game.ActionDouble
 		}
 	}
 

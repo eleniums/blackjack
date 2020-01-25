@@ -77,63 +77,27 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand, actions []game.
 		}
 	}
 
-	// at least one ace that is counted as 11
-	if player.Soft() {
-		if playerTotal >= 20 {
-			return game.ActionStay
-		}
-		if playerTotal == 19 {
-			if dealerTotal == 6 && player.CanDouble() {
-				return game.ActionDouble
-			}
-			return game.ActionStay
-		}
-		if playerTotal == 18 {
-			if within(dealerTotal, 2, 6) && player.CanDouble() {
-				return game.ActionDouble
-			}
-			if within(dealerTotal, 9, 11) {
-				return game.ActionHit
-			}
-			return game.ActionStay
-		}
-		if playerTotal == 17 {
-			if within(dealerTotal, 3, 6) && player.CanDouble() {
-				return game.ActionDouble
-			}
-		}
-		if within(playerTotal, 15, 16) {
-			if within(dealerTotal, 4, 6) && player.CanDouble() {
-				return game.ActionDouble
-			}
-		}
-		if within(playerTotal, 13, 14) {
-			if within(dealerTotal, 5, 6) && player.CanDouble() {
-				return game.ActionDouble
-			}
-		}
-
+	// check for hit or stand
+	if player.Hard() && playerTotal <= 11 {
 		return game.ActionHit
 	}
-
-	// no aces in hand
-	if playerTotal >= 17 {
+	if player.Hard() && playerTotal == 12 && within(dealerTotal, 4, 6) {
 		return game.ActionStay
 	}
-	if within(playerTotal, 13, 16) && within(dealerTotal, 2, 6) {
+	if player.Hard() && within(playerTotal, 13, 16) && within(dealerTotal, 2, 6) {
 		return game.ActionStay
 	}
-	if playerTotal == 12 && within(dealerTotal, 4, 6) {
+	if player.Hard() && playerTotal >= 17 {
 		return game.ActionStay
 	}
-	if playerTotal == 11 && player.CanDouble() {
-		return game.ActionDouble
+	if player.Soft() && playerTotal <= 17 {
+		return game.ActionHit
 	}
-	if playerTotal == 10 && within(dealerTotal, 2, 9) && player.CanDouble() {
-		return game.ActionDouble
+	if player.Soft() && playerTotal == 18 && !within(dealerTotal, 9, 11) {
+		return game.ActionStay
 	}
-	if playerTotal == 9 && within(dealerTotal, 3, 6) && player.CanDouble() {
-		return game.ActionDouble
+	if player.Soft() && playerTotal >= 19 {
+		return game.ActionStay
 	}
 
 	return game.ActionHit

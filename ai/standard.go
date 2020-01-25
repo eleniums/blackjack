@@ -16,13 +16,15 @@ func NewStandard() *Standard {
 func (ai *Standard) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
 	dealerTotal := dealer.Total()
 	playerTotal := player.Total()
+	soft := player.Soft()
+	hard := player.Hard()
 
 	// check for surrender
 	if allowed(actions, game.ActionSurrender) {
-		if player.Hard() && playerTotal == 16 && within(dealerTotal, 9, 11) && player.Cards[0].Rank() != 8 {
+		if hard && playerTotal == 16 && within(dealerTotal, 9, 11) && player.Cards[0].Rank() != 8 {
 			return game.ActionSurrender
 		}
-		if player.Hard() && playerTotal == 15 && dealerTotal == 10 {
+		if hard && playerTotal == 15 && dealerTotal == 10 {
 			return game.ActionSurrender
 		}
 	}
@@ -57,46 +59,46 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand, actions []game.
 
 	// check for double
 	if allowed(actions, game.ActionDouble) {
-		if player.Hard() && playerTotal == 9 && within(dealerTotal, 3, 6) {
+		if hard && playerTotal == 9 && within(dealerTotal, 3, 6) {
 			return game.ActionDouble
 		}
-		if player.Hard() && playerTotal == 10 && !within(dealerTotal, 10, 11) {
+		if hard && playerTotal == 10 && !within(dealerTotal, 10, 11) {
 			return game.ActionDouble
 		}
-		if player.Hard() && playerTotal == 11 && dealerTotal != 11 {
+		if hard && playerTotal == 11 && dealerTotal != 11 {
 			return game.ActionDouble
 		}
-		if player.Soft() && within(playerTotal, 13, 14) && within(dealerTotal, 5, 6) {
+		if soft && within(playerTotal, 13, 14) && within(dealerTotal, 5, 6) {
 			return game.ActionDouble
 		}
-		if player.Soft() && within(playerTotal, 15, 16) && within(dealerTotal, 4, 6) {
+		if soft && within(playerTotal, 15, 16) && within(dealerTotal, 4, 6) {
 			return game.ActionDouble
 		}
-		if player.Soft() && within(playerTotal, 17, 18) && within(dealerTotal, 3, 6) {
+		if soft && within(playerTotal, 17, 18) && within(dealerTotal, 3, 6) {
 			return game.ActionDouble
 		}
 	}
 
 	// check for hit or stand
-	if player.Hard() && playerTotal <= 11 {
+	if hard && playerTotal <= 11 {
 		return game.ActionHit
 	}
-	if player.Hard() && playerTotal == 12 && within(dealerTotal, 4, 6) {
+	if hard && playerTotal == 12 && within(dealerTotal, 4, 6) {
 		return game.ActionStay
 	}
-	if player.Hard() && within(playerTotal, 13, 16) && within(dealerTotal, 2, 6) {
+	if hard && within(playerTotal, 13, 16) && within(dealerTotal, 2, 6) {
 		return game.ActionStay
 	}
-	if player.Hard() && playerTotal >= 17 {
+	if hard && playerTotal >= 17 {
 		return game.ActionStay
 	}
-	if player.Soft() && playerTotal <= 17 {
+	if soft && playerTotal <= 17 {
 		return game.ActionHit
 	}
-	if player.Soft() && playerTotal == 18 && !within(dealerTotal, 9, 11) {
+	if soft && playerTotal == 18 && !within(dealerTotal, 9, 11) {
 		return game.ActionStay
 	}
-	if player.Soft() && playerTotal >= 19 {
+	if soft && playerTotal >= 19 {
 		return game.ActionStay
 	}
 

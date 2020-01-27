@@ -5,15 +5,11 @@ import (
 )
 
 // Standard is an opponent that uses a standard strategy.
-type Standard struct {
-	dealerHitsSoft17 bool
-}
+type Standard struct{}
 
 // NewStandard will create a new standard AI.
 func NewStandard() *Standard {
-	return &Standard{
-		dealerHitsSoft17: false,
-	}
+	return &Standard{}
 }
 
 // Action returns the action the player wants to make with his hand from the given array of possible actions.
@@ -22,24 +18,6 @@ func (ai *Standard) Action(dealer *game.Hand, player *game.Hand, actions []game.
 	playerTotal := player.Total()
 	soft := player.Soft()
 	hard := player.Hard()
-
-	// modify if dealer hits soft 17
-	if ai.dealerHitsSoft17 {
-		if allowed(actions, game.ActionSurrender) {
-			if playerTotal == 15 ||
-				player.CanSplit() && player.Cards[0].Rank() == 8 ||
-				playerTotal == 17 && dealerTotal == 11 {
-				return game.ActionSurrender
-			}
-		}
-		if allowed(actions, game.ActionDouble) {
-			if playerTotal == 11 && dealerTotal == 11 ||
-				soft && playerTotal == 18 && dealerTotal == 2 ||
-				soft && playerTotal == 19 && dealerTotal == 6 {
-				return game.ActionDouble
-			}
-		}
-	}
 
 	// check for surrender
 	if allowed(actions, game.ActionSurrender) {

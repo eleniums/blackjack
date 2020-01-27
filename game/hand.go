@@ -96,7 +96,7 @@ func (h *Hand) Soft() bool {
 	return false
 }
 
-// Hard returns true if the hand is a hard hand, meaning it includes no aces or aces that are counted as 1.
+// Hard returns true if the hand is a hard hand, meaning it includes no aces or only aces that are counted as 1.
 func (h *Hand) Hard() bool {
 	return !h.Soft()
 }

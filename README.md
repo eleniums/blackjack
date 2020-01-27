@@ -26,7 +26,7 @@ Rules used for this version of blackjack:
 - [x] Change money to float
 - [x] Implement split
 - [x] Implement late surrender
-- [ ] Implement standard AI
+- [x] Implement standard AI
 - [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)
 - [ ] Create machine learning AI
 

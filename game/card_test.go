@@ -14,25 +14,25 @@ func Test_Unit_Card_Suit(t *testing.T) {
 		expected    Suit
 	}{
 		{
-			description: "Suit_Clubs_Visible",
+			description: "Clubs_Visible",
 			suit:        SuitClubs,
 			hidden:      false,
 			expected:    SuitClubs,
 		},
 		{
-			description: "Suit_Clubs_Hidden",
+			description: "Clubs_Hidden",
 			suit:        SuitClubs,
 			hidden:      true,
 			expected:    0,
 		},
 		{
-			description: "Suit_Spades_Visible",
+			description: "Spades_Visible",
 			suit:        SuitSpades,
 			hidden:      false,
 			expected:    SuitSpades,
 		},
 		{
-			description: "Suit_Spades_Hidden",
+			description: "Spades_Hidden",
 			suit:        SuitSpades,
 			hidden:      true,
 			expected:    0,
@@ -63,25 +63,25 @@ func Test_Unit_Card_Rank(t *testing.T) {
 		expected    Rank
 	}{
 		{
-			description: "Rank_Ace_Visible",
+			description: "Ace_Visible",
 			rank:        RankAce,
 			hidden:      false,
 			expected:    RankAce,
 		},
 		{
-			description: "Rank_Ace_Hidden",
+			description: "Ace_Hidden",
 			rank:        RankAce,
 			hidden:      true,
 			expected:    0,
 		},
 		{
-			description: "Rank_King_Visible",
+			description: "King_Visible",
 			rank:        RankKing,
 			hidden:      false,
 			expected:    RankKing,
 		},
 		{
-			description: "Rank_King_Hidden",
+			description: "King_Hidden",
 			rank:        RankKing,
 			hidden:      true,
 			expected:    0,
@@ -96,6 +96,156 @@ func Test_Unit_Card_Rank(t *testing.T) {
 
 			// act
 			result := card.Rank()
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+
+	}
+}
+
+func Test_Unit_Card_Text(t *testing.T) {
+	testCases := []struct {
+		description string
+		suit        Suit
+		rank        Rank
+		hidden      bool
+		expected    string
+	}{
+		{
+			description: "Clubs_Ace_Visible",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			hidden:      false,
+			expected:    "A♣",
+		},
+		{
+			description: "Clubs_Ace_Hidden",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			hidden:      true,
+			expected:    "XX",
+		},
+		{
+			description: "Spades_Jack_Visible",
+			suit:        SuitSpades,
+			rank:        RankJack,
+			hidden:      false,
+			expected:    "J♠",
+		},
+		{
+			description: "Hearts_Queen_Visible",
+			suit:        SuitHearts,
+			rank:        RankQueen,
+			hidden:      false,
+			expected:    "Q♥",
+		},
+		{
+			description: "Diamonds_King_Visible",
+			suit:        SuitDiamonds,
+			rank:        RankKing,
+			hidden:      false,
+			expected:    "K♦",
+		},
+		{
+			description: "Diamonds_Two_Visible",
+			suit:        SuitDiamonds,
+			rank:        2,
+			hidden:      false,
+			expected:    "2♦",
+		},
+		{
+			description: "Diamonds_Ten_Visible",
+			suit:        SuitDiamonds,
+			rank:        10,
+			hidden:      false,
+			expected:    "10♦",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			card := NewCard(tc.suit, tc.rank)
+			card.Hidden = tc.hidden
+
+			// act
+			result := card.Text()
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+
+	}
+}
+
+func Test_Unit_Card_Symbol(t *testing.T) {
+	testCases := []struct {
+		description string
+		suit        Suit
+		rank        Rank
+		hidden      bool
+		expected    string
+	}{
+		{
+			description: "Clubs_Ace_Visible",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			hidden:      false,
+			expected:    "🃑",
+		},
+		{
+			description: "Clubs_Ace_Hidden",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			hidden:      true,
+			expected:    "🂠",
+		},
+		{
+			description: "Spades_Jack_Visible",
+			suit:        SuitSpades,
+			rank:        RankJack,
+			hidden:      false,
+			expected:    "🂫",
+		},
+		{
+			description: "Hearts_Queen_Visible",
+			suit:        SuitHearts,
+			rank:        RankQueen,
+			hidden:      false,
+			expected:    "🂽",
+		},
+		{
+			description: "Diamonds_King_Visible",
+			suit:        SuitDiamonds,
+			rank:        RankKing,
+			hidden:      false,
+			expected:    "🃎",
+		},
+		{
+			description: "Diamonds_Two_Visible",
+			suit:        SuitDiamonds,
+			rank:        2,
+			hidden:      false,
+			expected:    "🃂",
+		},
+		{
+			description: "Diamonds_Ten_Visible",
+			suit:        SuitDiamonds,
+			rank:        10,
+			hidden:      false,
+			expected:    "🃊",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			card := NewCard(tc.suit, tc.rank)
+			card.Hidden = tc.hidden
+
+			// act
+			result := card.Symbol()
 
 			// assert
 			assert.Equal(t, tc.expected, result)

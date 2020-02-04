@@ -6,6 +6,152 @@ import (
 	assert "github.com/stretchr/testify/require"
 )
 
+func Test_Unit_Hand_NewHand(t *testing.T) {
+	testCases := []struct {
+		description string
+		cards       []Card
+		expected    int
+	}{
+		{
+			description: "No_Cards",
+			cards:       []Card{},
+			expected:    0,
+		},
+		{
+			description: "One_Card",
+			cards: []Card{
+				NewCard(SuitHearts, RankJack),
+			},
+			expected: 1,
+		},
+		{
+			description: "Two_Cards",
+			cards: []Card{
+				NewCard(SuitDiamonds, RankJack),
+				NewCard(SuitClubs, RankAce),
+			},
+			expected: 2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// act
+			hand := NewHand(tc.cards...)
+
+			// assert
+			assert.Equal(t, tc.expected, len(hand.Cards))
+			for i, v := range hand.Cards {
+				assert.Equal(t, tc.cards[i], v)
+			}
+		})
+	}
+}
+
+func Test_Unit_Hand_Count(t *testing.T) {
+	testCases := []struct {
+		description string
+		cards       []Card
+		expected    int
+	}{
+		{
+			description: "No_Cards",
+			cards:       []Card{},
+			expected:    0,
+		},
+		{
+			description: "One_Card",
+			cards: []Card{
+				NewCard(SuitHearts, RankJack),
+			},
+			expected: 1,
+		},
+		{
+			description: "Two_Cards",
+			cards: []Card{
+				NewCard(SuitHearts, RankJack),
+				NewCard(SuitHearts, RankJack),
+			},
+			expected: 2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			hand := NewHand(tc.cards...)
+
+			// act
+			result := hand.Count()
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func Test_Unit_Hand_Clear(t *testing.T) {
+	// arrange
+	hand := NewHand(NewCard(SuitHearts, RankJack), NewCard(SuitHearts, RankJack))
+	hand.Bet = 15
+	hand.Surrendered = true
+
+	// act
+	hand.Clear()
+
+	// assert
+	assert.Equal(t, 0, len(hand.Cards))
+	assert.Equal(t, 0.0, hand.Bet)
+	assert.False(t, hand.Surrendered)
+}
+
+func Test_Unit_Hand_Add(t *testing.T) {
+	testCases := []struct {
+		description string
+		cards       []Card
+		card        Card
+		expected    int
+	}{
+		{
+			description: "No_Cards",
+			cards:       []Card{},
+			card:        NewCard(SuitClubs, RankAce),
+			expected:    1,
+		},
+		{
+			description: "One_Card",
+			cards: []Card{
+				NewCard(SuitHearts, RankJack),
+			},
+			card:     NewCard(SuitSpades, RankQueen),
+			expected: 2,
+		},
+		{
+			description: "Two_Cards",
+			cards: []Card{
+				NewCard(SuitHearts, RankJack),
+				NewCard(SuitHearts, RankJack),
+			},
+			card:     NewCard(SuitHearts, RankQueen),
+			expected: 3,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			hand := NewHand(tc.cards...)
+
+			// act
+			hand.Add(tc.card)
+
+			// assert
+			assert.Equal(t, tc.expected, len(hand.Cards))
+			assert.Equal(t, tc.card, hand.Cards[len(hand.Cards)-1])
+		})
+	}
+}
+
 func Test_Unit_Hand_IsInitialHand(t *testing.T) {
 	testCases := []struct {
 		description string

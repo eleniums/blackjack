@@ -553,3 +553,133 @@ func Test_Unit_Hand_Hard(t *testing.T) {
 		})
 	}
 }
+
+func Test_Unit_Hand_Total(t *testing.T) {
+	testCases := []struct {
+		description string
+		cards       []Card
+		expected    int
+	}{
+		{
+			description: "No_Cards",
+			cards:       []Card{},
+			expected:    0,
+		},
+		{
+			description: "Ace",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+			},
+			expected: 11,
+		},
+		{
+			description: "Two_Aces",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+				NewCard(SuitClubs, RankAce),
+			},
+			expected: 12,
+		},
+		{
+			description: "Natural_Blackjack",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+				NewCard(SuitClubs, RankQueen),
+			},
+			expected: 21,
+		},
+		{
+			description: "Ace_Over_21",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+				NewCard(SuitClubs, 9),
+				NewCard(SuitClubs, 2),
+			},
+			expected: 12,
+		},
+		{
+			description: "Ace_Under_21",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+				NewCard(SuitClubs, 7),
+				NewCard(SuitClubs, 2),
+			},
+			expected: 20,
+		},
+		{
+			description: "No_Ace_Over_21",
+			cards: []Card{
+				NewCard(SuitClubs, RankJack),
+				NewCard(SuitClubs, 9),
+				NewCard(SuitClubs, 3),
+			},
+			expected: 22,
+		},
+		{
+			description: "No_Ace_Under_21",
+			cards: []Card{
+				NewCard(SuitClubs, RankKing),
+				NewCard(SuitClubs, 8),
+				NewCard(SuitClubs, 2),
+			},
+			expected: 20,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			hand := NewHand(tc.cards...)
+
+			// act
+			result := hand.Total()
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func Test_Unit_Hand_String(t *testing.T) {
+	testCases := []struct {
+		description string
+		cards       []Card
+		expected    string
+	}{
+		{
+			description: "No_Cards",
+			cards:       []Card{},
+			expected:    "",
+		},
+		{
+			description: "Single_Card",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+			},
+			expected: "A♣  ",
+		},
+		{
+			description: "Multiple_Cards",
+			cards: []Card{
+				NewCard(SuitClubs, RankAce),
+				NewCard(SuitHearts, RankQueen),
+				NewCard(SuitDiamonds, RankKing),
+			},
+			expected: "A♣  Q♥  K♦  ",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			hand := NewHand(tc.cards...)
+
+			// act
+			result := hand.String()
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+
+	}
+}

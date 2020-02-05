@@ -40,6 +40,7 @@ func Test_Unit_Hand_NewHand(t *testing.T) {
 			hand := NewHand(tc.cards...)
 
 			// assert
+			assert.NotNil(t, hand)
 			assert.Equal(t, tc.expected, len(hand.Cards))
 			for i, v := range hand.Cards {
 				assert.Equal(t, tc.cards[i], v)

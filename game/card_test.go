@@ -6,6 +6,47 @@ import (
 	assert "github.com/stretchr/testify/require"
 )
 
+func Test_Unit_Card_NewCard(t *testing.T) {
+	testCases := []struct {
+		description string
+		suit        Suit
+		rank        Rank
+	}{
+		{
+			description: "Clubs_King",
+			suit:        SuitClubs,
+			rank:        RankKing,
+		},
+		{
+			description: "Spades_Queen",
+			suit:        SuitSpades,
+			rank:        RankQueen,
+		},
+		{
+			description: "Hearts_Jack",
+			suit:        SuitHearts,
+			rank:        RankJack,
+		},
+		{
+			description: "Diamonds_Ace",
+			suit:        SuitDiamonds,
+			rank:        RankAce,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// act
+			card := NewCard(tc.suit, tc.rank)
+
+			// assert
+			assert.NotNil(t, card)
+			assert.Equal(t, tc.suit, card.suit)
+			assert.Equal(t, tc.rank, card.rank)
+		})
+	}
+}
+
 func Test_Unit_Card_Suit(t *testing.T) {
 	testCases := []struct {
 		description string

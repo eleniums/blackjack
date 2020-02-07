@@ -31,6 +31,15 @@ func Test_Unit_Deck_NewDeck(t *testing.T) {
 	}
 }
 
+func Test_Unit_Deck_NewEmptyDeck(t *testing.T) {
+	// act
+	deck := NewEmptyDeck()
+
+	// assert
+	assert.NotNil(t, deck)
+	assert.Empty(t, deck.Cards)
+}
+
 func Test_Unit_Deck_Add(t *testing.T) {
 	testCases := []struct {
 		description string

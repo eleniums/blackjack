@@ -27,7 +27,7 @@ Rules used for this version of blackjack:
 - [x] Implement split
 - [x] Implement late surrender
 - [x] Implement standard AI
-- [ ] Add unit tests
+- [x] Add unit tests
 - [ ] Add optional delay between moves
 - [ ] Optionally print stats for each game to file
 - [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)

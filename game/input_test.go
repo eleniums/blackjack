@@ -40,3 +40,20 @@ func Test_Unit_Input_ReadInput(t *testing.T) {
 
 	}
 }
+
+func Test_Unit_Input_ReadInput_Panic(t *testing.T) {
+	// arrange
+	stdin = bufio.NewReader(strings.NewReader(""))
+
+	defer func() {
+		if r := recover(); r != nil {
+			assert.True(t, true)
+		}
+	}()
+
+	// act
+	ReadInput()
+
+	// assert
+	assert.Fail(t, "expected panic from ReadInput")
+}

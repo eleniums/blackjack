@@ -294,3 +294,44 @@ func Test_Unit_Card_Symbol(t *testing.T) {
 
 	}
 }
+
+func Test_Unit_Card_String(t *testing.T) {
+	testCases := []struct {
+		description string
+		suit        Suit
+		rank        Rank
+		symbol      bool
+		expected    string
+	}{
+		{
+			description: "Clubs_Ace_Text",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			symbol:      false,
+			expected:    "A♣",
+		},
+		{
+			description: "Clubs_Ace_Symbol",
+			suit:        SuitClubs,
+			rank:        RankAce,
+			symbol:      true,
+			expected:    "🃑",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			card := NewCard(tc.suit, tc.rank)
+			UseCardSymbols = tc.symbol
+
+			// act
+			result := card.String()
+
+			// assert
+			UseCardSymbols = false
+			assert.Equal(t, tc.expected, result)
+		})
+
+	}
+}

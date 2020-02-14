@@ -178,3 +178,169 @@ func Test_Unit_Blackjack_determineWinner(t *testing.T) {
 		})
 	}
 }
+
+func Test_Unit_Blackjack_percent(t *testing.T) {
+	testCases := []struct {
+		description string
+		numerator   int
+		denominator int
+		expected    float32
+	}{
+		{
+			description: "Zero_Numerator",
+			numerator:   0,
+			denominator: 10,
+			expected:    0.0,
+		},
+		{
+			description: "Zero_Denominator",
+			numerator:   10,
+			denominator: 0,
+			expected:    0.0,
+		},
+		{
+			description: "Equal_Numerator_Denominator",
+			numerator:   10,
+			denominator: 10,
+			expected:    100.0,
+		},
+		{
+			description: "Smaller_Numerator",
+			numerator:   5,
+			denominator: 10,
+			expected:    50.0,
+		},
+		{
+			description: "Larger_Numerator",
+			numerator:   15,
+			denominator: 10,
+			expected:    150.0,
+		},
+		{
+			description: "Negative_Numerator",
+			numerator:   -5,
+			denominator: 10,
+			expected:    -50.0,
+		},
+		{
+			description: "Negative_Denominator",
+			numerator:   5,
+			denominator: -10,
+			expected:    -50.0,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// act
+			result := percent(tc.numerator, tc.denominator)
+
+			// assert
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+func Test_Unit_Blackjack_possibleActions(t *testing.T) {
+	testCases := []struct {
+		description string
+		player      *Player
+		hand        *game.Hand
+		expected    []game.Action
+	}{
+		{
+			description: "Default_Actions",
+			player: &Player{
+				SplitHands: []*game.Hand{
+					game.NewHand(),
+				},
+			},
+			hand: game.NewHand(
+				game.NewCard(game.SuitClubs, 2),
+				game.NewCard(game.SuitClubs, 3),
+				game.NewCard(game.SuitClubs, 4),
+			),
+			expected: []game.Action{
+				game.ActionHit,
+				game.ActionStay,
+			},
+		},
+		{
+			description: "Double",
+			player: &Player{
+				SplitHands: []*game.Hand{
+					game.NewHand(),
+				},
+			},
+			hand: game.NewHand(
+				game.NewCard(game.SuitClubs, 2),
+				game.NewCard(game.SuitClubs, 3),
+			),
+			expected: []game.Action{
+				game.ActionHit,
+				game.ActionStay,
+				game.ActionDouble,
+			},
+		},
+		{
+			description: "Split",
+			player: &Player{
+				SplitHands: []*game.Hand{
+					game.NewHand(),
+				},
+			},
+			hand: game.NewHand(
+				game.NewCard(game.SuitClubs, 2),
+				game.NewCard(game.SuitClubs, 2),
+			),
+			expected: []game.Action{
+				game.ActionHit,
+				game.ActionStay,
+				game.ActionDouble,
+				game.ActionSplit,
+			},
+		},
+		{
+			description: "Surrender",
+			player:      &Player{},
+			hand: game.NewHand(
+				game.NewCard(game.SuitClubs, 2),
+				game.NewCard(game.SuitClubs, 3),
+			),
+			expected: []game.Action{
+				game.ActionHit,
+				game.ActionStay,
+				game.ActionDouble,
+				game.ActionSurrender,
+			},
+		},
+		{
+			description: "Everything",
+			player:      &Player{},
+			hand: game.NewHand(
+				game.NewCard(game.SuitClubs, 2),
+				game.NewCard(game.SuitClubs, 2),
+			),
+			expected: []game.Action{
+				game.ActionHit,
+				game.ActionStay,
+				game.ActionDouble,
+				game.ActionSplit,
+				game.ActionSurrender,
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			blackjack := &Blackjack{}
+
+			// act
+			result := blackjack.possibleActions(tc.player, tc.hand)
+
+			// assert
+			assert.ElementsMatch(t, tc.expected, result)
+		})
+	}
+}

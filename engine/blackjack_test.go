@@ -3,6 +3,7 @@ package engine
 import (
 	"testing"
 
+	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/game"
 
 	assert "github.com/stretchr/testify/require"
@@ -343,4 +344,64 @@ func Test_Unit_Blackjack_possibleActions(t *testing.T) {
 			assert.ElementsMatch(t, tc.expected, result)
 		})
 	}
+}
+
+func Test_Unit_Blackjack_emptyHands_DiscardLimitNotMet(t *testing.T) {
+	// arrange
+	dealer := NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
+	players := []*Player{
+		NewPlayer("Player 1", 0, nil),
+		NewPlayer("Player 2", 0, nil),
+	}
+	blackjack := NewBlackjack(1, 10, 5, 5, dealer, players...)
+
+	blackjack.dealInitialCards()
+
+	for _, v := range players {
+		hand := game.NewHand()
+		blackjack.dealCard(hand, false)
+		blackjack.dealCard(hand, false)
+		v.SplitHands = append(v.SplitHands, hand)
+	}
+
+	// act
+	blackjack.emptyHands()
+
+	// assert
+	assert.Empty(t, dealer.Hand.Cards)
+	for _, v := range players {
+		assert.Empty(t, v.Hand.Cards)
+		assert.Empty(t, v.SplitHands)
+	}
+	assert.Equal(t, 10, blackjack.discard.Count())
+}
+
+func Test_Unit_Blackjack_emptyHands_DiscardLimitMet(t *testing.T) {
+	// arrange
+	dealer := NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
+	players := []*Player{
+		NewPlayer("Player 1", 0, nil),
+		NewPlayer("Player 2", 0, nil),
+	}
+	blackjack := NewBlackjack(1, 9, 5, 5, dealer, players...)
+
+	blackjack.dealInitialCards()
+
+	for _, v := range players {
+		hand := game.NewHand()
+		blackjack.dealCard(hand, false)
+		blackjack.dealCard(hand, false)
+		v.SplitHands = append(v.SplitHands, hand)
+	}
+
+	// act
+	blackjack.emptyHands()
+
+	// assert
+	assert.Empty(t, dealer.Hand.Cards)
+	for _, v := range players {
+		assert.Empty(t, v.Hand.Cards)
+		assert.Empty(t, v.SplitHands)
+	}
+	assert.Equal(t, 0, blackjack.discard.Count())
 }

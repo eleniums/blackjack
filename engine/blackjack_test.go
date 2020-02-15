@@ -405,3 +405,63 @@ func Test_Unit_Blackjack_emptyHands_DiscardLimitMet(t *testing.T) {
 	}
 	assert.Equal(t, 0, blackjack.discard.Count())
 }
+
+func Test_Unit_Blackjack_dealCard(t *testing.T) {
+	testCases := []struct {
+		description string
+		hidden      bool
+	}{
+		{
+			description: "Face_Up",
+			hidden:      false,
+		},
+		{
+			description: "Face_Down",
+			hidden:      true,
+		},
+	}
+
+	shuffler := game.NewShuffler()
+	shuffler.Add(game.NewDeck().Cards...)
+	blackjack := &Blackjack{
+		shuffler: shuffler,
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			// arrange
+			hand := game.NewHand()
+
+			// act
+			card := blackjack.dealCard(hand, tc.hidden)
+
+			// assert
+			assert.Len(t, hand.Cards, 1)
+			assert.Equal(t, card, hand.Cards[0])
+			assert.Equal(t, tc.hidden, card.Hidden)
+		})
+	}
+}
+
+func Test_Unit_Blackjack_dealInitialCards(t *testing.T) {
+	// arrange
+	dealer := NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
+	players := []*Player{
+		NewPlayer("Player 1", 0, nil),
+		NewPlayer("Player 2", 0, nil),
+	}
+	blackjack := NewBlackjack(1, 9, 5, 5, dealer, players...)
+
+	// act
+	blackjack.dealInitialCards()
+
+	// assert
+	assert.Len(t, dealer.Hand.Cards, 2)
+	assert.False(t, dealer.Hand.Cards[0].Hidden)
+	assert.True(t, dealer.Hand.Cards[1].Hidden)
+	for _, v := range players {
+		assert.Len(t, v.Hand.Cards, 2)
+		assert.False(t, v.Hand.Cards[0].Hidden)
+		assert.False(t, v.Hand.Cards[1].Hidden)
+	}
+}

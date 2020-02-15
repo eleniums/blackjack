@@ -18,21 +18,6 @@ Rules used for this version of blackjack:
 - Multiple splits are allowed
 - Insurance is not available
 
-## TODO
-- [x] Implement double down
-- [x] Make sure double down can only be done with original two cards
-- [x] Only show available actions if they are possible, like double or split
-- [x] Check for natural blackjacks and pay 3:2 (1.5x)
-- [x] Change money to float
-- [x] Implement split
-- [x] Implement late surrender
-- [x] Implement standard AI
-- [x] Add unit tests
-- [ ] Add optional delay between moves
-- [ ] Optionally print stats for each game to file
-- [ ] Add code to create training data (show hand and potential outcomes, like HITLOSS, HITWIN, STAYLOSS, STAYWIN, DOUBLEWIN, DOUBLELOSS, SPLIT)
-- [ ] Create machine learning AI
-
 ## Computer AIs
 Computer AIs can be added to the game using command-line flags.
 
@@ -46,7 +31,7 @@ Flag: `-standard-ai`
 
 Plays using a standard blackjack strategy.
 
-Resources:
+Strategy Resources:
 - https://wizardofodds.com/games/blackjack/strategy/4-decks
 - https://www.blackjackapprenticeship.com/blackjack-strategy-charts
 

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/engine"
@@ -22,6 +23,7 @@ func main() {
 	startingMoney := flag.Float64("starting-money", 100, "amount of money players start with")
 	minBet := flag.Float64("min-bet", 15, "minimum bet allowed")
 	maxBet := flag.Float64("max-bet", 500, "maximum bet allowed")
+	delay := flag.Int("delay", 0, "add a millisecond delay between rounds to slow the game down")
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	flag.Parse()
@@ -86,6 +88,10 @@ func main() {
 	fmt.Println()
 
 	for i := 1; i <= *numRounds || *numRounds == 0; i++ {
+		if *delay > 0 {
+			time.Sleep(time.Duration(*delay) * time.Millisecond)
+		}
+
 		fmt.Printf("--- Round %d ---\n", i)
 		blackjack.PlayRound()
 		blackjack.DisplayStats()

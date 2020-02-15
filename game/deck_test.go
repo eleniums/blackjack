@@ -12,7 +12,7 @@ func Test_Unit_Deck_NewDeck(t *testing.T) {
 
 	// assert
 	assert.NotNil(t, deck)
-	assert.Equal(t, 52, len(deck.Cards))
+	assert.Len(t, deck.Cards, 52)
 	for i := 1; i <= 13; i++ {
 		expected := NewCard(SuitClubs, Rank(i))
 		assert.Equal(t, expected, deck.Cards[i-1])

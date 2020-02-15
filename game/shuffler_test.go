@@ -101,7 +101,7 @@ func Test_Unit_Shuffler_Add(t *testing.T) {
 			shuffler.Add(tc.add...)
 
 			// assert
-			assert.Equal(t, tc.count, len(shuffler.deck.Cards))
+			assert.Len(t, shuffler.deck.Cards, tc.count)
 			for _, v := range tc.expected {
 				assert.Contains(t, shuffler.deck.Cards, v)
 			}

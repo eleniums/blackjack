@@ -41,7 +41,7 @@ func Test_Unit_Hand_NewHand(t *testing.T) {
 
 			// assert
 			assert.NotNil(t, hand)
-			assert.Equal(t, tc.expected, len(hand.Cards))
+			assert.Len(t, hand.Cards, tc.expected)
 			for i, v := range hand.Cards {
 				assert.Equal(t, tc.cards[i], v)
 			}
@@ -101,7 +101,7 @@ func Test_Unit_Hand_Clear(t *testing.T) {
 	hand.Clear()
 
 	// assert
-	assert.Equal(t, 0, len(hand.Cards))
+	assert.Empty(t, hand.Cards)
 	assert.Equal(t, 0.0, hand.Bet)
 	assert.False(t, hand.Surrendered)
 }
@@ -147,7 +147,7 @@ func Test_Unit_Hand_Add(t *testing.T) {
 			hand.Add(tc.card)
 
 			// assert
-			assert.Equal(t, tc.expected, len(hand.Cards))
+			assert.Len(t, hand.Cards, tc.expected)
 			assert.Equal(t, tc.card, hand.Cards[len(hand.Cards)-1])
 		})
 	}

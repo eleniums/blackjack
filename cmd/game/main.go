@@ -27,7 +27,7 @@ func main() {
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
-	trainingDataFile := flag.String("trainingDataFile", "./training.csv", "output file for machine learning training data")
+	trainingDataFile := flag.String("training-data-file", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
 
 	if *printCardsTest {

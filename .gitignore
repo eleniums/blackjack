@@ -16,3 +16,6 @@
 
 # Ignore training data
 *.csv
+
+# Ignore Mac files
+.DS_Store

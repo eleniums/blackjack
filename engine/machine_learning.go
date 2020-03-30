@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"fmt"
 	"os"
+
+	"github.com/eleniums/blackjack/game"
 )
 
 // ML contains methods for generating machine learning training data.
@@ -26,9 +29,9 @@ func (m *ML) Close() {
 }
 
 // Write hands and result to a file for machine learning training purposes.
-func (m *ML) Write() {
+func (m *ML) Write(dealer, player *game.Hand, action game.Action, result game.Result) {
 	if m == nil {
 		return
 	}
-	m.data.WriteString("Test string 2\n")
+	m.data.WriteString(fmt.Sprintf("D: %v - P: %v : %s_%s\n", dealer, player, action.String(), result.String()))
 }

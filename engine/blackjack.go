@@ -136,13 +136,21 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return true
 		}
 
+		player.Records[hand.ID] = machine.NewRecord(b.dealer.Hand, hand, player.Name)
+
 		actions := b.possibleActions(player, hand)
 		action = player.AI.Action(b.dealer.Hand, hand, actions)
-		b.Recorder.Start(b.dealer.Hand, hand, action)
+		player.Records[hand.ID].Action = action
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(hand, false)
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
+
+			// record hits that do not immediately result in win or loss
+			if hand.Total() < 21 {
+				player.Records[hand.ID].Result = game.ResultNone
+				b.Recorder.Write(player.Records[hand.ID])
+			}
 
 		case game.ActionStay:
 			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, hand.Total())
@@ -151,7 +159,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
-				b.Recorder.Write(game.ResultInvalid)
+				player.Records[hand.ID] = nil
 				continue
 			}
 
@@ -166,13 +174,14 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			newCard2 := b.dealCard(splitHand, false)
 			fmt.Printf("%s split their hand.\nOne hand was dealt: %v\nThe other hand was dealt: %v\n", player.Name, newCard1, newCard2)
 
-			b.Recorder.Write(game.ResultNone)
+			player.Records[hand.ID].Result = game.ResultNone
+			b.Recorder.Write(player.Records[hand.ID])
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
-				b.Recorder.Write(game.ResultInvalid)
+				player.Records[hand.ID] = nil
 				continue
 			}
 			card := b.dealCard(hand, false)
@@ -185,7 +194,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.IsInitialHand() || len(player.SplitHands) > 0 {
 				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
 				action = game.ActionInvalid
-				b.Recorder.Write(game.ResultInvalid)
+				player.Records[hand.ID] = nil
 				continue
 			}
 			player.Hand.Bet /= 2
@@ -195,11 +204,9 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 
 		case game.ActionStats:
 			b.displayPlayerStats(player)
-			b.Recorder.Write(game.ResultInvalid)
 
 		case game.ActionExit:
 			fmt.Println("Goodbye!")
-			b.Recorder.Write(game.ResultInvalid)
 			os.Exit(0)
 		}
 	}
@@ -247,37 +254,38 @@ func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal
 		fmt.Printf("%s surrendered.\n", player.Name)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.Recorder.Write(game.ResultLoss)
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if hand.IsNatural() {
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5
-		b.Recorder.Write(game.ResultWin)
 	} else if playerTotal > 21 {
 		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.Recorder.Write(game.ResultLoss)
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if dealerTotal > 21 {
 		fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
-		b.Recorder.Write(game.ResultWin)
+		player.Records[hand.ID].Result = game.ResultWin
 	} else if playerTotal < dealerTotal {
 		fmt.Printf("%s has %d, which loses to dealer's %d.\n", player.Name, playerTotal, dealerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.Recorder.Write(game.ResultLoss)
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if playerTotal == dealerTotal {
 		fmt.Printf("Push, %s and dealer both have %d.\n", player.Name, playerTotal)
 		player.Tie++
-		b.Recorder.Write(game.ResultTie)
+		player.Records[hand.ID].Result = game.ResultTie
 	} else if playerTotal > dealerTotal {
 		fmt.Printf("%s has %d, which beats dealer's %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
-		b.Recorder.Write(game.ResultWin)
+		player.Records[hand.ID].Result = game.ResultWin
 	}
+	b.Recorder.Write(player.Records[hand.ID])
+	player.Records[hand.ID] = nil
 }
 
 // handleDealerNatural will determine which players won or lost after dealer got a natural blackjack.

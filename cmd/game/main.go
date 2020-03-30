@@ -9,6 +9,7 @@ import (
 	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/engine"
 	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 )
 
 var version = "0.1"
@@ -79,9 +80,9 @@ func main() {
 
 	// check if machine learning training data should be generated
 	if *generateTrainingData {
-		ml := engine.NewML(*trainingDataFile)
-		defer ml.Close()
-		blackjack.ML = ml
+		recorder := machine.NewRecorder(*trainingDataFile)
+		defer recorder.Close()
+		blackjack.Recorder = recorder
 	}
 
 	// show starting stats

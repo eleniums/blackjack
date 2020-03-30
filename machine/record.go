@@ -1,4 +1,4 @@
-package engine
+package machine
 
 import (
 	"fmt"

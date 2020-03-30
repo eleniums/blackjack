@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 )
 
 // Blackjack is the engine for a game of Blackjack.
@@ -16,7 +17,7 @@ type Blackjack struct {
 	maxDiscard int
 	minBet     float64
 	maxBet     float64
-	ML         *ML
+	Recorder   *machine.Recorder
 }
 
 // NewBlackjack will create a new game engine.
@@ -137,7 +138,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 
 		actions := b.possibleActions(player, hand)
 		action = player.AI.Action(b.dealer.Hand, hand, actions)
-		b.ML.StartRecord(b.dealer.Hand, hand, action)
+		b.Recorder.Start(b.dealer.Hand, hand, action)
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(hand, false)
@@ -150,7 +151,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
-				b.ML.WriteRecord(game.ResultInvalid)
+				b.Recorder.Write(game.ResultInvalid)
 				continue
 			}
 
@@ -165,13 +166,13 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			newCard2 := b.dealCard(splitHand, false)
 			fmt.Printf("%s split their hand.\nOne hand was dealt: %v\nThe other hand was dealt: %v\n", player.Name, newCard1, newCard2)
 
-			b.ML.WriteRecord(game.ResultNone)
+			b.Recorder.Write(game.ResultNone)
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
-				b.ML.WriteRecord(game.ResultInvalid)
+				b.Recorder.Write(game.ResultInvalid)
 				continue
 			}
 			card := b.dealCard(hand, false)
@@ -184,7 +185,7 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.IsInitialHand() || len(player.SplitHands) > 0 {
 				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
 				action = game.ActionInvalid
-				b.ML.WriteRecord(game.ResultInvalid)
+				b.Recorder.Write(game.ResultInvalid)
 				continue
 			}
 			player.Hand.Bet /= 2
@@ -194,11 +195,11 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 
 		case game.ActionStats:
 			b.displayPlayerStats(player)
-			b.ML.WriteRecord(game.ResultInvalid)
+			b.Recorder.Write(game.ResultInvalid)
 
 		case game.ActionExit:
 			fmt.Println("Goodbye!")
-			b.ML.WriteRecord(game.ResultInvalid)
+			b.Recorder.Write(game.ResultInvalid)
 			os.Exit(0)
 		}
 	}
@@ -246,36 +247,36 @@ func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal
 		fmt.Printf("%s surrendered.\n", player.Name)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.ML.WriteRecord(game.ResultLoss)
+		b.Recorder.Write(game.ResultLoss)
 	} else if hand.IsNatural() {
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5
-		b.ML.WriteRecord(game.ResultWin)
+		b.Recorder.Write(game.ResultWin)
 	} else if playerTotal > 21 {
 		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.ML.WriteRecord(game.ResultLoss)
+		b.Recorder.Write(game.ResultLoss)
 	} else if dealerTotal > 21 {
 		fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
-		b.ML.WriteRecord(game.ResultWin)
+		b.Recorder.Write(game.ResultWin)
 	} else if playerTotal < dealerTotal {
 		fmt.Printf("%s has %d, which loses to dealer's %d.\n", player.Name, playerTotal, dealerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
-		b.ML.WriteRecord(game.ResultLoss)
+		b.Recorder.Write(game.ResultLoss)
 	} else if playerTotal == dealerTotal {
 		fmt.Printf("Push, %s and dealer both have %d.\n", player.Name, playerTotal)
 		player.Tie++
-		b.ML.WriteRecord(game.ResultTie)
+		b.Recorder.Write(game.ResultTie)
 	} else if playerTotal > dealerTotal {
 		fmt.Printf("%s has %d, which beats dealer's %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
-		b.ML.WriteRecord(game.ResultWin)
+		b.Recorder.Write(game.ResultWin)
 	}
 }
 

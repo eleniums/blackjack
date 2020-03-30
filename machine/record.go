@@ -8,8 +8,8 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
-// IncludePlayerName will add the player's name to the training data if true.
-var IncludePlayerName = false
+// Debug will add the player's name to the training data and print the training data to stdout.
+var Debug = false
 
 // Record of a single player action.
 type Record struct {
@@ -31,11 +31,14 @@ func NewRecord(dealer, player *game.Hand, name string) *Record {
 
 // Write record to the given file.
 func (r *Record) Write(file *os.File) {
-	if IncludePlayerName {
-		file.WriteString(fmt.Sprintf("%v_%v,%s,%s,%s\n", r.Action, r.Result, r.Dealer, r.Player, r.Name))
-	} else {
-		file.WriteString(fmt.Sprintf("%v_%v,%s,%s\n", r.Action, r.Result, r.Dealer, r.Player))
+	line := fmt.Sprintf("%v_%v,%s,%s", r.Action, r.Result, r.Dealer, r.Player)
+
+	if Debug {
+		line = fmt.Sprintf("%s,%s", line, r.Name)
+		fmt.Println(line)
 	}
+
+	file.WriteString(line + "\n")
 }
 
 // formatHand will return a formatted hand string.

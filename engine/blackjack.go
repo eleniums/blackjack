@@ -159,7 +159,6 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.CanSplit() {
 				fmt.Println("Splitting is only allowed if the starting hand has two cards with equal rank.")
 				action = game.ActionInvalid
-				player.Records[hand.ID] = nil
 				continue
 			}
 
@@ -181,7 +180,6 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.CanDouble() {
 				fmt.Println("Doubling down is only allowed on the original two cards.")
 				action = game.ActionInvalid
-				player.Records[hand.ID] = nil
 				continue
 			}
 			card := b.dealCard(hand, false)
@@ -194,7 +192,6 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			if !hand.IsInitialHand() || len(player.SplitHands) > 0 {
 				fmt.Println("Surrendering is only allowed on the original two cards before doubling or splitting.")
 				action = game.ActionInvalid
-				player.Records[hand.ID] = nil
 				continue
 			}
 			player.Hand.Bet /= 2
@@ -285,7 +282,6 @@ func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal
 		player.Records[hand.ID].Result = game.ResultWin
 	}
 	b.Recorder.Write(player.Records[hand.ID])
-	player.Records[hand.ID] = nil
 }
 
 // handleDealerNatural will determine which players won or lost after dealer got a natural blackjack.

@@ -16,6 +16,7 @@ type Blackjack struct {
 	maxDiscard int
 	minBet     float64
 	maxBet     float64
+	ML         *ML
 }
 
 // NewBlackjack will create a new game engine.

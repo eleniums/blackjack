@@ -26,7 +26,8 @@ func main() {
 	delay := flag.Int("delay", 0, "add a millisecond delay between rounds to slow the game down")
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
-	generateMachineLearningData := flag.String("generate-machine-learning-data", "", "specify a file to save machine learning training data")
+	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
+	trainingDataFile := flag.String("trainingDataFile", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -77,8 +78,8 @@ func main() {
 	blackjack := engine.NewBlackjack(*numDecks, *maxDiscard, *minBet, *maxBet, dealer, players...)
 
 	// check if machine learning training data should be generated
-	if *generateMachineLearningData != "" {
-		ml := engine.NewML(*generateMachineLearningData)
+	if *generateTrainingData {
+		ml := engine.NewML(*trainingDataFile)
 		defer ml.Close()
 		blackjack.ML = ml
 	}

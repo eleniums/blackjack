@@ -19,7 +19,6 @@ func NewRecorder(file string) *Recorder {
 	if err != nil {
 		panic(err)
 	}
-	data.WriteString("Dealer,Player,Result\n")
 	return &Recorder{
 		data:   data,
 		record: nil,

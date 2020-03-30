@@ -20,6 +20,7 @@ func NewML(trainingDataFile string) *ML {
 	if err != nil {
 		panic(err)
 	}
+	data.WriteString("Dealer,Player,Result\n")
 	return &ML{
 		needsResult: false,
 		data:        data,
@@ -49,7 +50,7 @@ func (m *ML) WriteAction(dealer, player *game.Hand, action game.Action) {
 	d.Cards[0].Hidden = false
 	d.Cards[1].Hidden = false
 
-	m.data.WriteString(fmt.Sprintf("D:%s-P:%s-%v", m.formatHand(d), m.formatHand(player), action))
+	m.data.WriteString(fmt.Sprintf("%s,%s,%v", m.formatHand(d), m.formatHand(player), action))
 	m.needsResult = true
 }
 

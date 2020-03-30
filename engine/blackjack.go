@@ -256,6 +256,7 @@ func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5
+		player.Records[hand.ID] = nil
 	} else if playerTotal > 21 {
 		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
 		player.Loss++

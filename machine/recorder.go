@@ -2,7 +2,6 @@ package machine
 
 import (
 	"os"
-	"strings"
 
 	"github.com/eleniums/blackjack/game"
 )
@@ -38,21 +37,14 @@ func (r *Recorder) Start(dealer, player *game.Hand, action game.Action) {
 
 	// close out any existing record
 	if r.record != nil {
-		r.Write(game.ResultNone)
+		r.Write(game.ResultInvalid)
 	}
-
-	// a copy is used so the cards will not stay revealed
-	d := game.NewHand(dealer.Cards...)
-
-	// we need to reveal all the dealer cards
-	d.Cards[0].Hidden = false
-	d.Cards[1].Hidden = false
 
 	r.record = &record{
-		dealer: r.formatHand(d),
-		player: r.formatHand(player),
 		action: action,
 	}
+	r.record.AddDealerHand(dealer)
+	r.record.AddPlayerHand(player)
 }
 
 // Write a completed record to a file.
@@ -64,15 +56,4 @@ func (r *Recorder) Write(result game.Result) {
 	r.record.result = result
 	r.record.Write(r.data)
 	r.record = nil
-}
-
-// formatHand will return a formatted hand string.
-func (r *Recorder) formatHand(hand *game.Hand) string {
-	cleaned := strings.TrimSpace(hand.String())
-	cleaned = strings.ReplaceAll(cleaned, "♣", "")
-	cleaned = strings.ReplaceAll(cleaned, "♠", "")
-	cleaned = strings.ReplaceAll(cleaned, "♥", "")
-	cleaned = strings.ReplaceAll(cleaned, "♦", "")
-	cleaned = strings.ReplaceAll(cleaned, "  ", " ")
-	return cleaned
 }

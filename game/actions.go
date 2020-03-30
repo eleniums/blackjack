@@ -14,3 +14,23 @@ const (
 	ActionExit
 	ActionInvalid
 )
+
+var actionStrings = map[Action]string{
+	ActionHit:       "HIT",
+	ActionStay:      "STAY",
+	ActionSplit:     "SPLIT",
+	ActionDouble:    "DOUBLE",
+	ActionSurrender: "SURRENDER",
+	ActionStats:     "STATS",
+	ActionExit:      "EXIT",
+	ActionInvalid:   "INVALID",
+}
+
+// String will return the string representation of an Action.
+func (a Action) String() string {
+	s, ok := actionStrings[a]
+	if !ok {
+		return actionStrings[ActionInvalid]
+	}
+	return s
+}

@@ -9,6 +9,7 @@ import (
 	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/engine"
 	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 )
 
 var version = "0.1"
@@ -26,6 +27,8 @@ func main() {
 	delay := flag.Int("delay", 0, "add a millisecond delay between rounds to slow the game down")
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
+	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
+	trainingDataFile := flag.String("training-data-file", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
 
 	if *printCardsTest {
@@ -74,6 +77,13 @@ func main() {
 	dealer := engine.NewPlayer("Dealer", 0, ai.NewSoft17Dealer())
 
 	blackjack := engine.NewBlackjack(*numDecks, *maxDiscard, *minBet, *maxBet, dealer, players...)
+
+	// check if machine learning training data should be generated
+	if *generateTrainingData {
+		recorder := machine.NewRecorder(*trainingDataFile)
+		defer recorder.Close()
+		blackjack.Recorder = recorder
+	}
 
 	// show starting stats
 	if *numRounds == 0 {

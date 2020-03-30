@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -10,8 +9,8 @@ import (
 
 // ML contains methods for generating machine learning training data.
 type ML struct {
-	needsResult bool
-	data        *os.File
+	data   *os.File
+	record *record
 }
 
 // NewML will create a new ML instance with an open file for storing training data.
@@ -22,8 +21,8 @@ func NewML(trainingDataFile string) *ML {
 	}
 	data.WriteString("Dealer,Player,Result\n")
 	return &ML{
-		needsResult: false,
-		data:        data,
+		data:   data,
+		record: nil,
 	}
 }
 
@@ -32,15 +31,15 @@ func (m *ML) Close() {
 	m.data.Close()
 }
 
-// WriteAction to a file for machine learning training purposes.
-func (m *ML) WriteAction(dealer, player *game.Hand, action game.Action) {
+// StartRecord will begin a new record.
+func (m *ML) StartRecord(dealer, player *game.Hand, action game.Action) {
 	if m == nil {
 		return
 	}
 
-	// make sure to not continuously write on the same line
-	if m.needsResult {
-		m.WriteResult(game.ResultNone)
+	// close out any existing record
+	if m.record != nil {
+		m.WriteRecord(game.ResultNone)
 	}
 
 	// a copy is used so the cards will not stay revealed
@@ -50,24 +49,22 @@ func (m *ML) WriteAction(dealer, player *game.Hand, action game.Action) {
 	d.Cards[0].Hidden = false
 	d.Cards[1].Hidden = false
 
-	m.data.WriteString(fmt.Sprintf("%s,%s,%v", m.formatHand(d), m.formatHand(player), action))
-	m.needsResult = true
+	m.record = &record{
+		dealer: m.formatHand(d),
+		player: m.formatHand(player),
+		action: action,
+	}
 }
 
-// WriteResult to a file for machine learning training purposes.
-func (m *ML) WriteResult(result game.Result) {
-	if m == nil {
+// WriteRecord will write a completed record to a file.
+func (m *ML) WriteRecord(result game.Result) {
+	if m == nil || m.record == nil {
 		return
 	}
 
-	// make sure to not write a result without an action
-	if !m.needsResult {
-		return
-		//m.data.WriteString(game.Action(game.ActionInvalid).String())
-	}
-
-	m.data.WriteString(fmt.Sprintf("_%v\n", result))
-	m.needsResult = false
+	m.record.result = result
+	m.record.Write(m.data)
+	m.record = nil
 }
 
 // formatHand for training data.

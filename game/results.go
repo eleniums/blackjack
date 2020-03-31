@@ -1,5 +1,9 @@
 package game
 
+import (
+	"strings"
+)
+
 // Result of playing a hand.
 type Result int
 
@@ -18,6 +22,17 @@ var resultStrings = map[Result]string{
 	ResultTie:     "TIE",
 	ResultNone:    "NONE",
 	ResultInvalid: "INVALID",
+}
+
+// ParseResult will return the Result represented by the given string.
+func ParseResult(value string) Result {
+	upper := strings.ToUpper(value)
+	for k, v := range resultStrings {
+		if v == upper {
+			return k
+		}
+	}
+	return ResultInvalid
 }
 
 // String will return the string representation of a Result.

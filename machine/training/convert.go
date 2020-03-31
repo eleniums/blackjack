@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 )
 
 // Simple program to transform the generated human-readable training data to integers more appropriate for machine learning.
@@ -42,12 +42,7 @@ func main() {
 }
 
 func convertResult(result string) int {
-	split := strings.Split(result, "_")
-
-	a := game.ParseAction(split[0])
-	r := game.ParseResult(split[1])
-
-	return int(a) + int(r)*100
+	return int(machine.ParseLabel(result))
 }
 
 func convertHand(hand string) int {

@@ -11,9 +11,11 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
+// Simple program to transform the generated human-readable training data to integers more appropriate for machine learning.
+// Usage: go run ./machine/training/convert.go ./machine/testdata/training.csv ./machine/testdata/output.csv
 func main() {
-	inputFile := "../testdata/training.csv"
-	outputFile := "../testdata/output.csv"
+	inputFile := os.Args[1]
+	outputFile := os.Args[2]
 
 	input, err := os.Open(inputFile)
 	if err != nil {

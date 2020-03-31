@@ -43,7 +43,6 @@ func main() {
 
 func convertResult(result string) int {
 	split := strings.Split(result, "_")
-	fmt.Println(split)
 
 	a := game.ParseAction(split[0])
 	r := game.ParseResult(split[1])

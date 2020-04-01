@@ -27,6 +27,7 @@ func main() {
 	delay := flag.Int("delay", 0, "add a millisecond delay between rounds to slow the game down")
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
+	addMachineAI := flag.Bool("machine-ai", false, "add an ai that uses a machine learning strategy")
 	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
 	trainingDataFile := flag.String("training-data-file", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
@@ -66,6 +67,11 @@ func main() {
 	if *addStandardAI {
 		standardAI := engine.NewPlayer("Joe", *startingMoney, ai.NewStandard())
 		players = append(players, standardAI)
+	}
+
+	if *addMachineAI {
+		machineAI := engine.NewPlayer("Marvin", *startingMoney, machine.NewAI())
+		players = append(players, machineAI)
 	}
 
 	if len(players) <= 0 {

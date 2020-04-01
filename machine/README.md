@@ -35,3 +35,14 @@ https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-train-model.html
 
 XGBoost Hyperparameters:
 https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+
+## Results
+Not too shabby for a first stab. Marvin is the player using the trained model.
+```
+Larry (*ai.Random)
+  Win: 313 (%31.3) | Loss: 641 (%64.1) | Tie: 46 (%4.6) | $-4497.50
+Joe (*ai.Standard)
+  Win: 439 (%42.8) | Loss: 507 (%49.5) | Tie: 79 (%7.7) | $-65.00
+Marvin (*ai.Machine)
+  Win: 429 (%41.6) | Loss: 534 (%51.8) | Tie: 68 (%6.6) | $-1100.00
+```

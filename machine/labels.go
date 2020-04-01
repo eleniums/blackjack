@@ -2,6 +2,8 @@ package machine
 
 import (
 	"strings"
+
+	"github.com/eleniums/blackjack/game"
 )
 
 // Label in a dataset.
@@ -33,9 +35,18 @@ func ParseLabel(value string) Label {
 	return -1
 }
 
+// Split will divide a label into an action and result.
+func (l Label) Split() (game.Action, game.Result) {
+	s := l.String()
+	split := strings.Split(s, "_")
+	a := game.ParseAction(split[0])
+	r := game.ParseResult(split[1])
+	return a, r
+}
+
 // String will return the string representation of a Label.
-func (a Label) String() string {
-	s, ok := labelStrings[a]
+func (l Label) String() string {
+	s, ok := labelStrings[l]
 	if !ok {
 		return "INVALID_INVALID"
 	}

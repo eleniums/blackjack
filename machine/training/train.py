@@ -16,7 +16,7 @@ classifier = xgb.XGBClassifier(max_depth=5,  # (Default: 6) Maximum depth of a t
                                num_class=12,  # The number of classes. Required if objective is set to multi:softmax or multi:softprob.
                                num_round=10)  # The number of rounds to run the training. Required.
 
-classifier.fit(X, y, verbose=True)
+classifier.fit(X, y)
 
 data = np.matrix([803, 1111])
 print(data)

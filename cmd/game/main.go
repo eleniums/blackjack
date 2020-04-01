@@ -70,7 +70,7 @@ func main() {
 	}
 
 	if *addMachineAI {
-		machineAI := engine.NewPlayer("Marvin", *startingMoney, machine.NewAI())
+		machineAI := engine.NewPlayer("Marvin", *startingMoney, ai.NewMachine())
 		players = append(players, machineAI)
 	}
 

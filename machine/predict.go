@@ -9,13 +9,13 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
-const model = "./model/model.bin"
+const model = "./machine/model/model.bin"
 
 func Predict(dealer *game.Hand, player *game.Hand) Label {
 	d := strconv.Itoa(convertHand(formatHand(dealer)))
 	p := strconv.Itoa(convertHand(formatHand(player)))
 
-	cmd := exec.Command("python3", "predict.py", model, d, p)
+	cmd := exec.Command("python3", "./machine/predict.py", model, d, p)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		panic(err)

@@ -50,6 +50,9 @@ https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
 Training Example:
 https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-train-model.html
 
+XGBoost Python Package:
+https://xgboost.readthedocs.io/en/latest/python/index.html
+
 XGBoost Parameters:
 https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst
 

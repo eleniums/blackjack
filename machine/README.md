@@ -11,12 +11,6 @@ This script will generate a large set of training data using AI players:
 ./machine/scripts/generate_training_data.sh
 ```
 
-## Convert training data
-Training data needs to be in a numerical format:
-```
-go run ./machine/training/convert.go ./machine/testdata/training.csv ./machine/testdata/output.csv
-```
-
 ## Train model
 This Python script will use the converted training data to train a model:
 ```

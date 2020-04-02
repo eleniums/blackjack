@@ -1,3 +1,8 @@
+"""
+Load model and retrieve prediction.
+Usage: predict.py <model_file> <dealer_hand> <player_hand>
+"""
+
 import sys
 import xgboost as xgb
 import numpy as np

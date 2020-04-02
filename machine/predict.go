@@ -11,6 +11,7 @@ import (
 
 const model = "./machine/model/model.bin"
 
+// Predict will feed a dealer hand and player hand into a model and return the resulting label.
 func Predict(dealer *game.Hand, player *game.Hand) Label {
 	d := strconv.Itoa(convertHand(formatHand(dealer)))
 	p := strconv.Itoa(convertHand(formatHand(player)))
@@ -29,6 +30,7 @@ func Predict(dealer *game.Hand, player *game.Hand) Label {
 	return Label(n)
 }
 
+// convertHand will take a string representation of a hand and convert it into an integer.
 func convertHand(hand string) int {
 	total := 0.0
 	split := strings.Split(hand, " ")

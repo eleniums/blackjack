@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 )
 
 // Blackjack is the engine for a game of Blackjack.
@@ -16,6 +17,7 @@ type Blackjack struct {
 	maxDiscard int
 	minBet     float64
 	maxBet     float64
+	Recorder   *machine.Recorder
 }
 
 // NewBlackjack will create a new game engine.
@@ -134,12 +136,21 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			return true
 		}
 
+		player.Records[hand.ID] = machine.NewRecord(b.dealer.Hand, hand, player.Name)
+
 		actions := b.possibleActions(player, hand)
 		action = player.AI.Action(b.dealer.Hand, hand, actions)
+		player.Records[hand.ID].Action = action
 		switch action {
 		case game.ActionHit:
 			card := b.dealCard(hand, false)
 			fmt.Printf("%s hit and was dealt: %v\n", player.Name, card)
+
+			// record hits that do not immediately result in win or loss
+			if hand.Total() < 21 {
+				player.Records[hand.ID].Result = game.ResultNone
+				b.Recorder.Write(player.Records[hand.ID])
+			}
 
 		case game.ActionStay:
 			fmt.Printf("%s chose to stay with a total of %d.\n", player.Name, hand.Total())
@@ -161,6 +172,9 @@ func (b *Blackjack) playHand(player *Player, hand *game.Hand) bool {
 			newCard1 := b.dealCard(hand, false)
 			newCard2 := b.dealCard(splitHand, false)
 			fmt.Printf("%s split their hand.\nOne hand was dealt: %v\nThe other hand was dealt: %v\n", player.Name, newCard1, newCard2)
+
+			player.Records[hand.ID].Result = game.ResultNone
+			b.Recorder.Write(player.Records[hand.ID])
 
 		case game.ActionDouble:
 			if !hand.CanDouble() {
@@ -237,30 +251,38 @@ func (b *Blackjack) determineWinner(player *Player, hand *game.Hand, dealerTotal
 		fmt.Printf("%s surrendered.\n", player.Name)
 		player.Loss++
 		player.Money -= hand.Bet
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if hand.IsNatural() {
 		fmt.Printf("%s has a natural blackjack!\n", player.Name)
 		player.Win++
 		player.Money += hand.Bet * 1.5
+		player.Records[hand.ID] = nil
 	} else if playerTotal > 21 {
 		fmt.Printf("%s busted with a total of %d.\n", player.Name, playerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if dealerTotal > 21 {
 		fmt.Printf("%s wins with %d because dealer busted with a total of %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
+		player.Records[hand.ID].Result = game.ResultWin
 	} else if playerTotal < dealerTotal {
 		fmt.Printf("%s has %d, which loses to dealer's %d.\n", player.Name, playerTotal, dealerTotal)
 		player.Loss++
 		player.Money -= hand.Bet
+		player.Records[hand.ID].Result = game.ResultLoss
 	} else if playerTotal == dealerTotal {
 		fmt.Printf("Push, %s and dealer both have %d.\n", player.Name, playerTotal)
 		player.Tie++
+		player.Records[hand.ID].Result = game.ResultTie
 	} else if playerTotal > dealerTotal {
 		fmt.Printf("%s has %d, which beats dealer's %d!\n", player.Name, playerTotal, dealerTotal)
 		player.Win++
 		player.Money += hand.Bet
+		player.Records[hand.ID].Result = game.ResultWin
 	}
+	b.Recorder.Write(player.Records[hand.ID])
 }
 
 // handleDealerNatural will determine which players won or lost after dealer got a natural blackjack.

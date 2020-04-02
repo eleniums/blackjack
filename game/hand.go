@@ -6,6 +6,7 @@ import (
 
 // Hand represents a hand of cards.
 type Hand struct {
+	ID          string
 	Cards       []Card
 	Bet         float64
 	Surrendered bool
@@ -14,6 +15,8 @@ type Hand struct {
 // NewHand will create a new hand with the given cards.
 func NewHand(cards ...Card) *Hand {
 	var hand Hand
+
+	hand.ID = NewUUID()
 
 	for _, v := range cards {
 		hand.Cards = append(hand.Cards, v)

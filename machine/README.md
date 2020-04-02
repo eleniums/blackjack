@@ -11,10 +11,10 @@ This script will generate a large set of training data using AI players:
 ./machine/scripts/generate_training_data.sh
 ```
 
-## Train model
-This Python script will use the converted training data to train a model:
+## Training model
+This script will use the converted training data to train a model:
 ```
-python train.py
+./machine/scripts/train_model.sh
 ```
 
 ## Results

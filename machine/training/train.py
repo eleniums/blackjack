@@ -1,8 +1,15 @@
+"""
+Train a new model with the provided dataset.
+Usage: train.py <data_csv> <model_file>
+"""
+
+import sys
 import numpy as np
 import pandas as pd
 import xgboost as xgb
 
-dataset = pd.read_csv('../testdata/output.csv')
+print("Loading dataset: {}".format(sys.argv[1]))
+dataset = pd.read_csv(sys.argv[1])
 
 X = dataset.iloc[:, 1:3].values
 y = dataset.iloc[:, 0].values
@@ -16,11 +23,16 @@ classifier = xgb.XGBClassifier(max_depth=5,  # (Default: 6) Maximum depth of a t
                                num_class=12,  # The number of classes. Required if objective is set to multi:softmax or multi:softprob.
                                num_round=10)  # The number of rounds to run the training. Required.
 
+print("Starting training...")
 classifier.fit(X, y)
+print("Training finished")
 
+print("Quick prediction test:")
 data = np.matrix([803, 1111])
 print(data)
 result = classifier.predict(data)
 print(result)
 
-classifier.save_model('model.bin')
+print("Saving model...")
+classifier.save_model(sys.argv[2])
+print("Model saved: {}".format(sys.argv[2]))

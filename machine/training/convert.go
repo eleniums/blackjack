@@ -3,9 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/eleniums/blackjack/machine"
@@ -34,7 +32,7 @@ func main() {
 		parsed := strings.Split(scanner.Text(), ",")
 		fmt.Println(parsed)
 
-		converted := fmt.Sprintf("%v,%v,%v", convertResult(parsed[0]), convertHand(parsed[1]), convertHand(parsed[2]))
+		converted := fmt.Sprintf("%v,%v,%v", convertResult(parsed[0]), machine.ConvertHand(parsed[1]), machine.ConvertHand(parsed[2]))
 		fmt.Println(converted)
 
 		output.WriteString(converted + "\n")
@@ -43,24 +41,4 @@ func main() {
 
 func convertResult(result string) int {
 	return int(machine.ParseLabel(result))
-}
-
-func convertHand(hand string) int {
-	total := 0.0
-	split := strings.Split(hand, " ")
-
-	for i, v := range split {
-		var n int
-		switch v {
-		case "J", "Q", "K":
-			n = 10
-		case "A":
-			n = 11
-		default:
-			n, _ = strconv.Atoi(v)
-		}
-		total += float64(n) * math.Pow(100.0, float64(i))
-	}
-
-	return int(total)
 }

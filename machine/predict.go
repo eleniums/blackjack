@@ -12,8 +12,8 @@ const model = "./machine/model.bin"
 
 // Predict will feed a dealer hand and player hand into a model and return the resulting label.
 func Predict(dealer *game.Hand, player *game.Hand) Label {
-	d := strconv.Itoa(ConvertHand(formatHand(dealer)))
-	p := strconv.Itoa(ConvertHand(formatHand(player)))
+	d := strconv.Itoa(ConvertHand(FormatHand(dealer)))
+	p := strconv.Itoa(ConvertHand(FormatHand(player)))
 
 	cmd := exec.Command("python3", "./machine/predict.py", model, d, p)
 	out, err := cmd.CombinedOutput()

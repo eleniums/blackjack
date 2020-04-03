@@ -32,13 +32,9 @@ func main() {
 		parsed := strings.Split(scanner.Text(), ",")
 		fmt.Println(parsed)
 
-		converted := fmt.Sprintf("%v,%v,%v", convertResult(parsed[0]), machine.ConvertHand(parsed[1]), machine.ConvertHand(parsed[2]))
+		converted := fmt.Sprintf("%v,%v,%v", machine.ConvertResult(parsed[0]), machine.ConvertHand(parsed[1]), machine.ConvertHand(parsed[2]))
 		fmt.Println(converted)
 
 		output.WriteString(converted + "\n")
 	}
-}
-
-func convertResult(result string) int {
-	return int(machine.ParseLabel(result))
 }

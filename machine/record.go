@@ -3,7 +3,6 @@ package machine
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/eleniums/blackjack/game"
 )
@@ -24,8 +23,8 @@ type Record struct {
 func NewRecord(dealer, player *game.Hand, name string) *Record {
 	return &Record{
 		Name:   name,
-		Dealer: formatHand(dealer),
-		Player: formatHand(player),
+		Dealer: FormatHand(dealer),
+		Player: FormatHand(player),
 	}
 }
 
@@ -39,25 +38,4 @@ func (r *Record) Write(file *os.File) {
 	}
 
 	file.WriteString(line + "\n")
-}
-
-// formatHand will return a formatted hand string.
-func formatHand(hand *game.Hand) string {
-	// a copy is used so the cards will not stay revealed
-	local := game.NewHand(hand.Cards...)
-
-	// we need to reveal all the cards
-	for i := range local.Cards {
-		local.Cards[i].Hidden = false
-	}
-
-	// remove suits as they are not needed
-	cleaned := strings.TrimSpace(local.String())
-	cleaned = strings.ReplaceAll(cleaned, "♣", "")
-	cleaned = strings.ReplaceAll(cleaned, "♠", "")
-	cleaned = strings.ReplaceAll(cleaned, "♥", "")
-	cleaned = strings.ReplaceAll(cleaned, "♦", "")
-	cleaned = strings.ReplaceAll(cleaned, "  ", " ")
-
-	return cleaned
 }

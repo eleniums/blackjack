@@ -17,6 +17,12 @@ This script will use the converted training data to train a model:
 ./machine/scripts/train_model.sh
 ```
 
+## Running simulation
+This script will run several iterations of the blackjack game with the machine ai:
+```
+./machine/scripts/run_simulation.sh
+```
+
 ## Results
 Not too shabby for a first pass. Marvin is the player using the trained model.
 ```

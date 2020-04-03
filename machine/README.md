@@ -35,33 +35,15 @@ Marvin (*ai.Machine)
 ```
 
 ## Training model with AWS SageMaker
-Dashboard:
-https://us-west-2.console.aws.amazon.com/sagemaker/home
-
-Getting Started:
-https://docs.aws.amazon.com/sagemaker/latest/dg/gs-console.html
-
-Data Formats:
-https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html
-
-Built-in Algorithms:
-https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
-
-Training Example:
-https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-train-model.html
-
-XGBoost Python Package:
-https://xgboost.readthedocs.io/en/latest/python/index.html
-
-XGBoost Parameters:
-https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst
-
-XGBoost Hyperparameters:
-https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+- Dashboard: https://us-west-2.console.aws.amazon.com/sagemaker/home
+- Getting Started: https://docs.aws.amazon.com/sagemaker/latest/dg/gs-console.html
+- Data Formats: https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html
+- Built-in Algorithms: https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+- Training Example: https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-train-model.html
+- XGBoost Python Package: https://xgboost.readthedocs.io/en/latest/python/index.html
+- XGBoost Parameters: https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst
+- XGBoost Hyperparameters: https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
 
 ## Go packages
-Pure Go implementation:
-https://github.com/dmitryikh/leaves
-
-Uses CGO with XGBoost library:
-https://github.com/Applifier/go-xgboost
+- Pure Go implementation: https://github.com/dmitryikh/leaves
+- Uses CGO with XGBoost library: https://github.com/Applifier/go-xgboost

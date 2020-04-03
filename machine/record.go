@@ -30,7 +30,7 @@ func NewRecord(dealer, player *game.Hand, name string) *Record {
 
 // Write record to the given file.
 func (r *Record) Write(file *os.File) {
-	line := fmt.Sprintf("%v_%v,%s,%s", r.Action, r.Result, r.Dealer, r.Player)
+	line := fmt.Sprintf("%v,%s,%s", NewLabel(r.Action, r.Result), r.Dealer, r.Player)
 
 	if Debug {
 		line = fmt.Sprintf("%s,%s", line, r.Name)

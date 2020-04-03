@@ -1,6 +1,7 @@
 package machine
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/eleniums/blackjack/game"
@@ -22,6 +23,11 @@ var labelStrings = map[Label]string{
 	9:  "DOUBLE_TIE",
 	10: "SURRENDER_LOSS",
 	11: "SPLIT_NONE",
+}
+
+// NewLabel will create the correct label for the given action and result.
+func NewLabel(action game.Action, result game.Result) Label {
+	return ParseLabel(fmt.Sprintf("%v_%v", action, result))
 }
 
 // ParseLabel will return the label represented by the given string.

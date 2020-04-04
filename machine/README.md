@@ -24,7 +24,7 @@ This script will run several iterations of the blackjack game with the machine a
 ```
 
 ## Results
-Not too shabby for a first pass. Marvin is the player using the trained model.
+Not too shabby for a first pass. [Marvin](https://en.wikipedia.org/wiki/Marvin_the_Paranoid_Android) is the player using the trained model.
 ```
 Larry (*ai.Random)
   Win: 313 (%31.3) | Loss: 641 (%64.1) | Tie: 46 (%4.6) | $-4497.50

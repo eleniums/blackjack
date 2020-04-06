@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Load model and retrieve prediction.
 Usage: predict.py <model_file> <dealer_hand> <player_hand>

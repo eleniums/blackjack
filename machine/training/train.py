@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Train a new model with the provided dataset.
 Usage: train.py <data_csv> <model_file>

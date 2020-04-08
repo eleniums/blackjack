@@ -15,7 +15,7 @@ func Predict(dealer *game.Hand, player *game.Hand) Label {
 	d := strconv.Itoa(ConvertHand(FormatHand(dealer)))
 	p := strconv.Itoa(ConvertHand(FormatHand(player)))
 
-	cmd := exec.Command("python3", "./machine/predict.py", model, d, p)
+	cmd := exec.Command("./machine/predict.py", model, d, p)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		panic(err)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/eleniums/blackjack/ai"
 	"github.com/eleniums/blackjack/game"
+	"github.com/eleniums/blackjack/machine"
 
 	assert "github.com/stretchr/testify/require"
 )
@@ -167,6 +168,9 @@ func Test_Unit_Blackjack_determineWinner(t *testing.T) {
 		t.Run(tc.description, func(t *testing.T) {
 			// arrange
 			blackjack := &Blackjack{}
+			tc.player.Records = map[string]*machine.Record{
+				tc.hand.ID: &machine.Record{},
+			}
 
 			// act
 			blackjack.determineWinner(tc.player, tc.hand, tc.dealerTotal)

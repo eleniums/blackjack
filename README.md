@@ -35,6 +35,13 @@ Strategy Resources:
 - https://wizardofodds.com/games/blackjack/strategy/4-decks
 - https://www.blackjackapprenticeship.com/blackjack-strategy-charts
 
+### Machine AI
+Flag: `-machine-ai`
+
+Makes decisions based on a model trained using XGBoost. See [README](https://github.com/eleniums/blackjack/blob/master/machine/README.md).
+
+NOTE: This is still experimental.
+
 ## Links
 - https://en.wikipedia.org/wiki/Playing_cards_in_Unicode
 - https://bicyclecards.com/how-to-play/blackjack

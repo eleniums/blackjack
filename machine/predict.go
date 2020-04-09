@@ -8,14 +8,12 @@ import (
 	"github.com/eleniums/blackjack/game"
 )
 
-const model = "./machine/model.bin"
-
 // Predict will feed a dealer hand and player hand into a model and return the resulting label.
-func Predict(dealer *game.Hand, player *game.Hand) Label {
+func Predict(dealer *game.Hand, player *game.Hand, modelFile string, predictScript string) Label {
 	d := strconv.Itoa(ConvertHand(FormatHand(dealer)))
 	p := strconv.Itoa(ConvertHand(FormatHand(player)))
 
-	cmd := exec.Command("./machine/predict.py", model, d, p)
+	cmd := exec.Command(predictScript, modelFile, d, p)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		panic(err)

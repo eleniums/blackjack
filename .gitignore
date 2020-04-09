@@ -16,3 +16,7 @@
 
 # Ignore Mac files
 .DS_Store
+
+# Ignore releases
+release/
+blackjack_*

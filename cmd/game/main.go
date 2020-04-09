@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -28,6 +29,8 @@ func main() {
 	addRandomAI := flag.Bool("random-ai", false, "add an ai that randomly chooses actions")
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	addMachineAI := flag.Bool("machine-ai", false, "add an ai that uses a machine learning strategy")
+	machineAIModel := flag.String("machine-ai-model", "./model.bin", "location of model for machine ai")
+	machineAIPredictScript := flag.String("machine-ai-predict-script", "./predict.py", "location of predict.py for machine ai")
 	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
 	trainingDataFile := flag.String("training-data-file", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
@@ -55,8 +58,8 @@ func main() {
 		}
 		player := engine.NewPlayer(name, *startingMoney, ai.NewHuman())
 		players = append(players, player)
+		fmt.Println()
 	}
-	fmt.Println()
 
 	// add computer players
 	if *addRandomAI {
@@ -70,7 +73,18 @@ func main() {
 	}
 
 	if *addMachineAI {
-		machineAI := engine.NewPlayer("Marvin", *startingMoney, ai.NewMachine())
+		if !fileExists(*machineAIModel) {
+			fmt.Printf("Unable to locate model at: %s\n", *machineAIModel)
+			fmt.Println("Please specify location with '-machine-ai-model' flag.")
+			return
+		}
+		if !fileExists(*machineAIPredictScript) {
+			fmt.Printf("Unable to locate prediction script at: %s\n", *machineAIPredictScript)
+			fmt.Println("Please specify location with '-machine-ai-predict-script' flag.")
+			return
+		}
+
+		machineAI := engine.NewPlayer("Marvin", *startingMoney, ai.NewMachine(*machineAIModel, *machineAIPredictScript))
 		players = append(players, machineAI)
 	}
 
@@ -143,4 +157,9 @@ func displayAllCards() {
 		fmt.Printf("%v  ", card)
 	}
 	fmt.Printf("\n")
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }

@@ -58,8 +58,8 @@ func main() {
 		}
 		player := engine.NewPlayer(name, *startingMoney, ai.NewHuman())
 		players = append(players, player)
+		fmt.Println()
 	}
-	fmt.Println()
 
 	// add computer players
 	if *addRandomAI {

@@ -13,7 +13,7 @@ import (
 	"github.com/eleniums/blackjack/machine"
 )
 
-var version = "0.1"
+var version = "DEV"
 
 func main() {
 	flag.BoolVar(&game.UseCardSymbols, "use-card-symbols", false, "set to display card symbols instead of text")
@@ -45,7 +45,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("--- Blackjack v%s ---\n\n", version)
+	fmt.Printf("--- Blackjack %s ---\n\n", version)
 
 	var players []*engine.Player
 

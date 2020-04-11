@@ -25,6 +25,12 @@ func (ai *Machine) Action(dealer *game.Hand, player *game.Hand, actions []game.A
 	action, result := prediction.Split()
 
 	if allowed(actions, action) {
+		// if surrender is recommended, take the surrender
+		if action == game.ActionSurrender {
+			return action
+		}
+
+		// if result is positive, proceed with action
 		if result == game.ResultWin || result == game.ResultTie || result == game.ResultNone {
 			return action
 		}

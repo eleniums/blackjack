@@ -30,7 +30,6 @@ func main() {
 	addStandardAI := flag.Bool("standard-ai", false, "add an ai that uses a standard strategy")
 	addMachineAI := flag.Bool("machine-ai", false, "add an ai that uses a machine learning strategy")
 	machineAIModel := flag.String("machine-ai-model", "./model.bin", "location of model for machine ai")
-	machineAIPredictScript := flag.String("machine-ai-predict-script", "./predict.py", "location of predict.py for machine ai")
 	generateTrainingData := flag.Bool("generate-training-data", false, "generate and save machine learning training data")
 	trainingDataFile := flag.String("training-data-file", "./training.csv", "output file for machine learning training data")
 	flag.Parse()
@@ -78,13 +77,8 @@ func main() {
 			fmt.Println("Please specify location with '-machine-ai-model' flag.")
 			return
 		}
-		if !fileExists(*machineAIPredictScript) {
-			fmt.Printf("Unable to locate prediction script at: %s\n", *machineAIPredictScript)
-			fmt.Println("Please specify location with '-machine-ai-predict-script' flag.")
-			return
-		}
 
-		machineAI := engine.NewPlayer("Marvin", *startingMoney, ai.NewMachine(*machineAIModel, *machineAIPredictScript))
+		machineAI := engine.NewPlayer("Marvin", *startingMoney, ai.NewMachine(*machineAIModel))
 		players = append(players, machineAI)
 	}
 

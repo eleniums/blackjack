@@ -7,21 +7,19 @@ import (
 
 // Machine is an opponent that uses machine learning to make decisions.
 type Machine struct {
-	model  string
-	script string
+	model *machine.Model
 }
 
 // NewMachine will create a new machine learning AI.
-func NewMachine(modelFile string, predictScript string) *Machine {
+func NewMachine(modelFile string) *Machine {
 	return &Machine{
-		model:  modelFile,
-		script: predictScript,
+		model: machine.NewModel(modelFile),
 	}
 }
 
 // Action returns the action the player wants to make with his hand from the given array of possible actions.
 func (ai *Machine) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
-	prediction := machine.Predict(dealer, player, ai.model, ai.script)
+	prediction := ai.model.Predict(dealer, player)
 	action, result := prediction.Split()
 
 	if allowed(actions, action) {

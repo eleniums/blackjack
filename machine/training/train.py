@@ -5,6 +5,7 @@ Train a new model with the provided dataset.
 Usage: train.py <data_csv> <model_file>
 """
 
+import time
 import sys
 import numpy as np
 import pandas as pd
@@ -31,8 +32,10 @@ classifier = xgb.XGBClassifier(
 )
 
 print("Starting training...")
+start = time.time()
 classifier.fit(X, y)
-print("Training finished")
+end = time.time()
+print("Training finished in {:.2f} seconds".format(end-start))
 
 print("Quick prediction test:")
 data = np.matrix([803, 1111])

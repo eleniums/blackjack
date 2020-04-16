@@ -19,17 +19,11 @@ func NewMachine(modelFile string) *Machine {
 
 // Action returns the action the player wants to make with his hand from the given array of possible actions.
 func (ai *Machine) Action(dealer *game.Hand, player *game.Hand, actions []game.Action) game.Action {
-	p := ai.model.Predict(dealer, player)
+	p := ai.model.PredictAll(dealer, player)
 
-	if allowed(actions, p.Action) {
-		// if surrender is recommended, take the surrender
-		if p.Action == game.ActionSurrender {
-			return p.Action
-		}
-
-		// if result is positive, proceed with action
-		if p.Result == game.ResultWin || p.Result == game.ResultTie || p.Result == game.ResultNone {
-			return p.Action
+	for _, v := range p {
+		if allowed(actions, v.Action) && v.Result != game.ResultLoss {
+			return v.Action
 		}
 	}
 

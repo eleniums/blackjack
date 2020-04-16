@@ -1,6 +1,8 @@
 package machine
 
 import (
+	"sort"
+
 	"github.com/dmitryikh/leaves"
 	"github.com/eleniums/blackjack/game"
 )
@@ -58,6 +60,10 @@ func (m *Model) PredictAll(dealer *game.Hand, player *game.Hand) []Prediction {
 			Score:  v,
 		})
 	}
+
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].Score > results[j].Score
+	})
 
 	return results
 }

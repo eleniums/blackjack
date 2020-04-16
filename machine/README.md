@@ -1,6 +1,12 @@
 # Machine Learning
 Creating an AI to play Blackjack.
 
+## Setup
+This requires an older version of XGBoost (version 0.90). Make sure to uninstall any existing version of XGBoost, then:
+```
+pip install xgboost==0.90
+```
+
 ## Creating training data
 Flags:
 - `-generate-training-data`: Add to generate training data.

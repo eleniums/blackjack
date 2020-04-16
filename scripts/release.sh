@@ -15,15 +15,14 @@ make
 rm -rf $RELEASE
 mkdir -p $RELEASE
 
-# copy model and predict.py
+# copy model
 cp ./machine/model.bin $RELEASE/model.bin
-cp ./machine/predict.py $RELEASE/predict.py
 
 # package windows binary
 echo Packaging Windows binary...
 mv "$NAME"_windows_amd64.exe $RELEASE/$NAME.exe
 cd $RELEASE
-zip "$NAME"_windows.zip $NAME.exe model.bin predict.py
+zip "$NAME"_windows.zip $NAME.exe model.bin
 rm -rf $NAME.exe
 cd $BASE
 
@@ -31,7 +30,7 @@ cd $BASE
 echo Packaging Linux binary...
 mv "$NAME"_linux_amd64 $RELEASE/$NAME
 cd $RELEASE
-tar -czvf "$NAME"_linux.tar.gz $NAME model.bin predict.py
+tar -czvf "$NAME"_linux.tar.gz $NAME model.bin
 rm -rf $NAME
 cd $BASE
 
@@ -39,12 +38,11 @@ cd $BASE
 echo Packaging macOS binary...
 mv "$NAME"_darwin_amd64 $RELEASE/$NAME
 cd $RELEASE
-tar -czvf "$NAME"_mac.tar.gz $NAME model.bin predict.py
+tar -czvf "$NAME"_mac.tar.gz $NAME model.bin
 rm -rf $NAME
 cd $BASE
 
-# remove model and predict.py
+# remove model
 rm -rf $RELEASE/model.bin
-rm -rf $RELEASE/predict.py
 
 echo "Release of $NAME created: $RELEASE"

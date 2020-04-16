@@ -10,6 +10,20 @@
   version = "v1.1.1"
 
 [[projects]]
+  branch = "master"
+  digest = "1:f11ae84de3179129c9d85481c686f2f77cf8cb058488f0e489034eb4297b939c"
+  name = "github.com/dmitryikh/leaves"
+  packages = [
+    ".",
+    "internal/pickle",
+    "internal/xgbin",
+    "transformation",
+    "util",
+  ]
+  pruneopts = "UT"
+  revision = "43f8378db1939e1cb688a743281558df0abfc66c"
+
+[[projects]]
   digest = "1:bed9d72d596f94e65fff37f4d6c01398074a6bb1c3f3ceff963516bd01db6ff5"
   name = "github.com/gofrs/uuid"
   packages = ["."]
@@ -48,6 +62,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/dmitryikh/leaves",
     "github.com/gofrs/uuid",
     "github.com/stretchr/testify/require",
   ]

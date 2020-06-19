@@ -1,0 +1,17 @@
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
+# github.com/dmitryikh/leaves v0.0.0-20191108161455-43f8378db193
+github.com/dmitryikh/leaves
+github.com/dmitryikh/leaves/internal/pickle
+github.com/dmitryikh/leaves/internal/xgbin
+github.com/dmitryikh/leaves/transformation
+github.com/dmitryikh/leaves/util
+# github.com/gofrs/uuid v3.2.0+incompatible
+github.com/gofrs/uuid
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/testify v1.5.1
+github.com/stretchr/testify/assert
+github.com/stretchr/testify/require
+# gopkg.in/yaml.v2 v2.2.8
+gopkg.in/yaml.v2

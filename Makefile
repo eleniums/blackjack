@@ -12,9 +12,6 @@ all: test build ## Build and run tests
 test: ## Run unit tests
 	./scripts/test_unit.sh
 
-dep: ## Retrieve all dependencies
-	dep ensure -v
-
 docker: linux ## Build Docker container
 	docker build -t $(EXECUTABLE) -t $(EXECUTABLE):$(TAG) .
 

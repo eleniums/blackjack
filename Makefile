@@ -12,9 +12,6 @@ all: test build ## Build and run tests
 test: ## Run unit tests
 	./scripts/test_unit.sh
 
-docker: linux ## Build Docker container
-	docker build -t $(EXECUTABLE) -t $(EXECUTABLE):$(TAG) .
-
 build: windows linux darwin ## Build binaries
 	@echo version: $(VERSION)
 

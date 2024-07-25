@@ -36,7 +36,7 @@ cd $BASE
 
 # package mac binary
 echo Packaging macOS binary...
-mv "$NAME"_darwin_amd64 $RELEASE/$NAME
+mv "$NAME"_darwin_arm64 $RELEASE/$NAME
 cd $RELEASE
 tar -czvf "$NAME"_mac.tar.gz $NAME model.bin
 rm -rf $NAME

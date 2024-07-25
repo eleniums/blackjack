@@ -1,7 +1,7 @@
 EXECUTABLE=blackjack
 WINDOWS=$(EXECUTABLE)_windows_amd64.exe
 LINUX=$(EXECUTABLE)_linux_amd64
-DARWIN=$(EXECUTABLE)_darwin_amd64
+DARWIN=$(EXECUTABLE)_darwin_arm64
 VERSION=$(shell git describe --tags --always --long --dirty)
 TAG=$(shell git describe --tags --abbrev=0)
 
@@ -31,7 +31,7 @@ $(LINUX):
 	env GOOS=linux GOARCH=amd64 go build -o $(LINUX) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/game/main.go
 
 $(DARWIN):
-	env GOOS=darwin GOARCH=amd64 go build -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/game/main.go
+	env GOOS=darwin GOARCH=arm64 go build -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/game/main.go
 
 release: ## Create release
 	./scripts/release.sh
